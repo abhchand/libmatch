@@ -7,7 +7,17 @@ BINARY_NAME=libmatch
 
 export GO111MODULE=on
 
-all: build
+all: lint test build
+
 build:
 	rm -f $(BINARY_NAME)
 	scripts/build.sh $(BINARY_NAME)
+
+lint:
+	scripts/gofmt.sh
+
+lintfix:
+	go fmt ./...
+
+test:
+	go test ./...
