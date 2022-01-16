@@ -1,11 +1,11 @@
 package version
 
-import "testing"
+import (
+	"testing"
 
-func TestPrint(t *testing.T) {
-    want := "v0.0.1"
+	"github.com/stretchr/testify/assert"
+)
 
-    if got := Print(); got != want {
-        t.Errorf("Print() = %q, want %q", got, want)
-    }
+func TestFormatted(t *testing.T) {
+	assert.Equal(t, "v0.0.1", Formatted())
 }

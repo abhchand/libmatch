@@ -1,11 +1,11 @@
 package version
 
 import (
-  "fmt"
+	"fmt"
 )
 
 var version = "0.0.1"
 
-func Print() {
-  fmt.Printf("v%v\n", version)
+func Formatted() string {
+	return fmt.Sprintf("v%v", version)
 }
