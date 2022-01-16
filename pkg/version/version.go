@@ -9,3 +9,7 @@ var version = "0.0.1"
 func Formatted() string {
 	return fmt.Sprintf("v%v", version)
 }
+
+func Version() string {
+	return version
+}
