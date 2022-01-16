@@ -65,6 +65,20 @@ func TestValidate_EmptyMember(t *testing.T) {
 	}
 }
 
+func TestValidate_MemberNamesAreCaseSensitive(t *testing.T) {
+	table := core.PreferenceTable{
+		"A": core.PreferenceList{Members: []string{"B", "C", "a"}},
+		"B": core.PreferenceList{Members: []string{"A", "C", "a"}},
+		"C": core.PreferenceList{Members: []string{"A", "B", "a"}},
+		"a": core.PreferenceList{Members: []string{"A", "B", "C"}},
+	}
+
+	v := Validator{PrimaryTable: table}
+	err := v.Validate()
+
+	assert.Nil(t, err)
+}
+
 func TestValidate_AsymmetricalEmptyList(t *testing.T) {
 	table := core.PreferenceTable{
 		"A": core.PreferenceList{Members: []string{}},
