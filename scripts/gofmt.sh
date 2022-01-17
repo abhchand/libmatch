@@ -6,13 +6,9 @@ RED='\033[00;31m'
 GREEN='\033[00;32m'
 RESTORE='\033[0m'
 
-GOFMTOUTPUT=$(gofmt -l .)
-echo -e "${RED}$GOFMTOUTPUT${RESTORE}"
-
-# A "blank" output still outputs a single line
-if [[ $(echo $GOFMTOUTPUT | wc -l) -gt 1 ]]; then
-  echo "One or more unformatted files found."
+if [ "$(gofmt -s -l . | tee /dev/stderr | wc -l)" -gt 0 ]; then
+  echo -e "${RED}FAIL${RESTORE}"
   exit 1
 else
-  echo -e "${GREEN}ok${RESTORE}"
+  echo -e "${GREEN}OK${RESTORE}"
 fi
