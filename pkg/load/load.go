@@ -43,31 +43,17 @@ import (
 	"github.com/abhchand/libmatch/pkg/core"
 )
 
-func LoadFromIO(r io.Reader) (core.PreferenceTable, error) {
-	rawJson, err := io.ReadAll(r)
-	if err != nil {
-		return make(core.PreferenceTable), nil
-	}
-
+func LoadFromIO(r io.Reader) (*[]core.MatchEntry, error) {
 	var data []core.MatchEntry
 
+	rawJson, err := io.ReadAll(r)
+	if err != nil {
+		return &data, err
+	}
+
 	if err := json.Unmarshal(rawJson, &data); err != nil {
-		return make(core.PreferenceTable), nil
+		return &data, err
 	}
 
-	return LoadFromDataType(&data), nil
-}
-
-func LoadFromDataType(pEntries *[]core.MatchEntry) core.PreferenceTable {
-	entries := *pEntries
-	table := make(core.PreferenceTable)
-
-	for i := range entries {
-		name := entries[i].Name
-		preferences := core.PreferenceList{entries[i].Preferences}
-
-		table[name] = preferences
-	}
-
-	return table
+	return &data, nil
 }

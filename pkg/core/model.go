@@ -5,8 +5,6 @@ type MatchEntry struct {
 	Preferences []string `json:"preferences"`
 }
 
-type PreferenceTable map[string]PreferenceList
-
 type PreferenceList struct {
 	Members []string
 }
