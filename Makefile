@@ -27,5 +27,5 @@ lintfix:
 
 test:
 	echo '# $@'
-	go test ./...
+	scripts/test.sh
 	echo ''
