@@ -31,6 +31,6 @@ fi
 echo "Building $LIBMATCH_BINARY..."
 go build \
   -ldflags "-s -w -X main.version=${LIBMATCH_DATE}-${LIBMATCH_VERSION}-${LIBMATCH_OS}-${LIBMATCH_ARCH}" \
-  -o $LIBMATCH_BINARY cmd/libmatch/libmatch.go
+  -o $LIBMATCH_BINARY cmd/libmatch/main.go
 du -h $LIBMATCH_BINARY
 echo 'Done.'
