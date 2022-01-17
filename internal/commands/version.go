@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/abhchand/libmatch/pkg/version"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // VersionCommand registers the version cli command.

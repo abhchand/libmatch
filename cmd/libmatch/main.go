@@ -8,7 +8,7 @@ import (
 	"github.com/abhchand/libmatch/internal/commands"
 	"github.com/abhchand/libmatch/internal/config"
 	"github.com/abhchand/libmatch/pkg/version"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func main() {
@@ -22,9 +22,9 @@ func main() {
 	app.EnableBashCompletion = true
 	app.Flags = config.GlobalFlags
 
-	app.Commands = []cli.Command{
-		commands.SolveCommand,
-		commands.VersionCommand,
+	app.Commands = []*cli.Command{
+		&commands.SolveCommand,
+		&commands.VersionCommand,
 	}
 
 	if err := app.Run(os.Args); err != nil {

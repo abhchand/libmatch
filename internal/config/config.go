@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 type Config struct {
@@ -12,7 +12,7 @@ type Config struct {
 
 func NewConfig(ctx *cli.Context) *Config {
 	c := &Config{
-		Debug: ctx.GlobalBool("debug"),
+		Debug: ctx.Bool("debug"),
 	}
 
 	return c
