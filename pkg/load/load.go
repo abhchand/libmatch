@@ -37,11 +37,26 @@
 package load
 
 import (
+	"bufio"
 	"encoding/json"
 	"io"
+	"os"
 
 	"github.com/abhchand/libmatch/pkg/core"
 )
+
+func LoadFromFile(filename string) (*[]core.MatchEntry, error) {
+	var data *[]core.MatchEntry
+
+	file, err := os.Open(filename)
+	if err != nil {
+		return data, err
+	}
+	defer file.Close()
+
+	data, err = LoadFromIO(bufio.NewReader(file))
+	return data, err
+}
 
 func LoadFromIO(r io.Reader) (*[]core.MatchEntry, error) {
 	var data []core.MatchEntry
