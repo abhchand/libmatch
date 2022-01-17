@@ -22,7 +22,7 @@ lint:
 
 lintfix:
 	echo '# $@'
-	go fmt ./...
+	gofmt -l -w -s .
 	echo ''
 
 test:
