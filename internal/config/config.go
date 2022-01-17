@@ -1,13 +1,13 @@
 package config
 
-import(
+import (
 	"github.com/urfave/cli"
 )
 
 type Config struct {
-	Algo     string
-	Debug    bool
-	CliCtx   *cli.Context
+	Algo   string
+	Debug  bool
+	CliCtx *cli.Context
 }
 
 func NewConfig(ctx *cli.Context) *Config {

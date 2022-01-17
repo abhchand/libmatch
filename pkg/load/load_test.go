@@ -28,7 +28,6 @@ func TestLoadFromIO(t *testing.T) {
 		"D": core.PreferenceList{Members: []string{"A", "B", "C"}},
 	}
 
-
 	assert.Nil(t, err)
 	assert.Equal(t, wanted, got)
 }
