@@ -52,7 +52,7 @@ func (v Validator) validateMembers(table core.PreferenceTable) ([]string, error)
 
 	members := make([]string, 0, len(table))
 
-	for m, _ := range table {
+	for m := range table {
 		if m == "" {
 			return members, errors.New("All member names must non-blank")
 		}
@@ -70,7 +70,7 @@ func (v Validator) validateMembers(table core.PreferenceTable) ([]string, error)
  * That is, verify each member's preferences contains all the other members.
  */
 func (v Validator) validateSymmetry(table core.PreferenceTable, members []string) error {
-	for m, _ := range table {
+	for m := range table {
 		// Find index of member
 		var idx int
 		for i := range members {
