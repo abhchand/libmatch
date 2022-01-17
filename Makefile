@@ -17,7 +17,7 @@ build:
 
 lint:
 	echo '# $@'
-	scripts/gofmt.sh
+	scripts/lint.sh
 	echo ''
 
 lintfix:
