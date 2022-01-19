@@ -49,6 +49,7 @@ GLOBAL OPTIONS:
 Run 'libmatch COMMAND --help' for more information on a command.
 	`
 
+	// Customize command help-text
 	cli.CommandHelpTemplate = `Usage: {{.HelpName}} [GLOBAL OPTIONS] COMMAND [OPTIONS]
 
 {{.Usage}}
@@ -58,6 +59,7 @@ OPTIONS:
    {{end}}{{end}}
 `
 
+	// Start the CLI
 	if err := app.Run(os.Args); err != nil {
 		fmt.Println(err)
 	}
