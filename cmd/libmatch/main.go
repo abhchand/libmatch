@@ -24,6 +24,7 @@ func main() {
 
 	app.Commands = []*cli.Command{
 		&commands.SolveCommand,
+		&commands.LsCommand,
 	}
 
 	// Customize the output of `-v` / `--version`
