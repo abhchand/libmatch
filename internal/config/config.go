@@ -1,19 +1,30 @@
 package config
 
 import (
+	"path/filepath"
+	"strings"
+
 	"github.com/urfave/cli/v2"
 )
 
 type Config struct {
-	Algo   string
-	Debug  bool
-	CliCtx *cli.Context
+	Algorithm       string
+	Debug           bool
+	Filename        string
+	originalContext *cli.Context
 }
 
-func NewConfig(ctx *cli.Context) *Config {
+func NewConfig(ctx *cli.Context) (*Config, error) {
 	c := &Config{
-		Debug: ctx.Bool("debug"),
+		Algorithm: strings.ToUpper(ctx.String("algorithm")),
+		Debug:     ctx.Bool("debug"),
 	}
 
-	return c
+	absFilename, err := filepath.Abs(ctx.String("file"))
+	if err != nil {
+		return c, err
+	}
+	c.Filename = absFilename
+
+	return c, nil
 }

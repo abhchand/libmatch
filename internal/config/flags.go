@@ -9,5 +9,6 @@ var GlobalFlags = []cli.Flag{
 	&cli.BoolFlag{
 		Name:  "debug",
 		Usage: "enable debug output to STDOUT",
+		Value: false,
 	},
 }
