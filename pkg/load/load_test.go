@@ -38,6 +38,17 @@ func TestLoadFromFile(t *testing.T) {
 	assert.Equal(t, wanted, got)
 }
 
+func TestLoadFromFile_DoesNotExist(t *testing.T) {
+	badFile := "/tmp/badfile.json"
+
+	_, err := LoadFromFile(badFile)
+
+	if assert.NotNil(t, err) {
+		assert.Equal(t,
+			fmt.Sprintf("open %v: no such file or directory", badFile), err.Error())
+	}
+}
+
 func TestLoadFromIO(t *testing.T) {
 	body := `
   [
