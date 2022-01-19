@@ -20,7 +20,7 @@ var SolveCommand = cli.Command{
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:     "algorithm",
-			Usage:    "Algorithm used to determine matches. See all available with \"libmatch ls\"",
+			Usage:    "Algorithm used to determine matches. See all algorithms with \"libmatch ls\"",
 			Required: true,
 			Aliases:  []string{"a"},
 		},
