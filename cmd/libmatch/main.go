@@ -24,9 +24,14 @@ func main() {
 
 	app.Commands = []*cli.Command{
 		&commands.SolveCommand,
-		&commands.VersionCommand,
 	}
 
+	// Customize the output of `-v` / `--version`
+	cli.VersionPrinter = func(c *cli.Context) {
+		fmt.Fprintf(c.App.Writer, "%v\n", version.Formatted())
+	}
+
+	// Customize Application help-text
 	cli.AppHelpTemplate = `
 Usage: {{.HelpName}} [GLOBAL OPTIONS] COMMAND [OPTIONS]
 
