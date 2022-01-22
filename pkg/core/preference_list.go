@@ -4,6 +4,10 @@ type PreferenceList struct {
 	members []*Member
 }
 
+func NewPreferenceList(members []*Member) PreferenceList {
+	return PreferenceList{members: members}
+}
+
 func (pl PreferenceList) Members() []*Member {
 	return pl.members
 }

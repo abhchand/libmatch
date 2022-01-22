@@ -1,10 +1,23 @@
 package core
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func TestNewPreferenceList(t *testing.T) {
+	m := NewMember("A")
+	members := []*Member{&m}
+	pl := NewPreferenceList(members)
+
+	var zero PreferenceList
+	wanted := reflect.TypeOf(zero).Kind()
+
+	assert.Equal(t, wanted, reflect.TypeOf(pl).Kind())
+	assert.Equal(t, members, pl.Members())
+}
 
 func TestMembers(t *testing.T) {
 	memA = Member{name: "A"}
