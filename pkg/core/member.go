@@ -43,6 +43,10 @@ func (m Member) HasAcceptedProposal() bool {
 	return m.acceptedProposalFrom != nil
 }
 
+func (m *Member) Accept(member *Member) {
+	m.acceptedProposalFrom = member
+}
+
 func (m *Member) Reject(member *Member) {
 
 	// Clear "current proposer" if that's who we're rejecting

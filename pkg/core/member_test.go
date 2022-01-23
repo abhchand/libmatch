@@ -107,6 +107,18 @@ func TestHasAcceptedProposal(t *testing.T) {
 	assert.False(t, memB.HasAcceptedProposal())
 }
 
+func TestAccept(t *testing.T) {
+	setupMembers()
+
+	assert.Nil(t, memA.acceptedProposalFrom)
+
+	memA.Accept(&memB)
+	assert.Equal(t, memB, *memA.acceptedProposalFrom)
+
+	memA.Accept(&memC)
+	assert.Equal(t, memC, *memA.acceptedProposalFrom)
+}
+
 func TestReject(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		setupMembers()
