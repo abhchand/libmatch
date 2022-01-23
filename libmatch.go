@@ -27,10 +27,18 @@ func SolveSRP(prefs *[]MemberPreferences) (MatchResult, error) {
 	var res MatchResult
 	var err error
 
-	table := core.NewPreferenceTable(prefs)
-	validator := validate.PreferenceTableValidator{PrimaryTable: table}
+	// Validate input data
+	meValidator := validate.MatchEntryValidator{Entries: prefs}
 
-	if err = validator.Validate(); err != nil {
+	if err = meValidator.Validate(); err != nil {
+		return res, err
+	}
+
+	// Build and validate preference table
+	table := core.NewPreferenceTable(prefs)
+	ptValidator := validate.PreferenceTableValidator{PrimaryTable: table}
+
+	if err = ptValidator.Validate(); err != nil {
 		return res, err
 	}
 

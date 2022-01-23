@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestValidate(t *testing.T) {
+func TestPreferenceTableValidator__Validate(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		setupMembers()
 
