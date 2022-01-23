@@ -6,5 +6,5 @@ type MatchEntry struct {
 }
 
 type MatchResult struct {
-	Values map[string]string `json:"values"`
+	Mapping map[string]string `json:"values"`
 }
