@@ -21,12 +21,12 @@ func (v *Validator) Validate() error {
 		return err
 	}
 
-	members, err := v.validateMembers(v.PrimaryTable)
+	memberNames, err := v.validateMembers(v.PrimaryTable)
 	if err != nil {
 		return err
 	}
 
-	err = v.validateSymmetry(v.PrimaryTable, members)
+	err = v.validateSymmetry(v.PrimaryTable, memberNames)
 	if err != nil {
 		return err
 	}
@@ -50,17 +50,17 @@ func (v Validator) validateSize(table core.PreferenceTable) error {
 
 func (v Validator) validateMembers(table core.PreferenceTable) ([]string, error) {
 
-	members := make([]string, 0, len(table))
+	memberNames := make([]string, 0, len(table))
 
-	for m := range table {
-		if m == "" {
-			return members, errors.New("All member names must non-blank")
+	for name := range table {
+		if name == "" {
+			return memberNames, errors.New("All member names must non-blank")
 		}
 
-		members = append(members, m)
+		memberNames = append(memberNames, name)
 	}
 
-	return members, nil
+	return memberNames, nil
 
 }
 
@@ -69,35 +69,46 @@ func (v Validator) validateMembers(table core.PreferenceTable) ([]string, error)
  *
  * That is, verify each member's preferences contains all the other members.
  */
-func (v Validator) validateSymmetry(table core.PreferenceTable, members []string) error {
-	for m := range table {
-		// Find index of member
+func (v Validator) validateSymmetry(table core.PreferenceTable, memberNames []string) error {
+	for name := range table {
+		fmt.Printf("Evaluating %v\n", name)
+
+		// Find index of this member's name
 		var idx int
-		for i := range members {
-			if members[i] == m {
+		for i := range memberNames {
+			if memberNames[i] == name {
 				idx = i
 				break
 			}
 		}
 
-		/*
-		 * Remove this member from the member list
-		 * This result should be the expected preference list for this member
-		 */
-		expected := make([]string, len(members)-1)
-		copy(expected[:idx], members[:idx])
-		copy(expected[idx:], members[idx+1:])
+		fmt.Printf("\tIndex: %v\n", idx)
 
-		actual := make([]string, len(table[m].Members))
-		copy(actual, table[m].Members)
+		/*
+		 * Remove this member from the member name list
+		 * This result should be the expected preference list (names) for this member
+		 */
+		expected := make([]string, len(memberNames)-1)
+		copy(expected[:idx], memberNames[:idx])
+		copy(expected[idx:], memberNames[idx+1:])
+
+		// Determine the actual list of preference list (names) for this member
+		prefs := table[name].PreferenceList().Members()
+		actual := make([]string, len(prefs))
+		for i := range prefs {
+			actual[i] = prefs[i].Name()
+		}
 
 		// Compare
 		sort.Strings(actual)
 		sort.Strings(expected)
 
+		fmt.Printf("\tActual: %v( (%v)\n", actual, len(prefs))
+		fmt.Printf("\tExpected: %v (%v)\n", expected, len(expected))
+
 		if !stringSlicesEqual(actual, expected) {
 			return errors.New(
-				fmt.Sprintf("Preference list for '%v' does not contain all the required members", m))
+				fmt.Sprintf("Preference list for '%v' does not contain all the required members", name))
 		}
 	}
 

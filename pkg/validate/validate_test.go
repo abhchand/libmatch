@@ -5,110 +5,123 @@ import (
 	"testing"
 
 	"github.com/abhchand/libmatch/pkg/core"
-
 	"github.com/stretchr/testify/assert"
 )
 
 func TestValidate(t *testing.T) {
-	table := core.PreferenceTable{
-		"A": core.PreferenceList{Members: []string{"B", "C", "D"}},
-		"B": core.PreferenceList{Members: []string{"A", "C", "D"}},
-		"C": core.PreferenceList{Members: []string{"A", "B", "D"}},
-		"D": core.PreferenceList{Members: []string{"A", "B", "C"}},
-	}
+	t.Run("success", func(t *testing.T) {
+		setupMembers()
 
-	v := Validator{PrimaryTable: table}
-	err := v.Validate()
+		v := Validator{PrimaryTable: pt}
+		err := v.Validate()
 
-	assert.Nil(t, err)
-}
+		assert.Nil(t, err)
+	})
 
-func TestValidate_EmptyTable(t *testing.T) {
-	table := core.PreferenceTable{}
+	t.Run("empty table", func(t *testing.T) {
+		pt := core.PreferenceTable{}
 
-	v := Validator{PrimaryTable: table}
-	err := v.Validate()
+		v := Validator{PrimaryTable: pt}
+		err := v.Validate()
 
-	if assert.NotNil(t, err) {
-		assert.Equal(t, "Table must be non-empty", err.Error())
-	}
-}
+		if assert.NotNil(t, err) {
+			assert.Equal(t, "Table must be non-empty", err.Error())
+		}
+	})
 
-func TestValidate_OddNumberOfMembers(t *testing.T) {
-	table := core.PreferenceTable{
-		"A": core.PreferenceList{Members: []string{"B", "C", "D"}},
-		"B": core.PreferenceList{Members: []string{"A", "C", "D"}},
-		"C": core.PreferenceList{Members: []string{"A", "B", "D"}},
-	}
+	t.Run("odd number of members", func(t *testing.T) {
+		setupMembers()
 
-	v := Validator{PrimaryTable: table}
-	err := v.Validate()
+		pt = core.PreferenceTable{
+			"A": &memA,
+			"B": &memB,
+			"C": &memC,
+		}
 
-	if assert.NotNil(t, err) {
-		assert.Equal(t, "Table must have an even number of members", err.Error())
-	}
-}
+		v := Validator{PrimaryTable: pt}
+		err := v.Validate()
 
-func TestValidate_EmptyMember(t *testing.T) {
-	table := core.PreferenceTable{
-		"A": core.PreferenceList{Members: []string{"B", "C", "D"}},
-		"B": core.PreferenceList{Members: []string{"A", "C", "D"}},
-		"":  core.PreferenceList{Members: []string{"A", "B", "D"}},
-		"D": core.PreferenceList{Members: []string{"A", "B", "C"}},
-	}
+		if assert.NotNil(t, err) {
+			assert.Equal(t, "Table must have an even number of members", err.Error())
+		}
+	})
 
-	v := Validator{PrimaryTable: table}
-	err := v.Validate()
+	t.Run("empty member", func(t *testing.T) {
+		setupMembers()
 
-	if assert.NotNil(t, err) {
-		assert.Equal(t, "All member names must non-blank", err.Error())
-	}
-}
+		pt = core.PreferenceTable{
+			"A": &memA,
+			"B": &memB,
+			"":  &memC,
+			"D": &memD,
+		}
 
-func TestValidate_MemberNamesAreCaseSensitive(t *testing.T) {
-	table := core.PreferenceTable{
-		"A": core.PreferenceList{Members: []string{"B", "C", "a"}},
-		"B": core.PreferenceList{Members: []string{"A", "C", "a"}},
-		"C": core.PreferenceList{Members: []string{"A", "B", "a"}},
-		"a": core.PreferenceList{Members: []string{"A", "B", "C"}},
-	}
+		v := Validator{PrimaryTable: pt}
+		err := v.Validate()
 
-	v := Validator{PrimaryTable: table}
-	err := v.Validate()
+		if assert.NotNil(t, err) {
+			assert.Equal(t, "All member names must non-blank", err.Error())
+		}
+	})
 
-	assert.Nil(t, err)
-}
+	t.Run("member names are case sensitive", func(t *testing.T) {
+		setupMembers()
 
-func TestValidate_AsymmetricalEmptyList(t *testing.T) {
-	table := core.PreferenceTable{
-		"A": core.PreferenceList{Members: []string{}},
-		"B": core.PreferenceList{Members: []string{"A", "C", "D"}},
-		"C": core.PreferenceList{Members: []string{"A", "B", "D"}},
-		"D": core.PreferenceList{Members: []string{"A", "B", "C"}},
-	}
+		memA = core.NewMember("A")
+		memB = core.NewMember("B")
+		memC = core.NewMember("C")
+		memA_ := core.NewMember("a")
 
-	v := Validator{PrimaryTable: table}
-	err := v.Validate()
+		plA = core.NewPreferenceList([]*core.Member{&memB, &memC, &memA_})
+		plB = core.NewPreferenceList([]*core.Member{&memA, &memC, &memA_})
+		plC = core.NewPreferenceList([]*core.Member{&memA, &memB, &memA_})
+		plA_ := core.NewPreferenceList([]*core.Member{&memA, &memB, &memC})
 
-	if assert.NotNil(t, err) {
-		wanted := fmt.Sprintf("Preference list for '%v' does not contain all the required members", "A")
-		assert.Equal(t, wanted, err.Error())
-	}
-}
+		memA.SetPreferenceList(&plA)
+		memB.SetPreferenceList(&plB)
+		memC.SetPreferenceList(&plC)
+		memA_.SetPreferenceList(&plA_)
 
-func TestValidate_AsymmetricalMismatchedList(t *testing.T) {
-	table := core.PreferenceTable{
-		"A": core.PreferenceList{Members: []string{"B", "C"}},
-		"B": core.PreferenceList{Members: []string{"A", "C", "D"}},
-		"C": core.PreferenceList{Members: []string{"A", "B", "D"}},
-		"D": core.PreferenceList{Members: []string{"A", "B", "C"}},
-	}
+		pt = core.PreferenceTable{
+			"A": &memA,
+			"B": &memB,
+			"C": &memC,
+			"a": &memA_,
+		}
 
-	v := Validator{PrimaryTable: table}
-	err := v.Validate()
+		v := Validator{PrimaryTable: pt}
+		err := v.Validate()
 
-	if assert.NotNil(t, err) {
-		wanted := fmt.Sprintf("Preference list for '%v' does not contain all the required members", "A")
-		assert.Equal(t, wanted, err.Error())
-	}
+		assert.Nil(t, err)
+	})
+
+	t.Run("asymmetrical empty list", func(t *testing.T) {
+		setupMembers()
+
+		plA_ := core.NewPreferenceList([]*core.Member{})
+		memA.SetPreferenceList(&plA_)
+
+		v := Validator{PrimaryTable: pt}
+		err := v.Validate()
+
+		if assert.NotNil(t, err) {
+			wanted := fmt.Sprintf("Preference list for '%v' does not contain all the required members", "A")
+			assert.Equal(t, wanted, err.Error())
+		}
+	})
+
+	t.Run("asymmetrical mismatched list", func(t *testing.T) {
+		setupMembers()
+
+		plA_ := core.NewPreferenceList([]*core.Member{&memB, &memC})
+		memA.SetPreferenceList(&plA_)
+
+		v := Validator{PrimaryTable: pt}
+		err := v.Validate()
+
+		if assert.NotNil(t, err) {
+			wanted := fmt.Sprintf("Preference list for '%v' does not contain all the required members", "A")
+			assert.Equal(t, wanted, err.Error())
+		}
+	})
 }
