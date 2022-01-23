@@ -12,7 +12,7 @@ func TestValidate(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		setupMembers()
 
-		v := Validator{PrimaryTable: pt}
+		v := PreferenceTableValidator{PrimaryTable: pt}
 		err := v.Validate()
 
 		assert.Nil(t, err)
@@ -21,7 +21,7 @@ func TestValidate(t *testing.T) {
 	t.Run("empty table", func(t *testing.T) {
 		pt := core.PreferenceTable{}
 
-		v := Validator{PrimaryTable: pt}
+		v := PreferenceTableValidator{PrimaryTable: pt}
 		err := v.Validate()
 
 		if assert.NotNil(t, err) {
@@ -38,7 +38,7 @@ func TestValidate(t *testing.T) {
 			"C": &memC,
 		}
 
-		v := Validator{PrimaryTable: pt}
+		v := PreferenceTableValidator{PrimaryTable: pt}
 		err := v.Validate()
 
 		if assert.NotNil(t, err) {
@@ -56,7 +56,7 @@ func TestValidate(t *testing.T) {
 			"D": &memD,
 		}
 
-		v := Validator{PrimaryTable: pt}
+		v := PreferenceTableValidator{PrimaryTable: pt}
 		err := v.Validate()
 
 		if assert.NotNil(t, err) {
@@ -89,7 +89,7 @@ func TestValidate(t *testing.T) {
 			"a": &memA_,
 		}
 
-		v := Validator{PrimaryTable: pt}
+		v := PreferenceTableValidator{PrimaryTable: pt}
 		err := v.Validate()
 
 		assert.Nil(t, err)
@@ -101,7 +101,7 @@ func TestValidate(t *testing.T) {
 		plA_ := core.NewPreferenceList([]*core.Member{})
 		memA.SetPreferenceList(&plA_)
 
-		v := Validator{PrimaryTable: pt}
+		v := PreferenceTableValidator{PrimaryTable: pt}
 		err := v.Validate()
 
 		if assert.NotNil(t, err) {
@@ -116,7 +116,7 @@ func TestValidate(t *testing.T) {
 		plA_ := core.NewPreferenceList([]*core.Member{&memB, &memC})
 		memA.SetPreferenceList(&plA_)
 
-		v := Validator{PrimaryTable: pt}
+		v := PreferenceTableValidator{PrimaryTable: pt}
 		err := v.Validate()
 
 		if assert.NotNil(t, err) {

@@ -8,12 +8,12 @@ import (
 	"github.com/abhchand/libmatch/pkg/core"
 )
 
-type Validator struct {
+type PreferenceTableValidator struct {
 	PrimaryTable core.PreferenceTable
 	Err          error
 }
 
-func (v *Validator) Validate() error {
+func (v *PreferenceTableValidator) Validate() error {
 	var err error
 
 	err = v.validateSize(v.PrimaryTable)
@@ -34,7 +34,7 @@ func (v *Validator) Validate() error {
 	return nil
 }
 
-func (v Validator) validateSize(table core.PreferenceTable) error {
+func (v PreferenceTableValidator) validateSize(table core.PreferenceTable) error {
 	numMembers := len(table)
 
 	if numMembers == 0 {
@@ -48,7 +48,7 @@ func (v Validator) validateSize(table core.PreferenceTable) error {
 	return nil
 }
 
-func (v Validator) validateMembers(table core.PreferenceTable) ([]string, error) {
+func (v PreferenceTableValidator) validateMembers(table core.PreferenceTable) ([]string, error) {
 
 	memberNames := make([]string, 0, len(table))
 
@@ -69,7 +69,7 @@ func (v Validator) validateMembers(table core.PreferenceTable) ([]string, error)
  *
  * That is, verify each member's preferences contains all the other members.
  */
-func (v Validator) validateSymmetry(table core.PreferenceTable, memberNames []string) error {
+func (v PreferenceTableValidator) validateSymmetry(table core.PreferenceTable, memberNames []string) error {
 	for name := range table {
 		fmt.Printf("Evaluating %v\n", name)
 
