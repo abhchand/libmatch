@@ -19,6 +19,12 @@ func TestNewMember(t *testing.T) {
 	assert.Nil(t, m.acceptedProposalFrom)
 }
 
+func TestString__Member(t *testing.T) {
+	m := Member{name: "A"}
+
+	assert.Equal(t, "'A'", m.String())
+}
+
 func TestName(t *testing.T) {
 	memA = Member{name: "A"}
 

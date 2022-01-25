@@ -10,6 +10,10 @@ func NewMember(name string) Member {
 	return Member{name: name}
 }
 
+func (m Member) String() string {
+	return "'" + m.name + "'"
+}
+
 func (m Member) Name() string {
 	return m.name
 }

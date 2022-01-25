@@ -1,5 +1,11 @@
 package core
 
+import (
+	"fmt"
+	"regexp"
+	"sort"
+)
+
 type PreferenceTable map[string]*Member
 
 func NewPreferenceTable(entries *[]MatchEntry) PreferenceTable {
@@ -31,6 +37,35 @@ func NewPreferenceTable(entries *[]MatchEntry) PreferenceTable {
 	}
 
 	return table
+}
+
+func (pt PreferenceTable) String() string {
+	var str string
+
+	// Sort map keys so we can iterate over the map below deterministically
+	keys := make([]string, 0, len(pt))
+	for k := range pt {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for k := range keys {
+		member := pt[keys[k]]
+		preferenceList := member.PreferenceList().String()
+
+		if member.CurrentProposer() != nil {
+			currentProposer := member.CurrentProposer().String()
+
+			pattern := regexp.MustCompile(currentProposer)
+			newPattern := fmt.Sprintf("%v+", currentProposer)
+
+			preferenceList = pattern.ReplaceAllString(preferenceList, newPattern)
+		}
+
+		str = str + fmt.Sprintf("%v\t=>\t%v\n", member, preferenceList)
+	}
+
+	return str
 }
 
 func (pt PreferenceTable) UnmatchedMembers() []*Member {

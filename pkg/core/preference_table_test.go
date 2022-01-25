@@ -57,6 +57,69 @@ func TestNewPreferenceTable(t *testing.T) {
 	})
 }
 
+func TestString__PreferenceTable(t *testing.T) {
+
+	cases := [][]string{
+		{
+			"success",
+			"",
+			"",
+			"'A'\t=>\t'B', 'C', 'D'\n'B'\t=>\t'A', 'C', 'D'\n'C'\t=>\t'A', 'B', 'D'\n'D'\t=>\t'A', 'B', 'C'\n",
+		},
+		{
+			"displays current proposer (middle element)",
+			"A",
+			"C",
+			"'A'\t=>\t'B', 'C'+, 'D'\n'B'\t=>\t'A', 'C', 'D'\n'C'\t=>\t'A', 'B', 'D'\n'D'\t=>\t'A', 'B', 'C'\n",
+		},
+		{
+			"displays current proposer (first element)",
+			"A",
+			"B",
+			"'A'\t=>\t'B'+, 'C', 'D'\n'B'\t=>\t'A', 'C', 'D'\n'C'\t=>\t'A', 'B', 'D'\n'D'\t=>\t'A', 'B', 'C'\n",
+		},
+		{
+			"displays current proposer (last element)",
+			"A",
+			"D",
+			"'A'\t=>\t'B', 'C', 'D'+\n'B'\t=>\t'A', 'C', 'D'\n'C'\t=>\t'A', 'B', 'D'\n'D'\t=>\t'A', 'B', 'C'\n",
+		},
+	}
+
+	for i := range cases {
+		testCase := cases[i]
+
+		t.Run(testCase[0], func(t *testing.T) {
+			entries := []MatchEntry{
+				{Name: "A", Preferences: []string{"B", "C", "D"}},
+				{Name: "B", Preferences: []string{"A", "C", "D"}},
+				{Name: "C", Preferences: []string{"A", "B", "D"}},
+				{Name: "D", Preferences: []string{"A", "B", "C"}},
+			}
+
+			pt = NewPreferenceTable(&entries)
+
+			if len(testCase[1]) > 0 {
+				proposed := testCase[1]
+				proposer := testCase[2]
+				pt[proposed].Accept(pt[proposer])
+			}
+
+			assert.Equal(t, testCase[3], pt.String())
+		})
+	}
+
+	t.Run("empty table", func(t *testing.T) {
+		entries := []MatchEntry{}
+
+		pt = NewPreferenceTable(&entries)
+
+		wanted := ""
+
+		assert.Equal(t, wanted, pt.String())
+	})
+}
+
 func TestUnmatchedMembers(t *testing.T) {
 	setupMembers()
 

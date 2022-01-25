@@ -19,6 +19,24 @@ func TestNewPreferenceList(t *testing.T) {
 	assert.Equal(t, members, pl.Members())
 }
 
+func TestString__PreferenceList(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		m1 := NewMember("A")
+		m2 := NewMember("B")
+		members := []*Member{&m1, &m2}
+		pl := NewPreferenceList(members)
+
+		assert.Equal(t, "'A', 'B'", pl.String())
+	})
+
+	t.Run("empty list", func(t *testing.T) {
+		members := []*Member{}
+		pl := NewPreferenceList(members)
+
+		assert.Equal(t, "", pl.String())
+	})
+}
+
 func TestMembers(t *testing.T) {
 	memA = Member{name: "A"}
 	memB = Member{name: "B"}

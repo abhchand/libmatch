@@ -1,11 +1,25 @@
 package core
 
+import (
+	"strings"
+)
+
 type PreferenceList struct {
 	members []*Member
 }
 
 func NewPreferenceList(members []*Member) PreferenceList {
 	return PreferenceList{members: members}
+}
+
+func (pl PreferenceList) String() string {
+	names := make([]string, len(pl.members))
+
+	for i := range pl.members {
+		names[i] = pl.members[i].String()
+	}
+
+	return strings.Join(names, ", ")
 }
 
 func (pl PreferenceList) Members() []*Member {
