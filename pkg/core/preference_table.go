@@ -80,6 +80,16 @@ func (pt PreferenceTable) UnmatchedMembers() []*Member {
 	return unmatched
 }
 
+func (pt PreferenceTable) IsStable() bool {
+	for m := range pt {
+		if len(pt[m].PreferenceList().members) == 0 {
+			return false
+		}
+	}
+
+	return true
+}
+
 func (pt PreferenceTable) IsComplete() bool {
 	for m := range pt {
 		if len(pt[m].PreferenceList().members) != 1 {

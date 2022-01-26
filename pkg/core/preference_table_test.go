@@ -131,6 +131,30 @@ func TestUnmatchedMembers(t *testing.T) {
 	assert.Equal(t, []*Member{&memC}, pt.UnmatchedMembers())
 }
 
+func TestIsStable(t *testing.T) {
+	t.Run("returns true", func(t *testing.T) {
+		setupMembers()
+
+		plA = PreferenceList{members: []*Member{&memB}}
+		plB = PreferenceList{members: []*Member{&memA}}
+		plC = PreferenceList{members: []*Member{&memA, &memD}}
+		plD = PreferenceList{members: []*Member{&memA}}
+
+		assert.True(t, pt.IsStable())
+	})
+
+	t.Run("returns false", func(t *testing.T) {
+		setupMembers()
+
+		plA = PreferenceList{members: []*Member{&memB}}
+		plB = PreferenceList{members: []*Member{&memA}}
+		plC = PreferenceList{members: []*Member{}}
+		plD = PreferenceList{members: []*Member{&memA}}
+
+		assert.False(t, pt.IsStable())
+	})
+}
+
 func TestIsComplete(t *testing.T) {
 	t.Run("returns true", func(t *testing.T) {
 		setupMembers()
