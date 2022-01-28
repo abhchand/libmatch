@@ -3,6 +3,7 @@ package libmatch
 import (
 	"io"
 
+	"github.com/abhchand/libmatch/pkg/algo/srp"
 	"github.com/abhchand/libmatch/pkg/core"
 	"github.com/abhchand/libmatch/pkg/load"
 	"github.com/abhchand/libmatch/pkg/validate"
@@ -41,6 +42,8 @@ func SolveSRP(prefs *[]MemberPreferences) (MatchResult, error) {
 	if err = ptValidator.Validate(); err != nil {
 		return res, err
 	}
+
+	res, err = srp.Run(&table)
 
 	return res, err
 }

@@ -6,6 +6,7 @@ import (
 
 	"github.com/abhchand/libmatch"
 	"github.com/abhchand/libmatch/internal/config"
+	"github.com/abhchand/libmatch/pkg/core"
 	"github.com/abhchand/libmatch/pkg/load"
 	"github.com/urfave/cli/v2"
 )
@@ -34,6 +35,8 @@ var SolveCommand = cli.Command{
 }
 
 func solveAction(ctx *cli.Context) error {
+	var result core.MatchResult
+
 	cfg, err := config.NewConfig(ctx)
 	if err != nil {
 		return err
@@ -54,10 +57,14 @@ func solveAction(ctx *cli.Context) error {
 	 */
 	switch cfg.Algorithm {
 	case "SRP":
-		_, err = libmatch.SolveSRP(prefs)
+		result, err = libmatch.SolveSRP(prefs)
 		if err != nil {
 			return err
 		}
+	}
+
+	for a, b := range result.Mapping {
+		fmt.Printf("%v,%v\n", a, b)
 	}
 
 	return nil
