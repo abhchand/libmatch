@@ -18,7 +18,7 @@ func phase3CyclicalElimnationWithSeed(pt *core.PreferenceTable, seed string) cor
 	var loopIdx int
 	res := core.MatchResult{}
 
-	for true {
+	for !pt.IsComplete() {
 		if loopIdx == 0 && seed != "" {
 			startingMember = (*pt)[seed]
 		} else {
@@ -36,10 +36,6 @@ func phase3CyclicalElimnationWithSeed(pt *core.PreferenceTable, seed string) cor
 
 		if !pt.IsStable() {
 			return res
-		}
-
-		if pt.IsComplete() {
-			break
 		}
 
 		loopIdx++

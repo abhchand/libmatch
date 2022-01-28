@@ -41,4 +41,19 @@ func TestPhase3CyclicalElimnation(t *testing.T) {
 			assert.True(t, reflect.DeepEqual(wanted, result))
 		})
 	}
+
+	t.Run("table is already complete", func(t *testing.T) {
+		pt := core.NewPreferenceTable(&[]core.MatchEntry{
+			{Name: "A", Preferences: []string{"F"}},
+			{Name: "B", Preferences: []string{"E"}},
+			{Name: "C", Preferences: []string{"D"}},
+			{Name: "D", Preferences: []string{"C"}},
+			{Name: "E", Preferences: []string{"B"}},
+			{Name: "F", Preferences: []string{"A"}},
+		})
+
+		result := phase3CyclicalElimnation(&pt)
+
+		assert.True(t, reflect.DeepEqual(wanted, result))
+	})
 }
