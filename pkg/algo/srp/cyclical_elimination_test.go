@@ -36,8 +36,6 @@ func TestPhase3CyclicalElimnation(t *testing.T) {
 				{Name: "F", Preferences: []string{"A", "B", "D"}},
 			})
 
-			fmt.Printf("=== RUNNING WITH SEED: %v\n", testCases[tc])
-
 			result := phase3CyclicalElimnationWithSeed(&pt, testCases[tc])
 
 			assert.True(t, reflect.DeepEqual(wanted, result))
