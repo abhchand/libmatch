@@ -12,6 +12,7 @@ import (
 )
 
 var ALGORITHMS = [1]string{"SRP"}
+var OUTPUT_FORMATS = [2]string{"csv", "json"}
 
 // SolveCommand registers the solve cli command.
 var SolveCommand = cli.Command{
@@ -30,6 +31,13 @@ var SolveCommand = cli.Command{
 			Usage:    "JSON-formatted file containing list of matching preferences",
 			Required: true,
 			Aliases:  []string{"f"},
+		},
+		&cli.StringFlag{
+			Name:     "format",
+			Usage:    "Output format to print results. Must be one of 'csv', 'json'",
+			Required: false,
+			Value:    "csv",
+			Aliases:  []string{"o"},
 		},
 	},
 }
@@ -63,20 +71,37 @@ func solveAction(ctx *cli.Context) error {
 		}
 	}
 
-	for a, b := range result.Mapping {
-		fmt.Printf("%v,%v\n", a, b)
-	}
+	result.Print(cfg.OutputFormat)
 
 	return nil
 }
 
 func validateConfig(cfg config.Config) error {
 	// Verify `algorithm` value is valid
+	valid := false
 	for i := range ALGORITHMS {
 		if cfg.Algorithm == ALGORITHMS[i] {
-			return nil
+			valid = true
+			break
 		}
 	}
 
-	return errors.New(fmt.Sprintf("Unknown `--algorithm` value: %v", cfg.Algorithm))
+	if !(valid) {
+		return errors.New(fmt.Sprintf("Unknown `--algorithm` value: %v", cfg.Algorithm))
+	}
+
+	// Verify `format` value is valid
+	valid = false
+	for i := range OUTPUT_FORMATS {
+		if cfg.OutputFormat == OUTPUT_FORMATS[i] {
+			valid = true
+			break
+		}
+	}
+
+	if !(valid) {
+		return errors.New(fmt.Sprintf("Unknown `--format` value: %v", cfg.OutputFormat))
+	}
+
+	return nil
 }

@@ -12,6 +12,7 @@ import (
 func TestNewConfig(t *testing.T) {
 	globalSet := flag.NewFlagSet("test", 0)
 	globalSet.String("algorithm", "SRP", "doc")
+	globalSet.String("format", "csv", "doc")
 	globalSet.Bool("debug", false, "doc")
 	globalSet.String("file", "/tmp/test.json", "doc")
 
@@ -24,6 +25,7 @@ func TestNewConfig(t *testing.T) {
 	assert.IsType(t, new(Config), c)
 	assert.Equal(t, "SRP", c.Algorithm)
 	assert.Equal(t, false, c.Debug)
+	assert.Equal(t, "csv", c.OutputFormat)
 	assert.Equal(t, "/tmp/test.json", c.Filename)
 }
 

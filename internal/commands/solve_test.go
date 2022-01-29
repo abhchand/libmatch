@@ -25,6 +25,7 @@ func TestSolveAction(t *testing.T) {
 
 	globalSet := flag.NewFlagSet("test", 0)
 	globalSet.String("algorithm", "SRP", "doc")
+	globalSet.String("format", "csv", "doc")
 	globalSet.String("file", testFile, "doc")
 
 	app := cli.NewApp()
@@ -40,6 +41,7 @@ func TestSolveAction_ErrorCreatingConfig(t *testing.T) {
 
 	globalSet := flag.NewFlagSet("test", 0)
 	globalSet.String("algorithm", "SRP", "doc")
+	globalSet.String("format", "csv", "doc")
 	globalSet.String("file", testFile, "doc")
 
 	app := cli.NewApp()
@@ -64,6 +66,7 @@ func TestSolveAction_ErrorValidatingConfig(t *testing.T) {
 	globalSet := flag.NewFlagSet("test", 0)
 	// Force a validation error by specifying a bad `algorithm` value
 	globalSet.String("algorithm", "INVALID_VALUE", "doc")
+	globalSet.String("format", "csv", "doc")
 	globalSet.String("file", testFile, "doc")
 
 	app := cli.NewApp()
@@ -90,6 +93,7 @@ func TestValidateConfig(t *testing.T) {
 
 	globalSet := flag.NewFlagSet("test", 0)
 	globalSet.String("algorithm", "SRP", "doc")
+	globalSet.String("format", "csv", "doc")
 	globalSet.Bool("debug", false, "doc")
 	globalSet.String("file", testFile, "doc")
 
@@ -112,6 +116,7 @@ func TestValidateConfig_InvalidAlgorithm(t *testing.T) {
 
 	globalSet := flag.NewFlagSet("test", 0)
 	globalSet.String("algorithm", "INVALID_VALUE", "doc")
+	globalSet.String("format", "csv", "doc")
 	globalSet.Bool("debug", false, "doc")
 	globalSet.String("file", testFile, "doc")
 
@@ -122,6 +127,31 @@ func TestValidateConfig_InvalidAlgorithm(t *testing.T) {
 
 	if assert.NotNil(t, err) {
 		assert.Equal(t, "Unknown `--algorithm` value: INVALID_VALUE", err.Error())
+	}
+}
+
+func TestValidateConfig_InvalidFormat(t *testing.T) {
+	body := `
+  [
+    { "name":"A", "preferences": ["B"] },
+    { "name":"B", "preferences": ["A"] }
+  ]
+	`
+	writeToFile(testFile, body)
+
+	globalSet := flag.NewFlagSet("test", 0)
+	globalSet.String("algorithm", "srp", "doc")
+	globalSet.String("format", "INVALID_VALUE", "doc")
+	globalSet.Bool("debug", false, "doc")
+	globalSet.String("file", testFile, "doc")
+
+	app := cli.NewApp()
+	ctx := cli.NewContext(app, globalSet, nil)
+	cfg, err := config.NewConfig(ctx)
+	err = validateConfig(*cfg)
+
+	if assert.NotNil(t, err) {
+		assert.Equal(t, "Unknown `--format` value: INVALID_VALUE", err.Error())
 	}
 }
 
