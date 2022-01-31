@@ -13,10 +13,7 @@ type MatchEntry = core.MatchEntry
 type MatchResult = core.MatchResult
 
 func Load(r io.Reader) (*[]MatchEntry, error) {
-	var mp *[]MatchEntry
-	var err error
-
-	mp, err = load.LoadFromIO(r)
+	mp, err := load.LoadFromIO(r)
 	if err != nil {
 		return mp, err
 	}
