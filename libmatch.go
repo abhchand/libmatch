@@ -9,11 +9,11 @@ import (
 	"github.com/abhchand/libmatch/pkg/validate"
 )
 
-type MemberPreferences = core.MatchEntry
+type MatchEntry = core.MatchEntry
 type MatchResult = core.MatchResult
 
-func Load(r io.Reader) (*[]MemberPreferences, error) {
-	var mp *[]MemberPreferences
+func Load(r io.Reader) (*[]MatchEntry, error) {
+	var mp *[]MatchEntry
 	var err error
 
 	mp, err = load.LoadFromIO(r)
@@ -24,7 +24,7 @@ func Load(r io.Reader) (*[]MemberPreferences, error) {
 	return mp, err
 }
 
-func SolveSRP(prefs *[]MemberPreferences) (MatchResult, error) {
+func SolveSRP(prefs *[]MatchEntry) (MatchResult, error) {
 	var res MatchResult
 	var err error
 
