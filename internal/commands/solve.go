@@ -39,11 +39,6 @@ var SolveCommand = cli.Command{
 			Value:    "csv",
 			Aliases:  []string{"o"},
 		},
-		&cli.BoolFlag{
-			Name:  "debug",
-			Usage: "enable debug output to STDOUT",
-			Value: false,
-		},
 	},
 }
 

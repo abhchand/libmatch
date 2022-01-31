@@ -71,8 +71,6 @@ func (v PreferenceTableValidator) validateMembers(table core.PreferenceTable) ([
  */
 func (v PreferenceTableValidator) validateSymmetry(table core.PreferenceTable, memberNames []string) error {
 	for name := range table {
-		fmt.Printf("Evaluating %v\n", name)
-
 		// Find index of this member's name
 		var idx int
 		for i := range memberNames {
@@ -81,8 +79,6 @@ func (v PreferenceTableValidator) validateSymmetry(table core.PreferenceTable, m
 				break
 			}
 		}
-
-		fmt.Printf("\tIndex: %v\n", idx)
 
 		/*
 		 * Remove this member from the member name list
@@ -102,9 +98,6 @@ func (v PreferenceTableValidator) validateSymmetry(table core.PreferenceTable, m
 		// Compare
 		sort.Strings(actual)
 		sort.Strings(expected)
-
-		fmt.Printf("\tActual: %v( (%v)\n", actual, len(prefs))
-		fmt.Printf("\tExpected: %v (%v)\n", expected, len(expected))
 
 		if !stringSlicesEqual(actual, expected) {
 			return errors.New(

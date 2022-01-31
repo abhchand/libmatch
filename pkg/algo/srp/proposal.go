@@ -1,8 +1,6 @@
 package srp
 
 import (
-	"fmt"
-
 	"github.com/abhchand/libmatch/pkg/core"
 )
 
@@ -45,17 +43,12 @@ func isStable(pt *core.PreferenceTable) bool {
 }
 
 func simulateProposal(proposer, proposed *core.Member) {
-	fmt.Printf("%v proposes to %v,", proposer, proposed)
-
 	if !proposed.HasAcceptedProposal() {
-		fmt.Printf("%v accepts %v\n", proposed, proposer)
 		proposed.Accept(proposer)
 	} else if proposed.WouldPreferProposalFrom(*proposer) {
-		fmt.Printf("%v rejects %v, accepts %v\n", proposed, proposed.CurrentProposer(), proposer)
 		proposed.Reject(proposed.CurrentProposer())
 		proposed.Accept(proposer)
 	} else {
-		fmt.Printf("%v rejects %v\n", proposed, proposer)
 		proposed.Reject(proposer)
 	}
 }
