@@ -43,7 +43,11 @@ func SolveSRP(prefs *[]MemberPreferences) (MatchResult, error) {
 		return res, err
 	}
 
-	res, err = srp.Run(&table)
+	algoCtx := core.AlgorithmContext{
+		PrimaryTable: &table,
+	}
+
+	res, err = srp.Run(algoCtx)
 
 	return res, err
 }

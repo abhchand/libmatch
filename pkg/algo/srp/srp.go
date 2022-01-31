@@ -5,8 +5,9 @@ import (
 	"github.com/abhchand/libmatch/pkg/core"
 )
 
-func Run(pt *core.PreferenceTable) (core.MatchResult, error) {
+func Run(algoCtx core.AlgorithmContext) (core.MatchResult, error) {
 	var res core.MatchResult
+	pt := algoCtx.PrimaryTable
 
 	if !phase1Proposal(pt) {
 		return res, errors.New("No stable solution exists")
