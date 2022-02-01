@@ -26,12 +26,12 @@ func (v SingleTableValidator) Validate() error {
 		return err
 	}
 
-	memberNames, err := v.validateMembers()
+	err = v.validateMembers()
 	if err != nil {
 		return err
 	}
 
-	err = v.validateSymmetry(memberNames)
+	err = v.validateSymmetry()
 	if err != nil {
 		return err
 	}
@@ -70,20 +70,12 @@ func (v SingleTableValidator) validateSize() error {
 	return nil
 }
 
-func (v SingleTableValidator) validateMembers() ([]string, error) {
-
-	memberNames := make([]string, 0, len(*v.Table))
-
-	for name := range *v.Table {
-		if name == "" {
-			return memberNames, errors.New("All member names must non-blank")
-		}
-
-		memberNames = append(memberNames, name)
+func (v SingleTableValidator) validateMembers() error {
+	if (*v.Table)[""] != nil {
+		return errors.New("All member names must non-blank")
 	}
 
-	return memberNames, nil
-
+	return nil
 }
 
 /*
@@ -91,7 +83,19 @@ func (v SingleTableValidator) validateMembers() ([]string, error) {
  *
  * That is, verify each member's preferences contains all the other members.
  */
-func (v SingleTableValidator) validateSymmetry(memberNames []string) error {
+func (v SingleTableValidator) validateSymmetry() error {
+
+	// Build a list of member names
+
+	memberNames := make([]string, len(*v.Table))
+	i := 0
+	for name := range *v.Table {
+		memberNames[i] = name
+		i++
+	}
+
+	// Verify each member's preference list
+
 	for name := range *v.Table {
 		// Find index of this member's name
 		var idx int
