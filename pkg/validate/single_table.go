@@ -3,7 +3,6 @@ package validate
 import (
 	"errors"
 	"fmt"
-	"sort"
 
 	"github.com/abhchand/libmatch/pkg/core"
 )
@@ -128,28 +127,11 @@ func (v SingleTableValidator) validateSymmetry(memberNames []string) error {
 		}
 
 		// Compare
-		sort.Strings(actual)
-		sort.Strings(expected)
-
-		if !stringSlicesEqual(actual, expected) {
+		if !stringSlicesMatch(actual, expected) {
 			return errors.New(
 				fmt.Sprintf("Preference list for '%v' does not contain all the required members", name))
 		}
 	}
 
 	return nil
-}
-
-func stringSlicesEqual(a, b []string) bool {
-	if len(a) != len(b) {
-		return false
-	}
-
-	for i, v := range a {
-		if v != b[i] {
-			return false
-		}
-	}
-
-	return true
 }
