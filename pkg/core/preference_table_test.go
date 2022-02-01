@@ -73,6 +73,128 @@ func TestNewPreferenceTable(t *testing.T) {
 	})
 }
 
+func TestNewPreferenceTablePair(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		entriesA := []MatchEntry{
+			{Name: "A", Preferences: []string{"K", "L", "M"}},
+			{Name: "B", Preferences: []string{"L", "M", "K"}},
+			{Name: "C", Preferences: []string{"M", "L", "K"}},
+		}
+		entriesB := []MatchEntry{
+			{Name: "K", Preferences: []string{"B", "C", "A"}},
+			{Name: "L", Preferences: []string{"A", "C", "B"}},
+			{Name: "M", Preferences: []string{"A", "B", "C"}},
+		}
+
+		setupDoubleTable()
+
+		tables := NewPreferenceTablePair(&entriesA, &entriesB)
+
+		assert.True(t, reflect.DeepEqual(ptA, tables[0]))
+		assert.True(t, reflect.DeepEqual(ptB, tables[1]))
+	})
+
+	t.Run("order of entries does not matter", func(t *testing.T) {
+		entriesA := []MatchEntry{
+			{Name: "A", Preferences: []string{"K", "L", "M"}},
+			{Name: "B", Preferences: []string{"L", "M", "K"}},
+			{Name: "C", Preferences: []string{"M", "L", "K"}},
+		}
+		entriesB := []MatchEntry{
+			{Name: "K", Preferences: []string{"B", "C", "A"}},
+			{Name: "L", Preferences: []string{"A", "C", "B"}},
+			{Name: "M", Preferences: []string{"A", "B", "C"}},
+		}
+
+		setupDoubleTable()
+
+		tables := NewPreferenceTablePair(&entriesB, &entriesA)
+
+		assert.True(t, reflect.DeepEqual(ptB, tables[0]))
+		assert.True(t, reflect.DeepEqual(ptA, tables[1]))
+	})
+
+	t.Run("empty table", func(t *testing.T) {
+		entriesA := []MatchEntry{}
+		entriesB := []MatchEntry{}
+
+		tables := NewPreferenceTablePair(&entriesA, &entriesB)
+
+		assert.True(t, reflect.DeepEqual(PreferenceTable{}, tables[0]))
+		assert.True(t, reflect.DeepEqual(PreferenceTable{}, tables[1]))
+	})
+
+	t.Run("undefined preference", func(t *testing.T) {
+		entriesA := []MatchEntry{
+			{Name: "A", Preferences: []string{"K", "L", "X"}},
+			{Name: "B", Preferences: []string{"L", "M", "K"}},
+			{Name: "C", Preferences: []string{"M", "L", "K"}},
+		}
+		entriesB := []MatchEntry{
+			{Name: "K", Preferences: []string{"B", "C", "A"}},
+			{Name: "L", Preferences: []string{"A", "Z", "B"}},
+			{Name: "M", Preferences: []string{"A", "B", "C"}},
+		}
+
+		setupDoubleTable()
+
+		plA = PreferenceList{members: []*Member{&memK, &memL, nil}}
+		memA.SetPreferenceList(&plA)
+
+		plL = PreferenceList{members: []*Member{&memA, nil, &memB}}
+		memL.SetPreferenceList(&plL)
+
+		tables := NewPreferenceTablePair(&entriesA, &entriesB)
+
+		assert.True(t, reflect.DeepEqual(ptA, tables[0]))
+		assert.True(t, reflect.DeepEqual(ptB, tables[1]))
+	})
+
+	t.Run("case sensitive", func(t *testing.T) {
+		entriesA := []MatchEntry{
+			{Name: "A", Preferences: []string{"K", "L", "M"}},
+			{Name: "B", Preferences: []string{"L", "M", "K"}},
+			{Name: "C", Preferences: []string{"M", "L", "K"}},
+			{Name: "a", Preferences: []string{"L", "K", "M"}},
+		}
+		entriesB := []MatchEntry{
+			{Name: "K", Preferences: []string{"B", "C", "A"}},
+			{Name: "L", Preferences: []string{"A", "C", "B"}},
+			{Name: "M", Preferences: []string{"A", "B", "C"}},
+			{Name: "k", Preferences: []string{"C", "B", "A"}},
+		}
+
+		setupDoubleTable()
+
+		_memA := Member{name: "a"}
+		_plA := PreferenceList{members: []*Member{&memL, &memK, &memM}}
+		_memA.SetPreferenceList(&_plA)
+
+		_memK := Member{name: "k"}
+		_plK := PreferenceList{members: []*Member{&memC, &memB, &memA}}
+		_memK.SetPreferenceList(&_plK)
+
+		ptA = PreferenceTable{
+			"A": &memA,
+			"B": &memB,
+			"C": &memC,
+			"a": &_memA,
+		}
+
+		ptB = PreferenceTable{
+			"K": &memK,
+			"L": &memL,
+			"M": &memM,
+			"k": &_memK,
+		}
+
+		tables := NewPreferenceTablePair(&entriesA, &entriesB)
+
+		assert.True(t, reflect.DeepEqual(ptA, tables[0]))
+		assert.True(t, reflect.DeepEqual(ptB, tables[1]))
+	})
+}
+
 func TestString__PreferenceTable(t *testing.T) {
 
 	cases := [][]string{

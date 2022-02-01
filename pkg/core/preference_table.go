@@ -39,6 +39,51 @@ func NewPreferenceTable(entries *[]MatchEntry) PreferenceTable {
 	return table
 }
 
+func NewPreferenceTablePair(entriesA, entriesB *[]MatchEntry) []PreferenceTable {
+	entriesList := []*[]MatchEntry{entriesA, entriesB}
+
+	tables := make([]PreferenceTable, 2)
+	tables[0] = make(PreferenceTable, len(*entriesA))
+	tables[1] = make(PreferenceTable, len(*entriesB))
+
+	// First pass: build a list of members as a lookup table
+	for i := range entriesList {
+		entries := entriesList[i]
+
+		for j := range *entries {
+			name := (*entries)[j].Name
+			m := NewMember(name)
+			tables[i][name] = &m
+		}
+	}
+
+	// Second pass, build preference list for each member
+	// that contains references to the other table's members
+	for i := range entriesList {
+		e := *entriesList[i]
+
+		table := tables[i]
+		otherTable := tables[1-i]
+
+		for j := range e {
+			name := e[j].Name
+			m := table[name]
+			plMembers := make([]*Member, len(e[j].Preferences))
+
+			for p := range e[j].Preferences {
+				prefName := e[j].Preferences[p]
+				pref := otherTable[prefName]
+				plMembers[p] = pref
+			}
+
+			m.preferenceList = &PreferenceList{members: plMembers}
+			tables[i][name] = m
+		}
+	}
+
+	return tables
+}
+
 func (pt PreferenceTable) String() string {
 	var str string
 
