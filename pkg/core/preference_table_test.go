@@ -43,14 +43,7 @@ func TestNewPreferenceTable(t *testing.T) {
 		plA = PreferenceList{members: []*Member{&memB, &memC, nil}}
 		memA.SetPreferenceList(&plA)
 
-		wanted := PreferenceTable{
-			"A": &memA,
-			"B": &memB,
-			"C": &memC,
-			"D": &memD,
-		}
-
-		assert.True(t, reflect.DeepEqual(wanted, NewPreferenceTable(&entries)))
+		assert.True(t, reflect.DeepEqual(pt, NewPreferenceTable(&entries)))
 	})
 
 	t.Run("case sensitive", func(t *testing.T) {
