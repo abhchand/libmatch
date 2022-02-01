@@ -74,6 +74,44 @@ func TestSolveSRP(t *testing.T) {
 		assert.True(t, reflect.DeepEqual(wanted, result))
 	})
 
+	t.Run("no stable solution", func(t *testing.T) {
+		entries := []core.MatchEntry{
+			{Name: "A", Preferences: []string{"B","E","C","F","D"}},
+			{Name: "B", Preferences: []string{"C","F","E","A","D"}},
+			{Name: "C", Preferences: []string{"E","A","F","D","B"}},
+			{Name: "D", Preferences: []string{"B","A","C","F","E"}},
+			{Name: "E", Preferences: []string{"A","C","D","B","F"}},
+			{Name: "F", Preferences: []string{"C","A","E","B","D"}},
+		}
+
+		_, err := SolveSRP(&entries)
+
+		assert.Equal(t, "No stable solution exists", err.Error())
+	})
+
+	t.Run("is not dependent on order", func(t *testing.T) {
+		entries := []core.MatchEntry{
+			{Name: "A", Preferences: []string{"B", "C", "D"}},
+			{Name: "D", Preferences: []string{"A", "B", "C"}},
+			{Name: "C", Preferences: []string{"A", "B", "D"}},
+			{Name: "B", Preferences: []string{"A", "C", "D"}},
+		}
+
+		wanted := core.MatchResult{
+			Mapping: map[string]string{
+				"A": "B",
+				"B": "A",
+				"C": "D",
+				"D": "C",
+			},
+		}
+
+		result, err := SolveSRP(&entries)
+
+		assert.Nil(t, err)
+		assert.True(t, reflect.DeepEqual(wanted, result))
+	})
+
 	t.Run("validates match entries", func(t *testing.T) {
 		entries := []core.MatchEntry{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
