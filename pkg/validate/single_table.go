@@ -8,25 +8,31 @@ import (
 	"github.com/abhchand/libmatch/pkg/core"
 )
 
-type PreferenceTableValidator struct {
-	PrimaryTable core.PreferenceTable
-	Err          error
+type SingleTableValidator struct {
+	Entries *[]core.MatchEntry
+	Table   *core.PreferenceTable
+	Err     error
 }
 
-func (v *PreferenceTableValidator) Validate() error {
+func (v SingleTableValidator) Validate() error {
 	var err error
 
-	err = v.validateSize(v.PrimaryTable)
+	err = v.validateUniqueness()
 	if err != nil {
 		return err
 	}
 
-	memberNames, err := v.validateMembers(v.PrimaryTable)
+	err = v.validateSize()
 	if err != nil {
 		return err
 	}
 
-	err = v.validateSymmetry(v.PrimaryTable, memberNames)
+	memberNames, err := v.validateMembers()
+	if err != nil {
+		return err
+	}
+
+	err = v.validateSymmetry(memberNames)
 	if err != nil {
 		return err
 	}
@@ -34,8 +40,25 @@ func (v *PreferenceTableValidator) Validate() error {
 	return nil
 }
 
-func (v PreferenceTableValidator) validateSize(table core.PreferenceTable) error {
-	numMembers := len(table)
+func (v SingleTableValidator) validateUniqueness() error {
+	cache := make(map[string]bool, 0)
+
+	for i := range *v.Entries {
+		name := (*v.Entries)[i].Name
+
+		if cache[name] {
+			msg := fmt.Sprintf("Member names must be unique. Found duplicate entry '%v'", name)
+			return errors.New(msg)
+		}
+
+		cache[name] = true
+	}
+
+	return nil
+}
+
+func (v SingleTableValidator) validateSize() error {
+	numMembers := len(*v.Table)
 
 	if numMembers == 0 {
 		return errors.New("Table must be non-empty")
@@ -48,11 +71,11 @@ func (v PreferenceTableValidator) validateSize(table core.PreferenceTable) error
 	return nil
 }
 
-func (v PreferenceTableValidator) validateMembers(table core.PreferenceTable) ([]string, error) {
+func (v SingleTableValidator) validateMembers() ([]string, error) {
 
-	memberNames := make([]string, 0, len(table))
+	memberNames := make([]string, 0, len(*v.Table))
 
-	for name := range table {
+	for name := range *v.Table {
 		if name == "" {
 			return memberNames, errors.New("All member names must non-blank")
 		}
@@ -69,8 +92,8 @@ func (v PreferenceTableValidator) validateMembers(table core.PreferenceTable) ([
  *
  * That is, verify each member's preferences contains all the other members.
  */
-func (v PreferenceTableValidator) validateSymmetry(table core.PreferenceTable, memberNames []string) error {
-	for name := range table {
+func (v SingleTableValidator) validateSymmetry(memberNames []string) error {
+	for name := range *v.Table {
 		// Find index of this member's name
 		var idx int
 		for i := range memberNames {
@@ -89,7 +112,7 @@ func (v PreferenceTableValidator) validateSymmetry(table core.PreferenceTable, m
 		copy(expected[idx:], memberNames[idx+1:])
 
 		// Determine the actual list of preference list (names) for this member
-		prefs := table[name].PreferenceList().Members()
+		prefs := (*v.Table)[name].PreferenceList().Members()
 		actual := make([]string, len(prefs))
 		for i := range prefs {
 			actual[i] = prefs[i].Name()
