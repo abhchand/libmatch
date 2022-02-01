@@ -145,4 +145,23 @@ func TestValidate__SingleTable(t *testing.T) {
 			assert.Equal(t, wanted, err.Error())
 		}
 	})
+
+	t.Run("asymmetrical unknown member", func(t *testing.T) {
+		entries := []core.MatchEntry{
+			{Name: "A", Preferences: []string{"B", "C", "D"}},
+			{Name: "B", Preferences: []string{"A", "C", "X"}},
+			{Name: "C", Preferences: []string{"A", "B", "D"}},
+			{Name: "D", Preferences: []string{"A", "B", "C"}},
+		}
+
+		table := core.NewPreferenceTable(&entries)
+
+		v := SingleTableValidator{Entries: &entries, Table: &table}
+		err := v.Validate()
+
+		if assert.NotNil(t, err) {
+			wanted := fmt.Sprintf("Preference list for '%v' contains at least one unknown member", "B")
+			assert.Equal(t, wanted, err.Error())
+		}
+	})
 }

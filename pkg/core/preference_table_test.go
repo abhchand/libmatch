@@ -30,6 +30,29 @@ func TestNewPreferenceTable(t *testing.T) {
 		assert.Equal(t, wanted, NewPreferenceTable(&entries))
 	})
 
+	t.Run("undefined preference", func(t *testing.T) {
+		entries := []MatchEntry{
+			{Name: "A", Preferences: []string{"B", "C", "X"}},
+			{Name: "B", Preferences: []string{"A", "C", "D"}},
+			{Name: "C", Preferences: []string{"A", "B", "D"}},
+			{Name: "D", Preferences: []string{"A", "B", "C"}},
+		}
+
+		setupMembers()
+
+		plA = PreferenceList{members: []*Member{&memB, &memC, nil}}
+		memA.SetPreferenceList(&plA)
+
+		wanted := PreferenceTable{
+			"A": &memA,
+			"B": &memB,
+			"C": &memC,
+			"D": &memD,
+		}
+
+		assert.True(t, reflect.DeepEqual(wanted, NewPreferenceTable(&entries)))
+	})
+
 	t.Run("case sensitive", func(t *testing.T) {
 		entries := []MatchEntry{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},

@@ -115,6 +115,15 @@ func (v SingleTableValidator) validateSymmetry(memberNames []string) error {
 		prefs := (*v.Table)[name].PreferenceList().Members()
 		actual := make([]string, len(prefs))
 		for i := range prefs {
+			/*
+			 * The only way a PreferenceList member would be `nil` is if it referenced
+			 * a member that does not exist. That is, no `Member` value could be determined
+			 * when constructing the PreferenceTable.
+			 */
+			if prefs[i] == nil {
+				return errors.New(
+					fmt.Sprintf("Preference list for '%v' contains at least one unknown member", name))
+			}
 			actual[i] = prefs[i].Name()
 		}
 
