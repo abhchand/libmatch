@@ -76,12 +76,12 @@ func TestSolveSRP(t *testing.T) {
 
 	t.Run("no stable solution", func(t *testing.T) {
 		entries := []core.MatchEntry{
-			{Name: "A", Preferences: []string{"B","E","C","F","D"}},
-			{Name: "B", Preferences: []string{"C","F","E","A","D"}},
-			{Name: "C", Preferences: []string{"E","A","F","D","B"}},
-			{Name: "D", Preferences: []string{"B","A","C","F","E"}},
-			{Name: "E", Preferences: []string{"A","C","D","B","F"}},
-			{Name: "F", Preferences: []string{"C","A","E","B","D"}},
+			{Name: "A", Preferences: []string{"B", "E", "C", "F", "D"}},
+			{Name: "B", Preferences: []string{"C", "F", "E", "A", "D"}},
+			{Name: "C", Preferences: []string{"E", "A", "F", "D", "B"}},
+			{Name: "D", Preferences: []string{"B", "A", "C", "F", "E"}},
+			{Name: "E", Preferences: []string{"A", "C", "D", "B", "F"}},
+			{Name: "F", Preferences: []string{"C", "A", "E", "B", "D"}},
 		}
 
 		_, err := SolveSRP(&entries)
@@ -140,19 +140,19 @@ func TestSolveSRP(t *testing.T) {
 
 func BenchmarkSolveSRP(b *testing.B) {
 	entries := []core.MatchEntry{
-		{Name:"A", Preferences: []string{"H","J","E","B","D","I","C","G","F"}},
-		{Name:"B", Preferences: []string{"E","I","G","D","A","J","C","F","H"}},
-		{Name:"C", Preferences: []string{"J","A","B","H","F","I","G","D","E"}},
-		{Name:"D", Preferences: []string{"I","C","E","G","B","A","J","F","H"}},
-		{Name:"E", Preferences: []string{"F","J","G","B","C","H","A","D","I"}},
-		{Name:"F", Preferences: []string{"C","I","D","E","G","H","A","J","B"}},
-		{Name:"G", Preferences: []string{"E","H","F","A","J","C","D","B","I"}},
-		{Name:"H", Preferences: []string{"F","G","J","B","I","E","C","A","D"}},
-		{Name:"I", Preferences: []string{"J","G","B","D","A","C","E","F","H"}},
-		{Name:"J", Preferences: []string{"C","F","A","B","I","G","H","D","E"}},
+		{Name: "A", Preferences: []string{"H", "J", "E", "B", "D", "I", "C", "G", "F"}},
+		{Name: "B", Preferences: []string{"E", "I", "G", "D", "A", "J", "C", "F", "H"}},
+		{Name: "C", Preferences: []string{"J", "A", "B", "H", "F", "I", "G", "D", "E"}},
+		{Name: "D", Preferences: []string{"I", "C", "E", "G", "B", "A", "J", "F", "H"}},
+		{Name: "E", Preferences: []string{"F", "J", "G", "B", "C", "H", "A", "D", "I"}},
+		{Name: "F", Preferences: []string{"C", "I", "D", "E", "G", "H", "A", "J", "B"}},
+		{Name: "G", Preferences: []string{"E", "H", "F", "A", "J", "C", "D", "B", "I"}},
+		{Name: "H", Preferences: []string{"F", "G", "J", "B", "I", "E", "C", "A", "D"}},
+		{Name: "I", Preferences: []string{"J", "G", "B", "D", "A", "C", "E", "F", "H"}},
+		{Name: "J", Preferences: []string{"C", "F", "A", "B", "I", "G", "H", "D", "E"}},
 	}
 
-  for i := 0; i < b.N; i++ {
-    SolveSRP(&entries)
-  }
+	for i := 0; i < b.N; i++ {
+		SolveSRP(&entries)
+	}
 }
