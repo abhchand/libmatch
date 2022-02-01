@@ -56,7 +56,7 @@ func TestCurrentProposer(t *testing.T) {
 
 func TestCurrentAcceptor(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		setupMembers()
+		setupSingleTable()
 
 		// Ensure all users have an accepted proposal for this test. This avoids
 		// any nil reference errors for this specific test
@@ -78,7 +78,7 @@ func TestCurrentAcceptor(t *testing.T) {
 	})
 
 	t.Run("handles members with no accepted proposal", func(t *testing.T) {
-		setupMembers()
+		setupSingleTable()
 
 		// Set only some members to have an accepted proposal
 		memA.acceptedProposalFrom = nil
@@ -114,7 +114,7 @@ func TestHasAcceptedProposal(t *testing.T) {
 }
 
 func TestAccept(t *testing.T) {
-	setupMembers()
+	setupSingleTable()
 
 	assert.Nil(t, memA.acceptedProposalFrom)
 
@@ -127,7 +127,7 @@ func TestAccept(t *testing.T) {
 
 func TestReject(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		setupMembers()
+		setupSingleTable()
 
 		memA.acceptedProposalFrom = &memB
 		memB.acceptedProposalFrom = &memA
@@ -148,7 +148,7 @@ func TestReject(t *testing.T) {
 	})
 
 	t.Run("Rejecting current proposer", func(t *testing.T) {
-		setupMembers()
+		setupSingleTable()
 
 		memA.acceptedProposalFrom = &memB
 		memB.acceptedProposalFrom = &memA
@@ -175,7 +175,7 @@ func TestReject(t *testing.T) {
 
 func TestWouldPreferProposalFrom(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		setupMembers()
+		setupSingleTable()
 
 		memA.acceptedProposalFrom = &memC
 
@@ -184,7 +184,7 @@ func TestWouldPreferProposalFrom(t *testing.T) {
 	})
 
 	t.Run("has not accepted proposal", func(t *testing.T) {
-		setupMembers()
+		setupSingleTable()
 
 		assert.True(t, memA.WouldPreferProposalFrom(memB))
 		assert.True(t, memA.WouldPreferProposalFrom(memD))

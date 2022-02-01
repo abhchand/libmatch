@@ -4,7 +4,7 @@ var memA, memB, memC, memD, memK, memL, memM Member
 var plA, plB, plC, plD, plK, plL, plM PreferenceList
 var pt, ptA, ptB PreferenceTable
 
-func setupMembers() {
+func setupSingleTable() {
 	memA = Member{name: "A"}
 	memB = Member{name: "B"}
 	memC = Member{name: "C"}

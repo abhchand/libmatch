@@ -16,7 +16,7 @@ func TestNewPreferenceTable(t *testing.T) {
 			{Name: "D", Preferences: []string{"A", "B", "C"}},
 		}
 
-		setupMembers()
+		setupSingleTable()
 		wanted := pt
 
 		assert.True(t, reflect.DeepEqual(wanted, NewPreferenceTable(&entries)))
@@ -38,7 +38,7 @@ func TestNewPreferenceTable(t *testing.T) {
 			{Name: "D", Preferences: []string{"A", "B", "C"}},
 		}
 
-		setupMembers()
+		setupSingleTable()
 
 		plA = PreferenceList{members: []*Member{&memB, &memC, nil}}
 		memA.SetPreferenceList(&plA)
@@ -55,7 +55,7 @@ func TestNewPreferenceTable(t *testing.T) {
 			{Name: "a", Preferences: []string{"A", "B", "C"}},
 		}
 
-		setupMembers()
+		setupSingleTable()
 
 		_memA := Member{name: "a"}
 		_plA := PreferenceList{members: []*Member{&memA, &memB, &memC}}
@@ -259,7 +259,7 @@ func TestString__PreferenceTable(t *testing.T) {
 }
 
 func TestUnmatchedMembers(t *testing.T) {
-	setupMembers()
+	setupSingleTable()
 
 	memA.acceptedProposalFrom = &memB
 	memB.acceptedProposalFrom = &memA
@@ -271,7 +271,7 @@ func TestUnmatchedMembers(t *testing.T) {
 
 func TestIsStable(t *testing.T) {
 	t.Run("returns true", func(t *testing.T) {
-		setupMembers()
+		setupSingleTable()
 
 		plA = PreferenceList{members: []*Member{&memB}}
 		plB = PreferenceList{members: []*Member{&memA}}
@@ -282,7 +282,7 @@ func TestIsStable(t *testing.T) {
 	})
 
 	t.Run("returns false", func(t *testing.T) {
-		setupMembers()
+		setupSingleTable()
 
 		plA = PreferenceList{members: []*Member{&memB}}
 		plB = PreferenceList{members: []*Member{&memA}}
@@ -295,7 +295,7 @@ func TestIsStable(t *testing.T) {
 
 func TestIsComplete(t *testing.T) {
 	t.Run("returns true", func(t *testing.T) {
-		setupMembers()
+		setupSingleTable()
 
 		plA = PreferenceList{members: []*Member{&memB}}
 		plB = PreferenceList{members: []*Member{&memA}}
@@ -306,7 +306,7 @@ func TestIsComplete(t *testing.T) {
 	})
 
 	t.Run("returns false", func(t *testing.T) {
-		setupMembers()
+		setupSingleTable()
 
 		plA = PreferenceList{members: []*Member{&memB}}
 		plB = PreferenceList{members: []*Member{&memA}}
@@ -317,7 +317,7 @@ func TestIsComplete(t *testing.T) {
 	})
 
 	t.Run("handles empty lists", func(t *testing.T) {
-		setupMembers()
+		setupSingleTable()
 
 		plA = PreferenceList{members: []*Member{&memB}}
 		plB = PreferenceList{members: []*Member{&memA}}
