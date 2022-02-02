@@ -98,7 +98,7 @@ func (v DoubleTableValidator) validateSize() error {
 	}
 
 	if sizes[0] != sizes[1] {
-		errors.New("Tables must be the same size")
+		return errors.New("Tables must be the same size")
 	}
 
 	return nil

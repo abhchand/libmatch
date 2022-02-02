@@ -158,6 +158,30 @@ func TestValidate__DoubleTable(t *testing.T) {
 		assert.Equal(t, "Table must be non-empty", err.Error())
 	})
 
+	t.Run("tables are differente sizes", func(t *testing.T) {
+		entriesList := []*[]core.MatchEntry{
+			{
+				{Name: "A", Preferences: []string{"K", "L", "M"}},
+				{Name: "B", Preferences: []string{"L", "M", "K"}},
+				{Name: "C", Preferences: []string{"M", "L", "K"}},
+			},
+			{
+				{Name: "K", Preferences: []string{"B", "C", "A"}},
+				{Name: "L", Preferences: []string{"A", "C", "B"}},
+			},
+		}
+
+		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+
+		v := DoubleTableValidator{
+			EntriesList: entriesList,
+			Tables:      []*core.PreferenceTable{&tables[0], &tables[1]},
+		}
+		err := v.Validate()
+
+		assert.Equal(t, "Tables must be the same size", err.Error())
+	})
+
 	t.Run("empty member", func(t *testing.T) {
 		entriesList := []*[]core.MatchEntry{
 			{
