@@ -7,7 +7,7 @@ import (
 
 func Run(algoCtx core.AlgorithmContext) (core.MatchResult, error) {
 	var res core.MatchResult
-	pt := algoCtx.PrimaryTable
+	pt := algoCtx.TableA
 
 	if !phase1Proposal(pt) {
 		return res, errors.New("No stable solution exists")

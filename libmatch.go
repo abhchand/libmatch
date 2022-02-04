@@ -37,8 +37,8 @@ func SolveSMP(prefsA, prefsB *[]MatchEntry) (MatchResult, error) {
 	}
 
 	algoCtx := core.AlgorithmContext{
-		PrimaryTable: &tables[0],
-		PartnerTable: &tables[1],
+		TableA: &tables[0],
+		TableB: &tables[1],
 	}
 
 	res, err = smp.Run(algoCtx)
@@ -58,7 +58,7 @@ func SolveSRP(prefs *[]MatchEntry) (MatchResult, error) {
 	}
 
 	algoCtx := core.AlgorithmContext{
-		PrimaryTable: &table,
+		TableA: &table,
 	}
 
 	res, err = srp.Run(algoCtx)

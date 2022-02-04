@@ -18,7 +18,7 @@ func TestRun(t *testing.T) {
 		})
 
 		algoCtx := core.AlgorithmContext{
-			PrimaryTable: &pt,
+			TableA: &pt,
 		}
 
 		wanted := core.MatchResult{
@@ -50,7 +50,7 @@ func TestRun(t *testing.T) {
 		})
 
 		algoCtx := core.AlgorithmContext{
-			PrimaryTable: &pt,
+			TableA: &pt,
 		}
 
 		_, err := Run(algoCtx)

@@ -32,8 +32,8 @@ func TestRun(t *testing.T) {
 		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
 
 		algoCtx := core.AlgorithmContext{
-			PrimaryTable: &tables[0],
-			PartnerTable: &tables[1],
+			TableA: &tables[0],
+			TableB: &tables[1],
 		}
 
 		wanted := core.MatchResult{
@@ -82,8 +82,8 @@ func TestRun(t *testing.T) {
 		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
 
 		algoCtx := core.AlgorithmContext{
-			PrimaryTable: &tables[1],
-			PartnerTable: &tables[0],
+			TableA: &tables[1],
+			TableB: &tables[0],
 		}
 
 		wanted := core.MatchResult{

@@ -7,8 +7,8 @@ import (
 func Run(algoCtx core.AlgorithmContext) (core.MatchResult, error) {
 	res := core.MatchResult{}
 
-	ptA := algoCtx.PrimaryTable
-	ptB := algoCtx.PartnerTable
+	ptA := algoCtx.TableA
+	ptB := algoCtx.TableB
 
 	phase1Proposal(ptA, ptB)
 
