@@ -10,51 +10,71 @@ import (
 )
 
 func TestNewConfig(t *testing.T) {
-	globalSet := flag.NewFlagSet("test", 0)
-	globalSet.String("algorithm", "SRP", "doc")
-	globalSet.String("format", "csv", "doc")
-	globalSet.Bool("debug", false, "doc")
-	globalSet.String("file", "/tmp/test.json", "doc")
+	t.Run("success", func(t *testing.T) {
+		flagSet := flag.NewFlagSet("test", 0)
+		flagSet.String("algorithm", "SRP", "doc")
+		flagSet.String("format", "csv", "doc")
+		flagSet.Bool("debug", false, "doc")
+		flagSet.Var(cli.NewStringSlice("/tmp/test.json"), "file", "doc")
 
-	app := cli.NewApp()
-	ctx := cli.NewContext(app, globalSet, nil)
-	c, err := NewConfig(ctx)
+		app := cli.NewApp()
+		ctx := cli.NewContext(app, flagSet, nil)
+		cfg, err := NewConfig(ctx)
 
-	assert.Nil(t, err)
+		assert.Nil(t, err)
 
-	assert.IsType(t, new(Config), c)
-	assert.Equal(t, "SRP", c.Algorithm)
-	assert.Equal(t, false, c.Debug)
-	assert.Equal(t, "csv", c.OutputFormat)
-	assert.Equal(t, "/tmp/test.json", c.Filename)
+		assert.IsType(t, new(Config), cfg)
+		assert.Equal(t, "SRP", cfg.Algorithm)
+		assert.Equal(t, false, cfg.Debug)
+		assert.Equal(t, "csv", cfg.OutputFormat)
+		assert.Equal(t, []string{"/tmp/test.json"}, cfg.Filenames)
+	})
+
+	t.Run("`algorithm` is case insensitive", func(t *testing.T) {
+		flagSet := flag.NewFlagSet("test", 0)
+		flagSet.String("algorithm", "sRp", "doc")
+
+		app := cli.NewApp()
+		ctx := cli.NewContext(app, flagSet, nil)
+		cfg, err := NewConfig(ctx)
+
+		assert.Nil(t, err)
+
+		assert.IsType(t, new(Config), cfg)
+		assert.Equal(t, "SRP", cfg.Algorithm)
+	})
 }
 
-func TestNewConfig__AlgorithmCaseInsensitivity(t *testing.T) {
-	globalSet := flag.NewFlagSet("test", 0)
-	globalSet.String("algorithm", "sRp", "doc")
+func TestExpandFilenames(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		flagSet := flag.NewFlagSet("test", 0)
+		flagSet.Var(cli.NewStringSlice("./test.json"), "file", "doc")
 
-	app := cli.NewApp()
-	ctx := cli.NewContext(app, globalSet, nil)
-	c, err := NewConfig(ctx)
+		app := cli.NewApp()
+		ctx := cli.NewContext(app, flagSet, nil)
+		cfg, err := NewConfig(ctx)
 
-	assert.Nil(t, err)
+		curDir, err := filepath.Abs(".")
 
-	assert.IsType(t, new(Config), c)
-	assert.Equal(t, "SRP", c.Algorithm)
-}
+		assert.Nil(t, err)
 
-func TestNewConfig__PathExpansion(t *testing.T) {
-	globalSet := flag.NewFlagSet("test", 0)
-	globalSet.String("file", "./test.json", "doc")
+		assert.IsType(t, new(Config), cfg)
+		assert.Equal(t, []string{curDir + "/test.json"}, cfg.Filenames)
+	})
 
-	app := cli.NewApp()
-	ctx := cli.NewContext(app, globalSet, nil)
-	c, err := NewConfig(ctx)
+	t.Run("handles multiple files", func(t *testing.T) {
+		flagSet := flag.NewFlagSet("test", 0)
+		flagSet.Var(cli.NewStringSlice("./a.json", "./b.json"), "file", "doc")
 
-	curDir, err := filepath.Abs(".")
+		app := cli.NewApp()
+		ctx := cli.NewContext(app, flagSet, nil)
+		cfg, err := NewConfig(ctx)
 
-	assert.Nil(t, err)
+		curDir, err := filepath.Abs(".")
 
-	assert.IsType(t, new(Config), c)
-	assert.Equal(t, curDir+"/test.json", c.Filename)
+		assert.Nil(t, err)
+
+		assert.IsType(t, new(Config), cfg)
+		assert.Equal(t, []string{curDir + "/a.json", curDir + "/b.json"}, cfg.Filenames)
+	})
 }

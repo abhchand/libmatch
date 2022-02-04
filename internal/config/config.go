@@ -8,25 +8,42 @@ import (
 )
 
 type Config struct {
-	Algorithm       string
-	Debug           bool
-	Filename        string
-	OutputFormat    string
-	originalContext *cli.Context
+	Algorithm    string
+	Debug        bool
+	Filenames    []string
+	OutputFormat string
+	CliContext   *cli.Context
 }
 
 func NewConfig(ctx *cli.Context) (*Config, error) {
-	c := &Config{
+	cfg := &Config{
 		Algorithm:    strings.ToUpper(ctx.String("algorithm")),
 		Debug:        ctx.Bool("debug"),
 		OutputFormat: ctx.String("format"),
+		CliContext:   ctx,
 	}
 
-	absFilename, err := filepath.Abs(ctx.String("file"))
-	if err != nil {
-		return c, err
+	if err := expandFilenames(cfg); err != nil {
+		return cfg, err
 	}
-	c.Filename = absFilename
 
-	return c, nil
+	return cfg, nil
+}
+
+func expandFilenames(cfg *Config) error {
+	files := cfg.CliContext.StringSlice("file")
+
+	for f := range files {
+		absFilename, err := filepath.Abs(files[f])
+
+		if err != nil {
+			return err
+		}
+
+		files[f] = absFilename
+	}
+
+	cfg.Filenames = files
+
+	return nil
 }

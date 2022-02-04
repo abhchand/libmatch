@@ -60,7 +60,7 @@ func solveAction(ctx *cli.Context) error {
 		return err
 	}
 
-	prefs, err := load.LoadFromFile(cfg.Filename)
+	entriesList, err := loadFiles(*cfg)
 	if err != nil {
 		return err
 	}
@@ -71,7 +71,7 @@ func solveAction(ctx *cli.Context) error {
 	 */
 	switch cfg.Algorithm {
 	case "SRP":
-		result, err = libmatch.SolveSRP(prefs)
+		result, err = libmatch.SolveSRP(entriesList[0])
 		if err != nil {
 			return err
 		}
@@ -96,6 +96,12 @@ func validateConfig(cfg config.Config) error {
 		return errors.New(fmt.Sprintf("Unknown `--algorithm` value: %v", cfg.Algorithm))
 	}
 
+	// Verify number of `--file` inputs
+	if len(cfg.Filenames) != FILE_COUNTS[cfg.Algorithm] {
+		return errors.New(
+			fmt.Sprintf("Expected --file to be specified exactly %v time(s)", FILE_COUNTS[cfg.Algorithm]))
+	}
+
 	// Verify `format` value is valid
 	valid = false
 	for i := range OUTPUT_FORMATS {
@@ -110,4 +116,20 @@ func validateConfig(cfg config.Config) error {
 	}
 
 	return nil
+}
+
+func loadFiles(cfg config.Config) ([]*[]core.MatchEntry, error) {
+	entriesList := make([]*[]core.MatchEntry, len(cfg.Filenames))
+
+	for i := range cfg.Filenames {
+		entries, err := load.LoadFromFile(cfg.Filenames[i])
+
+		if err != nil {
+			return entriesList, err
+		}
+
+		entriesList[i] = entries
+	}
+
+	return entriesList, nil
 }

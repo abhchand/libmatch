@@ -26,7 +26,7 @@ func TestSolveAction(t *testing.T) {
 	globalSet := flag.NewFlagSet("test", 0)
 	globalSet.String("algorithm", "SRP", "doc")
 	globalSet.String("format", "csv", "doc")
-	globalSet.String("file", testFile, "doc")
+	globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
 
 	app := cli.NewApp()
 	ctx := cli.NewContext(app, globalSet, nil)
@@ -42,7 +42,7 @@ func TestSolveAction_ErrorCreatingConfig(t *testing.T) {
 	globalSet := flag.NewFlagSet("test", 0)
 	globalSet.String("algorithm", "SRP", "doc")
 	globalSet.String("format", "csv", "doc")
-	globalSet.String("file", testFile, "doc")
+	globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
 
 	app := cli.NewApp()
 	ctx := cli.NewContext(app, globalSet, nil)
@@ -67,7 +67,7 @@ func TestSolveAction_ErrorValidatingConfig(t *testing.T) {
 	// Force a validation error by specifying a bad `algorithm` value
 	globalSet.String("algorithm", "INVALID_VALUE", "doc")
 	globalSet.String("format", "csv", "doc")
-	globalSet.String("file", testFile, "doc")
+	globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
 
 	app := cli.NewApp()
 	ctx := cli.NewContext(app, globalSet, nil)
@@ -95,7 +95,7 @@ func TestValidateConfig(t *testing.T) {
 	globalSet.String("algorithm", "SRP", "doc")
 	globalSet.String("format", "csv", "doc")
 	globalSet.Bool("debug", false, "doc")
-	globalSet.String("file", testFile, "doc")
+	globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
 
 	app := cli.NewApp()
 	ctx := cli.NewContext(app, globalSet, nil)
@@ -118,7 +118,7 @@ func TestValidateConfig_InvalidAlgorithm(t *testing.T) {
 	globalSet.String("algorithm", "INVALID_VALUE", "doc")
 	globalSet.String("format", "csv", "doc")
 	globalSet.Bool("debug", false, "doc")
-	globalSet.String("file", testFile, "doc")
+	globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
 
 	app := cli.NewApp()
 	ctx := cli.NewContext(app, globalSet, nil)
@@ -127,6 +127,34 @@ func TestValidateConfig_InvalidAlgorithm(t *testing.T) {
 
 	if assert.NotNil(t, err) {
 		assert.Equal(t, "Unknown `--algorithm` value: INVALID_VALUE", err.Error())
+	}
+}
+
+func TestValidateConfig_InvalidNumberOfTables(t *testing.T) {
+	testFile2 := "/tmp/libmatch_test_2.json"
+
+	body := `
+  [
+    { "name":"A", "preferences": ["B"] },
+    { "name":"B", "preferences": ["A"] }
+  ]
+	`
+	writeToFile(testFile, body)
+	writeToFile(testFile2, body)
+
+	globalSet := flag.NewFlagSet("test", 0)
+	globalSet.String("algorithm", "SRP", "doc")
+	globalSet.String("format", "csv", "doc")
+	globalSet.Bool("debug", false, "doc")
+	globalSet.Var(cli.NewStringSlice(testFile, testFile2), "file", "doc")
+
+	app := cli.NewApp()
+	ctx := cli.NewContext(app, globalSet, nil)
+	cfg, err := config.NewConfig(ctx)
+	err = validateConfig(*cfg)
+
+	if assert.NotNil(t, err) {
+		assert.Equal(t, "Expected --file to be specified exactly 1 time(s)", err.Error())
 	}
 }
 
@@ -143,7 +171,7 @@ func TestValidateConfig_InvalidFormat(t *testing.T) {
 	globalSet.String("algorithm", "srp", "doc")
 	globalSet.String("format", "INVALID_VALUE", "doc")
 	globalSet.Bool("debug", false, "doc")
-	globalSet.String("file", testFile, "doc")
+	globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
 
 	app := cli.NewApp()
 	ctx := cli.NewContext(app, globalSet, nil)
