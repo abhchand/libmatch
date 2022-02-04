@@ -12,16 +12,20 @@ var SEQ_RESET = "\033[0m"
 
 var AlgorithmDescriptions = map[string]string{
 	"SMP": `Stable Marriage Problem
+
 Find a stable matching between two same-sized sets.
 Implements the Gale-Shapley (1962) algorithm.
 A stable solution is always guranteed, but it is non-deterministic
 and potentially one of many.
+
 https://en.wikipedia.org/wiki/Stable_marriage_problem.`,
 	"SRP": `Stable Roommates Problem
+
 Find a stable matching within an even-sized set.
 A stable solution is not guranteed, but is always deterministic if
 exists.
 Implements Irving's (1985) algorithm.
+
 https://en.wikipedia.org/wiki/Stable_roommates_problem.
 `,
 }
@@ -39,7 +43,7 @@ func LsCommand() *cli.Command {
 }
 
 func lsAction(ctx *cli.Context) error {
-	fmt.Println("\nALGORITHMS:")
+	fmt.Println("\nlibmatch supports the following matching algorithms:")
 	fmt.Println("")
 
 	for algorithm, desc := range AlgorithmDescriptions {
@@ -56,6 +60,7 @@ func lsAction(ctx *cli.Context) error {
 			num++
 		}
 
+		fmt.Println("")
 		fmt.Println("")
 	}
 	return nil
