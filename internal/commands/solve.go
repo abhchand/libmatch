@@ -11,9 +11,9 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var ALGORITHMS = [1]string{"SRP"}
+var ALGORITHMS = [2]string{"SRP", "SMP"}
 var OUTPUT_FORMATS = [2]string{"csv", "json"}
-var FILE_COUNTS = map[string]int{"SRP": 1}
+var FILE_COUNTS = map[string]int{"SRP": 1, "SMP": 2}
 
 /*
  * The `cli.Command` return value is wrapped in a function so we return a new
@@ -70,11 +70,14 @@ func solveAction(ctx *cli.Context) error {
 	 * to be one of the `case`s below.
 	 */
 	switch cfg.Algorithm {
+	case "SMP":
+		result, err = libmatch.SolveSMP(entriesList[0], entriesList[1])
 	case "SRP":
 		result, err = libmatch.SolveSRP(entriesList[0])
-		if err != nil {
-			return err
-		}
+	}
+
+	if err != nil {
+		return err
 	}
 
 	result.Print(cfg.OutputFormat)

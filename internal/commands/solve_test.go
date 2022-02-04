@@ -13,26 +13,58 @@ import (
 )
 
 var testFile = "/tmp/libmatch_test.json"
+var otherFile = "/tmp/libmatch_test2.json"
 
 func TestSolveAction(t *testing.T) {
-	body := `
-  [
-    { "name":"A", "preferences": ["B"] },
-    { "name":"B", "preferences": ["A"] }
-  ]
-	`
-	writeToFile(testFile, body)
+	t.Run("SMP", func(t *testing.T) {
+		body := `
+	  [
+	    { "name":"A", "preferences": ["C", "D"] },
+	    { "name":"B", "preferences": ["D", "C"] }
+	  ]
+		`
+		writeToFile(testFile, body)
 
-	globalSet := flag.NewFlagSet("test", 0)
-	globalSet.String("algorithm", "SRP", "doc")
-	globalSet.String("format", "csv", "doc")
-	globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
+		body = `
+	  [
+	    { "name":"C", "preferences": ["A", "B"] },
+	    { "name":"D", "preferences": ["B", "A"] }
+	  ]
+		`
+		writeToFile(otherFile, body)
 
-	app := cli.NewApp()
-	ctx := cli.NewContext(app, globalSet, nil)
-	err := solveAction(ctx)
+		globalSet := flag.NewFlagSet("test", 0)
+		globalSet.String("algorithm", "SMP", "doc")
+		globalSet.String("format", "csv", "doc")
+		globalSet.Var(cli.NewStringSlice(testFile, otherFile), "file", "doc")
 
-	assert.Nil(t, err)
+		app := cli.NewApp()
+		ctx := cli.NewContext(app, globalSet, nil)
+		err := solveAction(ctx)
+
+		assert.Nil(t, err)
+	})
+
+	t.Run("SRP", func(t *testing.T) {
+		body := `
+	  [
+	    { "name":"A", "preferences": ["B"] },
+	    { "name":"B", "preferences": ["A"] }
+	  ]
+		`
+		writeToFile(testFile, body)
+
+		globalSet := flag.NewFlagSet("test", 0)
+		globalSet.String("algorithm", "SRP", "doc")
+		globalSet.String("format", "csv", "doc")
+		globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
+
+		app := cli.NewApp()
+		ctx := cli.NewContext(app, globalSet, nil)
+		err := solveAction(ctx)
+
+		assert.Nil(t, err)
+	})
 }
 
 func TestSolveAction_ErrorCreatingConfig(t *testing.T) {
@@ -79,7 +111,7 @@ func TestSolveAction_ErrorValidatingConfig(t *testing.T) {
 }
 
 func TestSolveAction_ErrorSolvingMatching(t *testing.T) {
-	t.Skip("Skipping test - no way to force `SolveSRP` to return erro yet")
+	t.Skip("Skipping test - no way to force `SolveSRP` to return error yet")
 }
 
 func TestValidateConfig(t *testing.T) {

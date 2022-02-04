@@ -11,6 +11,12 @@ var SEQ_BOLD = "\033[1m"
 var SEQ_RESET = "\033[0m"
 
 var AlgorithmDescriptions = map[string]string{
+	"SMP": `Stable Marriage Problem
+Find a stable matching between two same-sized sets.
+Implements the Gale-Shapley (1962) algorithm.
+A stable solution is always guranteed, but it is non-deterministic
+and potentially one of many.
+https://en.wikipedia.org/wiki/Stable_marriage_problem.`,
 	"SRP": `Stable Roommates Problem
 Find a stable matching within an even-sized set.
 Implements Irving's (1985) algorithm.
