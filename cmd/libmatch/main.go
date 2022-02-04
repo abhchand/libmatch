@@ -23,8 +23,8 @@ func main() {
 	app.Flags = config.GlobalFlags
 
 	app.Commands = []*cli.Command{
-		&commands.SolveCommand,
-		&commands.LsCommand,
+		commands.SolveCommand(),
+		commands.LsCommand(),
 	}
 
 	// Customize the output of `-v` / `--version`

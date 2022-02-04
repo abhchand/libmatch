@@ -18,11 +18,16 @@ https://en.wikipedia.org/wiki/Stable_roommates_problem.
 `,
 }
 
-// LsCommand registers the ls cli command.
-var LsCommand = cli.Command{
-	Name:   "ls",
-	Usage:  "List all matching algorithms",
-	Action: lsAction,
+/*
+ * The `cli.Command` return value is wrapped in a function so we return a new
+ * instance of it every time. This avoids caching flags between tests
+ */
+func LsCommand() *cli.Command {
+	return &cli.Command{
+		Name:   "ls",
+		Usage:  "List all matching algorithms",
+		Action: lsAction,
+	}
 }
 
 func lsAction(ctx *cli.Context) error {

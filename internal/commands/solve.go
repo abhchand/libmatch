@@ -13,33 +13,39 @@ import (
 
 var ALGORITHMS = [1]string{"SRP"}
 var OUTPUT_FORMATS = [2]string{"csv", "json"}
+var FILE_COUNTS = map[string]int{"SRP": 1}
 
-// SolveCommand registers the solve cli command.
-var SolveCommand = cli.Command{
-	Name:   "solve",
-	Usage:  "Run a matching algorithm",
-	Action: solveAction,
-	Flags: []cli.Flag{
-		&cli.StringFlag{
-			Name:     "algorithm",
-			Usage:    "Algorithm used to determine matches. See all algorithms with \"libmatch ls\"",
-			Required: true,
-			Aliases:  []string{"a"},
+/*
+ * The `cli.Command` return value is wrapped in a function so we return a new
+ * instance of it every time. This avoids caching flags between tests
+ */
+func SolveCommand() *cli.Command {
+	return &cli.Command{
+		Name:   "solve",
+		Usage:  "Run a matching algorithm",
+		Action: solveAction,
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:     "algorithm",
+				Usage:    "Algorithm used to determine matches. See all algorithms with \"libmatch ls\"",
+				Required: true,
+				Aliases:  []string{"a"},
+			},
+			&cli.StringSliceFlag{
+				Name:     "file",
+				Usage:    "JSON-formatted file containing list of matching preferences",
+				Required: true,
+				Aliases:  []string{"f"},
+			},
+			&cli.StringFlag{
+				Name:     "format",
+				Usage:    "Output format to print results. Must be one of 'csv', 'json'",
+				Required: false,
+				Value:    "csv",
+				Aliases:  []string{"o"},
+			},
 		},
-		&cli.StringFlag{
-			Name:     "file",
-			Usage:    "JSON-formatted file containing list of matching preferences",
-			Required: true,
-			Aliases:  []string{"f"},
-		},
-		&cli.StringFlag{
-			Name:     "format",
-			Usage:    "Output format to print results. Must be one of 'csv', 'json'",
-			Required: false,
-			Value:    "csv",
-			Aliases:  []string{"o"},
-		},
-	},
+	}
 }
 
 func solveAction(ctx *cli.Context) error {
