@@ -22,7 +22,7 @@ A utility library for solving matching problems.
 
 ## <a name="overview">Overview
 
-Given one or more sets of *preferences*, `libmatch` finds an optimal matching of members.
+Given one or more sets of *member preferences*, `libmatch` finds an optimal matching between members.
 
 <div align="center">
   <img src="https://github.com/abhchand/libmatch/raw/main/meta/matching.png" width="400px" />
