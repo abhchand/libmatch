@@ -16,7 +16,7 @@ A utility library for solving matching problems.
 - [Overview](#overview)
 - [Installation](#installation)
 - [Usage](#usage)
-  * [As a utility](#as-a-utility)
+  * [As an executable](#as-an-executable)
   * [As a Go Library](#as-a-go-library)
 - [Miscellaneous](#miscellaneous)
 
@@ -48,7 +48,7 @@ go get github.com/abhchand/libmatch
 
 # <a name="usage">Usage
 
-## <a name="as-a-utility">As a utility
+## <a name="as-an-executable">As an executable
 
 
 Run it
