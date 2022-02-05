@@ -80,8 +80,6 @@ See `libmatch --help` for more options and examples
 
 ### <a name="as-a-go-library">As a Go Library
 
-See [the `examples/` directory](examples/) for a full list of working examples
-
 ```go
 package main
 
@@ -113,6 +111,8 @@ func main() {
   }
 }
 ```
+
+See [the `examples/` directory](examples/) for a full list of working examples
 
 ## <a name="miscellaneous">Miscellaneous
 
