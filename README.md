@@ -11,7 +11,16 @@ A utility library for solving matching problems.
 
 `libmatch` can be used as a **standalone executable** or included **as a library** in your Go program.
 
-# Overview
+---
+
+- [Overview](#overview)
+- [Installation](#installation)
+- [Usage](#usage)
+  * [As a utility](#as-a-utility)
+  * [As a Go Library](#as-a-go-library)
+- [Miscellaneous](#miscellaneous)
+
+# <a name="overview">Overview
 
 All algorithms take one or more sets of *preference tables* as an input.
 
@@ -23,7 +32,7 @@ These tables define an ordered preference for each *member*, whose name can be a
 
 The output represents the mathematically optimal matching ("stable matching"), where no two members both prefer each other over their current matches.
 
-# Installation
+# <a name="installation"></a>Installation
 
 Download the latest release executable:
 
@@ -37,9 +46,9 @@ Or, add `libmatch` to your Go project:
 go get github.com/abhchand/libmatch
 ```
 
-# Usage
+# <a name="usage">Usage
 
-## As a utility
+## <a name="as-a-utility">As a utility
 
 
 Run it
@@ -67,7 +76,7 @@ F,A
 
 See `libmatch --help` for more options and examples
 
-## As a Go Library
+## <a name="as-a-go-library">As a Go Library
 
 Call the `libmatch` API
 
@@ -105,7 +114,7 @@ func main() {
 
 See documentation [`libmatch.go`](libmatch.go) for the full available API.
 
-# Miscellaneous
+# <a name="miscellaneous">Miscellaneous
 
 * [Create an issue](https://github.com/abhchand/libmatch/issues/new) to report a bug or request a feature
 * Contributions are welcome! Please [open an Issue](https://github.com/abhchand/libmatch/issues/new) to discuss your changes first
