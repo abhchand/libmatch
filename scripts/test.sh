@@ -6,7 +6,7 @@ RED='\033[00;31m'
 GREEN='\033[00;32m'
 RESTORE='\033[0m'
 
-if go test ./...; then
+if go test ./cmd/... ./internal/... ./pkg/...; then
   echo -e "${GREEN}OK${RESTORE}"
 else
   echo -e "${RED}FAIL${RESTORE}"
