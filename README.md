@@ -49,7 +49,7 @@ go get github.com/abhchand/libmatch
 ### <a name="as-an-executable">As an executable
 
 
-Generate input JSON file of member preferences:
+Define member preferences as a JSON input file:
 
 ```shell
 $ cat <<EOF > input.json
