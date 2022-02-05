@@ -20,7 +20,7 @@ A utility library for solving matching problems.
   * [As a Go Library](#as-a-go-library)
 - [Miscellaneous](#miscellaneous)
 
-# <a name="overview">Overview
+## <a name="overview">Overview
 
 Given one or more sets of *preferences*, `libmatch` finds an optimal matching of members.
 
@@ -30,7 +30,7 @@ Given one or more sets of *preferences*, `libmatch` finds an optimal matching of
 
 The output will be mathematically "stable", meaning no two members will prefer each other over their existing matches.
 
-# <a name="installation"></a>Installation
+## <a name="installation"></a>Installation
 
 Download the latest release executable:
 
@@ -44,9 +44,9 @@ Or, add `libmatch` to your Go project:
 go get github.com/abhchand/libmatch
 ```
 
-# <a name="usage">Usage
+## <a name="usage">Usage
 
-## <a name="as-an-executable">As an executable
+### <a name="as-an-executable">As an executable
 
 
 Generate input JSON file of member preferences:
@@ -78,7 +78,7 @@ F,A
 
 See `libmatch --help` for more options and examples
 
-## <a name="as-a-go-library">As a Go Library
+### <a name="as-a-go-library">As a Go Library
 
 See [the `examples/` directory](examples/) for a full list of working examples
 
@@ -114,7 +114,7 @@ func main() {
 }
 ```
 
-# <a name="miscellaneous">Miscellaneous
+## <a name="miscellaneous">Miscellaneous
 
 * [Create an issue](https://github.com/abhchand/libmatch/issues/new) to report a bug or request a feature
 * Contributions are welcome! Please [open an Issue](https://github.com/abhchand/libmatch/issues/new) to discuss your changes first
