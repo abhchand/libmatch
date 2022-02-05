@@ -24,8 +24,6 @@ A utility library for solving matching problems.
 
 Given one or more sets of *preferences*, `libmatch` finds an optimal matching of members.
 
-Member names can be any unique `string` value.
-
 <div align="center">
   <img src="https://github.com/abhchand/libmatch/raw/main/meta/matching.png" width="400px" />
 </div>
