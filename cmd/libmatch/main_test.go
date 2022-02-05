@@ -26,7 +26,7 @@ func ExampleMain__solve_success() {
 
 	main()
 
-	// Output:
+	// Unordered output:
 	// A,B
 	// B,A
 	// C,D
