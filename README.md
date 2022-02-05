@@ -97,7 +97,7 @@ func main() {
     {Name: "C", Preferences: []string{"D", "E", "F", "A", "B"}},
     {Name: "D", Preferences: []string{"F", "C", "A", "E", "B"}},
     {Name: "E", Preferences: []string{"F", "C", "D", "B", "A"}},
-    {Name: "F", Preferences: []string{"A", "B", "D", "C", "E"}}
+    {Name: "F", Preferences: []string{"A", "B", "D", "C", "E"}},
   }
 
   result, err := libmatch.SolveSRP(&prefTable)
@@ -106,8 +106,8 @@ func main() {
     os.Exit(1)
   }
 
-  for x, y := result.Mapping() {
-    fmt.Printf("%v => %v", x, y)
+  for x, y := range result.Mapping {
+    fmt.Printf("%v => %v\n", x, y)
   }
 }
 ```
