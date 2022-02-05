@@ -78,7 +78,7 @@ See `libmatch --help` for more options and examples
 
 ## <a name="as-a-go-library">As a Go Library
 
-Call the API defined in the [`libmatch.go`](libmatch.go) package. See that file for full API documentation.
+See [the `examples/` directory](examples/) for a full list of working examples
 
 ```go
 package main
@@ -111,8 +111,6 @@ func main() {
   }
 }
 ```
-
-
 
 # <a name="miscellaneous">Miscellaneous
 

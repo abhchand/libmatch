@@ -1,0 +1,8 @@
+[
+  { "name":"A", "preferences": ["B", "D", "F", "C", "E"] },
+  { "name":"B", "preferences": ["D", "E", "F", "A", "C"] },
+  { "name":"C", "preferences": ["D", "E", "F", "A", "B"] },
+  { "name":"D", "preferences": ["F", "C", "A", "E", "B"] },
+  { "name":"E", "preferences": ["F", "C", "D", "B", "A"] },
+  { "name":"F", "preferences": ["A", "B", "D", "C", "E"] }
+]
