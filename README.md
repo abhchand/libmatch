@@ -23,15 +23,24 @@ These tables define an ordered preference for each *member*, whose name can be a
 
 The output represents the mathematically optimal matching ("stable matching"), where no two members both prefer each other over their current matches.
 
-# Usage
+# Installation
 
-## As a utility
-
-Download the `libmatch` release:
+Download the latest release executable:
 
 ```shell
 tbd
 ```
+
+Or, add `libmatch` to your Go project:
+
+```shell
+go get github.com/abhchand/libmatch
+```
+
+# Usage
+
+## As a utility
+
 
 Run it
 
@@ -59,12 +68,6 @@ F,A
 See `libmatch --help` for more options and examples
 
 ## As a Go Library
-
-Add `libmatch`:
-
-```shell
-go get github.com/abhchand/libmatch
-```
 
 Call the `libmatch` API
 
