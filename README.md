@@ -18,7 +18,7 @@ All algorithms take one or more sets of *preference tables* as an input.
 These tables define an ordered preference for each *member*, whose name can be any unique `string` value.
 
 <div align="center">
-  <img src="https://github.com/abhchand/libmatch/raw/main/meta/matching.png" width="300px" />
+  <img src="https://github.com/abhchand/libmatch/raw/main/meta/matching.png" width="400px" />
 </div>
 
 The output represents the mathematically optimal matching ("stable matching"), where no two members both prefer each other over their current matches.
