@@ -55,7 +55,7 @@ func ExampleSolveSRP__no_stable_solution() {
 	// Call `libmatch`
 	_, err := libmatch.SolveSRP(&prefTable)
 
-	// The above input has no stable matching solution, and we expect it to eturn an error
+	// The above input has no stable matching solution, and we expect it to return an error
 	fmt.Println(err)
 
 	// Output:
