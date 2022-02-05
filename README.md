@@ -22,15 +22,15 @@ A utility library for solving matching problems.
 
 # <a name="overview">Overview
 
-All algorithms take one or more sets of *preference tables* as an input.
+Given one or more sets of *preferences*, `libmatch` finds an optimal matching of members.
 
-These tables define an ordered preference for each *member*, whose name can be any unique `string` value.
+Member names can be any unique `string` value.
 
 <div align="center">
   <img src="https://github.com/abhchand/libmatch/raw/main/meta/matching.png" width="400px" />
 </div>
 
-The output represents the mathematically optimal matching ("stable matching"), where no two members both prefer each other over their current matches.
+The output will be mathematically "stable", meaning no two members will prefer each other over their existing matches.
 
 # <a name="installation"></a>Installation
 
