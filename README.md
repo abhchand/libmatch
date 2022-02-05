@@ -92,14 +92,14 @@ import (
 
 func main() {
   prefTable := []libmatch.MatchEntry{
-    {Name: "A", Preferences: []string{"B", "D", "F", "C", "E"}},
-    {Name: "B", Preferences: []string{"D", "E", "F", "A", "C"}},
-    {Name: "C", Preferences: []string{"D", "E", "F", "A", "B"}},
-    {Name: "D", Preferences: []string{"F", "C", "A", "E", "B"}},
-    {Name: "E", Preferences: []string{"F", "C", "D", "B", "A"}},
-    {Name: "F", Preferences: []string{"A", "B", "D", "C", "E"}},
+    {Name: "A", Preferences: []string{"B", "D", "C"}},
+    {Name: "B", Preferences: []string{"D", "A", "C"}},
+    {Name: "C", Preferences: []string{"D", "A", "B"}},
+    {Name: "D", Preferences: []string{"C", "A", "B"}},
   }
 
+  // libmatch returns a `libmatch.MatchResult` type.
+  // The mapping can be accessed via the `.Mapping` property
   result, err := libmatch.SolveSRP(&prefTable)
   if err != nil {
     fmt.Println(err)
