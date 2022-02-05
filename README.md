@@ -49,7 +49,7 @@ go get github.com/abhchand/libmatch
 ## <a name="as-an-executable">As an executable
 
 
-Run it
+Generate input JSON file of member preferences:
 
 ```shell
 $ cat <<EOF > input.json
@@ -62,7 +62,11 @@ $ cat <<EOF > input.json
   { "name":"F", "preferences": ["A", "B", "D", "C", "E"] }
 ]
 EOF
+```
 
+Run `libmatch`:
+
+```shell
 $ libmatch solve --algorithm SRP --file input.json
 A,F
 B,E
