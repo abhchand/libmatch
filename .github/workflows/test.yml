@@ -1,30 +1,40 @@
-name: Testing
+name: Run Tests
 
-on:
-  push:
-    branches:
-      - "*"
+on: push
+    # paths:
+    #   - "**.go"
 
 jobs:
-  testing:
-    name: test
-
-    strategy:
-      matrix:
-        go-version: [1.17.x]
-        platform: [ubuntu-latest, windows-latest, macos-latest]
-
-    runs-on: ${{ matrix.platform }}
-
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
     steps:
-      - name: Set up Go 1.x
+      - name: Set up Go 1.17
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go-version }}
         id: go
-
       - name: Check out code
         uses: actions/checkout@v2
+      - name: Run linters
+        run: make lint
 
-      - name: Test
-        run: sh scripts/test.sh
+  test:
+    name: test
+    strategy:
+      matrix:
+        go-version: [1.17.x]
+        platform: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Set up Go 1.17
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+        id: go
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Run Go tests
+        run: make test
+      - name: Run Go benchmarks
+        run: "echo \"Platform: ${{ matrix.platform }}\" && go test -bench=."
