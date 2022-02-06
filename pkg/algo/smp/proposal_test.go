@@ -51,19 +51,12 @@ func TestPhase1Proposal(t *testing.T) {
 		actualTables := core.NewPreferenceTablePair(actualEntries[0], actualEntries[1])
 		wantedTables := core.NewPreferenceTablePair(wantedEntries[0], wantedEntries[1])
 
-		wantedTables[0]["A"].Accept(wantedTables[1]["K"])
-		wantedTables[0]["B"].Accept(wantedTables[1]["J"])
-		wantedTables[0]["C"].Accept(wantedTables[1]["L"])
-		wantedTables[0]["D"].Accept(wantedTables[1]["I"])
-		wantedTables[0]["E"].Accept(wantedTables[1]["H"])
-		wantedTables[0]["F"].Accept(wantedTables[1]["M"])
-
-		wantedTables[1]["H"].Accept(wantedTables[0]["E"])
-		wantedTables[1]["I"].Accept(wantedTables[0]["D"])
-		wantedTables[1]["J"].Accept(wantedTables[0]["B"])
-		wantedTables[1]["K"].Accept(wantedTables[0]["A"])
-		wantedTables[1]["L"].Accept(wantedTables[0]["C"])
-		wantedTables[1]["M"].Accept(wantedTables[0]["F"])
+		wantedTables[0]["A"].AcceptMutually(wantedTables[1]["K"])
+		wantedTables[0]["B"].AcceptMutually(wantedTables[1]["J"])
+		wantedTables[0]["C"].AcceptMutually(wantedTables[1]["L"])
+		wantedTables[0]["D"].AcceptMutually(wantedTables[1]["I"])
+		wantedTables[0]["E"].AcceptMutually(wantedTables[1]["H"])
+		wantedTables[0]["F"].AcceptMutually(wantedTables[1]["M"])
 
 		phase1Proposal(&actualTables[0], &actualTables[1])
 		assert.True(t, reflect.DeepEqual(wantedTables[0], actualTables[0]))
@@ -112,19 +105,12 @@ func TestPhase1Proposal(t *testing.T) {
 		actualTables := core.NewPreferenceTablePair(actualEntries[0], actualEntries[1])
 		wantedTables := core.NewPreferenceTablePair(wantedEntries[0], wantedEntries[1])
 
-		wantedTables[0]["A"].Accept(wantedTables[1]["K"])
-		wantedTables[0]["B"].Accept(wantedTables[1]["J"])
-		wantedTables[0]["C"].Accept(wantedTables[1]["L"])
-		wantedTables[0]["D"].Accept(wantedTables[1]["I"])
-		wantedTables[0]["E"].Accept(wantedTables[1]["M"])
-		wantedTables[0]["F"].Accept(wantedTables[1]["H"])
-
-		wantedTables[1]["H"].Accept(wantedTables[0]["F"])
-		wantedTables[1]["I"].Accept(wantedTables[0]["D"])
-		wantedTables[1]["J"].Accept(wantedTables[0]["B"])
-		wantedTables[1]["K"].Accept(wantedTables[0]["A"])
-		wantedTables[1]["L"].Accept(wantedTables[0]["C"])
-		wantedTables[1]["M"].Accept(wantedTables[0]["E"])
+		wantedTables[0]["A"].AcceptMutually(wantedTables[1]["K"])
+		wantedTables[0]["B"].AcceptMutually(wantedTables[1]["J"])
+		wantedTables[0]["C"].AcceptMutually(wantedTables[1]["L"])
+		wantedTables[0]["D"].AcceptMutually(wantedTables[1]["I"])
+		wantedTables[0]["E"].AcceptMutually(wantedTables[1]["M"])
+		wantedTables[0]["F"].AcceptMutually(wantedTables[1]["H"])
 
 		phase1Proposal(&actualTables[1], &actualTables[0])
 		assert.True(t, reflect.DeepEqual(wantedTables[1], actualTables[1]))
@@ -167,8 +153,7 @@ func TestSimulateProposal(t *testing.T) {
 
 		wantedTables := core.NewPreferenceTablePair(wantedEntries[0], wantedEntries[1])
 
-		wantedTables[0]["C"].Accept(wantedTables[1]["I"])
-		wantedTables[1]["I"].Accept(wantedTables[0]["C"])
+		wantedTables[0]["C"].AcceptMutually(wantedTables[1]["I"])
 
 		assert.True(t, reflect.DeepEqual(wantedTables, actualTables))
 	})
@@ -209,8 +194,7 @@ func TestSimulateProposal(t *testing.T) {
 
 		wantedTables := core.NewPreferenceTablePair(wantedEntries[0], wantedEntries[1])
 
-		wantedTables[1]["H"].Accept(wantedTables[0]["A"])
-		wantedTables[0]["A"].Accept(wantedTables[1]["H"])
+		wantedTables[1]["H"].AcceptMutually(wantedTables[0]["A"])
 
 		assert.True(t, reflect.DeepEqual(wantedTables[1], actualTables[1]))
 	})
@@ -251,8 +235,7 @@ func TestSimulateProposal(t *testing.T) {
 
 		wantedTables := core.NewPreferenceTablePair(wantedEntries[0], wantedEntries[1])
 
-		wantedTables[1]["H"].Accept(wantedTables[0]["A"])
-		wantedTables[0]["A"].Accept(wantedTables[1]["H"])
+		wantedTables[1]["H"].AcceptMutually(wantedTables[0]["A"])
 
 		assert.True(t, reflect.DeepEqual(wantedTables[1], actualTables[1]))
 	})

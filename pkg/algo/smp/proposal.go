@@ -22,14 +22,11 @@ func phase1Proposal(ptA, ptB *core.PreferenceTable) {
 
 func simulateProposal(proposer, proposed *core.Member) {
 	if !proposed.HasAcceptedProposal() {
-		proposed.Accept(proposer)
-		proposer.Accept(proposed)
+		proposed.AcceptMutually(proposer)
 	} else if proposed.WouldPreferProposalFrom(*proposer) {
-		proposed.CurrentProposer().Reject(proposed)
-		proposed.Reject(proposed.CurrentProposer())
-		proposed.Accept(proposer)
-		proposer.Accept(proposed)
+		proposed.RejectMutually(proposed.CurrentProposer())
+		proposed.AcceptMutually(proposer)
 	} else {
-		proposed.Reject(proposer)
+		proposed.RejectMutually(proposer)
 	}
 }
