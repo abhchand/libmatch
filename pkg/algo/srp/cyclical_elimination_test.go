@@ -10,16 +10,14 @@ import (
 )
 
 func TestPhase3CyclicalElimnation(t *testing.T) {
-	wanted := core.MatchResult{
-		Mapping: map[string]string{
-			"A": "F",
-			"B": "E",
-			"C": "D",
-			"D": "C",
-			"E": "B",
-			"F": "A",
-		},
-	}
+	wanted := core.NewPreferenceTable(&[]core.MatchEntry{
+		{Name: "A", Preferences: []string{"F"}},
+		{Name: "B", Preferences: []string{"E"}},
+		{Name: "C", Preferences: []string{"D"}},
+		{Name: "D", Preferences: []string{"C"}},
+		{Name: "E", Preferences: []string{"B"}},
+		{Name: "F", Preferences: []string{"A"}},
+	})
 
 	testCases := []string{"A", "B", "C", "D", "E", "F", ""}
 
@@ -36,9 +34,9 @@ func TestPhase3CyclicalElimnation(t *testing.T) {
 				{Name: "F", Preferences: []string{"A", "B", "D"}},
 			})
 
-			result := phase3CyclicalElimnationWithSeed(&pt, testCases[tc])
+			phase3CyclicalElimnationWithSeed(&pt, testCases[tc])
 
-			assert.True(t, reflect.DeepEqual(wanted, result))
+			assert.True(t, reflect.DeepEqual(wanted, pt))
 		})
 	}
 
@@ -52,8 +50,8 @@ func TestPhase3CyclicalElimnation(t *testing.T) {
 			{Name: "F", Preferences: []string{"A"}},
 		})
 
-		result := phase3CyclicalElimnation(&pt)
+		phase3CyclicalElimnation(&pt)
 
-		assert.True(t, reflect.DeepEqual(wanted, result))
+		assert.True(t, reflect.DeepEqual(wanted, pt))
 	})
 }

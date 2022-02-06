@@ -8,15 +8,13 @@ type cyclePair struct {
 	x, y *core.Member
 }
 
-func phase3CyclicalElimnation(pt *core.PreferenceTable) core.MatchResult {
-	res := phase3CyclicalElimnationWithSeed(pt, "")
-	return res
+func phase3CyclicalElimnation(pt *core.PreferenceTable) {
+	phase3CyclicalElimnationWithSeed(pt, "")
 }
 
-func phase3CyclicalElimnationWithSeed(pt *core.PreferenceTable, seed string) core.MatchResult {
+func phase3CyclicalElimnationWithSeed(pt *core.PreferenceTable, seed string) {
 	var startingMember *core.Member
 	var loopIdx int
-	res := core.MatchResult{}
 
 	for !pt.IsComplete() {
 		if loopIdx == 0 && seed != "" {
@@ -35,18 +33,11 @@ func phase3CyclicalElimnationWithSeed(pt *core.PreferenceTable, seed string) cor
 		eliminateCycle(pt, pairs)
 
 		if !pt.IsStable() {
-			return res
+			return
 		}
 
 		loopIdx++
 	}
-
-	res.Mapping = make(map[string]string)
-	for name, member := range *pt {
-		res.Mapping[name] = member.PreferenceList().Members()[0].Name()
-	}
-
-	return res
 }
 
 func detectCycle(pt *core.PreferenceTable, startingMember *core.Member) []cyclePair {

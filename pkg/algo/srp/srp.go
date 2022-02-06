@@ -14,8 +14,12 @@ func Run(algoCtx core.AlgorithmContext) (core.MatchResult, error) {
 	}
 
 	phase2Rejection(pt)
+	phase3CyclicalElimnation(pt)
 
-	res = phase3CyclicalElimnation(pt)
+	res.Mapping = make(map[string]string)
+	for name, member := range *pt {
+		res.Mapping[name] = member.PreferenceList().Members()[0].Name()
+	}
 
 	return res, nil
 }
