@@ -1,5 +1,7 @@
 # libmatch
 
+![build status](https://github.com/abhchand/libmatch/actions/workflows/test.yml/badge.svg?branch=main)
+
 A utility library for solving matching problems.
 
 `libmatch` supports solving the following classes of problems:
