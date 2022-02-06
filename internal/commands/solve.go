@@ -11,9 +11,19 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var ALGORITHMS = [2]string{"SRP", "SMP"}
+type matchingAlgorithm struct {
+	fileCount int
+}
+
+var MATCHING_ALGORITHMS_CFG = map[string]matchingAlgorithm{
+	"SMP": {
+		fileCount: 2,
+	},
+	"SRP": {
+		fileCount: 1,
+	},
+}
 var OUTPUT_FORMATS = [2]string{"csv", "json"}
-var FILE_COUNTS = map[string]int{"SRP": 1, "SMP": 2}
 
 /*
  * The `cli.Command` return value is wrapped in a function so we return a new
@@ -86,23 +96,18 @@ func solveAction(ctx *cli.Context) error {
 }
 
 func validateConfig(cfg config.Config) error {
+	mac := MATCHING_ALGORITHMS_CFG[cfg.Algorithm]
+
 	// Verify `algorithm` value is valid
 	valid := false
-	for i := range ALGORITHMS {
-		if cfg.Algorithm == ALGORITHMS[i] {
-			valid = true
-			break
-		}
-	}
-
-	if !(valid) {
+	if mac.fileCount == 0 {
 		return errors.New(fmt.Sprintf("Unknown `--algorithm` value: %v", cfg.Algorithm))
 	}
 
 	// Verify number of `--file` inputs
-	if len(cfg.Filenames) != FILE_COUNTS[cfg.Algorithm] {
+	if len(cfg.Filenames) != mac.fileCount {
 		return errors.New(
-			fmt.Sprintf("Expected --file to be specified exactly %v time(s)", FILE_COUNTS[cfg.Algorithm]))
+			fmt.Sprintf("Expected --file to be specified exactly %v time(s)", mac.fileCount))
 	}
 
 	// Verify `format` value is valid
