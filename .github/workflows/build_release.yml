@@ -1,0 +1,44 @@
+name: Build and Release
+
+on:
+  push:
+    branches-ignore:
+      - '*'
+    tags:
+      - 'v*'
+
+jobs:
+  setup-release:
+    name: create release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Github Release
+        run: |
+          curl \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/abhchand/libmatch/releases \
+            -d '{"tag_name":"${{ github.ref_name }}"}'
+
+  releases-matrix:
+    name: Build+Release Go Binary
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: ['386', amd64, arm64]
+        exclude:
+          - goarch: '386'
+            goos: darwin
+          - goarch: arm64
+            goos: windows
+    steps:
+    - uses: actions/checkout@v2
+    - uses: wangyoucao577/go-release-action@v1.24
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
+        goversion: 1.17
+        build_command: make build
