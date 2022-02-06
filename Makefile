@@ -9,6 +9,11 @@ export GO111MODULE=on
 
 all: lint test build
 
+benchmark:
+	echo '# $@'
+	scripts/benchmark.sh
+	echo ''
+
 build:
 	echo '# $@'
 	rm -f $(BINARY_NAME)
