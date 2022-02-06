@@ -27,6 +27,7 @@ func TestNewConfig(t *testing.T) {
 		assert.Equal(t, "SRP", cfg.Algorithm)
 		assert.Equal(t, false, cfg.Debug)
 		assert.Equal(t, "csv", cfg.OutputFormat)
+		assert.Equal(t, ctx, cfg.CliContext)
 		assert.Equal(t, []string{"/tmp/test.json"}, cfg.Filenames)
 	})
 
