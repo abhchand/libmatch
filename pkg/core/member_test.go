@@ -125,6 +125,24 @@ func TestAccept(t *testing.T) {
 	assert.Equal(t, memC, *memA.acceptedProposalFrom)
 }
 
+func TestAcceptMutually(t *testing.T) {
+	setupSingleTable()
+
+	assert.Nil(t, memA.acceptedProposalFrom)
+	assert.Nil(t, memB.acceptedProposalFrom)
+	assert.Nil(t, memC.acceptedProposalFrom)
+
+	memA.AcceptMutually(&memB)
+	assert.Equal(t, memB, *memA.acceptedProposalFrom)
+	assert.Equal(t, memA, *memB.acceptedProposalFrom)
+	assert.Nil(t, memC.acceptedProposalFrom)
+
+	memA.AcceptMutually(&memC)
+	assert.Equal(t, memA, *memB.acceptedProposalFrom)
+	assert.Equal(t, memC, *memA.acceptedProposalFrom)
+	assert.Equal(t, memA, *memC.acceptedProposalFrom)
+}
+
 func TestReject(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		setupSingleTable()
@@ -163,11 +181,59 @@ func TestReject(t *testing.T) {
 		assert.Equal(t, PreferenceList{members: []*Member{&memA, &memB, &memC}}, plD)
 
 		/*
-		 * A rejects B (it's current proposer), so A also has that value reset
+		 * A rejects B (its current proposer), so A also has that value reset
 		 * B does not lose its current proposer, regardless of who is it
 		 */
 		assert.Nil(t, memA.CurrentProposer())
 		assert.Equal(t, &memA, memB.CurrentProposer())
+		assert.Equal(t, &memD, memC.CurrentProposer())
+		assert.Equal(t, &memC, memD.CurrentProposer())
+	})
+}
+
+func TestRejectMutually(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		setupSingleTable()
+
+		memA.acceptedProposalFrom = &memB
+		memB.acceptedProposalFrom = &memA
+		memC.acceptedProposalFrom = &memD
+		memD.acceptedProposalFrom = &memC
+
+		memA.RejectMutually(&memC)
+
+		assert.Equal(t, PreferenceList{members: []*Member{&memB, &memD}}, plA)
+		assert.Equal(t, PreferenceList{members: []*Member{&memA, &memC, &memD}}, plB)
+		assert.Equal(t, PreferenceList{members: []*Member{&memB, &memD}}, plC)
+		assert.Equal(t, PreferenceList{members: []*Member{&memA, &memB, &memC}}, plD)
+
+		assert.Equal(t, &memB, memA.CurrentProposer())
+		assert.Equal(t, &memA, memB.CurrentProposer())
+		assert.Equal(t, &memD, memC.CurrentProposer())
+		assert.Equal(t, &memC, memD.CurrentProposer())
+	})
+
+	t.Run("Rejecting current proposer", func(t *testing.T) {
+		setupSingleTable()
+
+		memA.acceptedProposalFrom = &memB
+		memB.acceptedProposalFrom = &memA
+		memC.acceptedProposalFrom = &memD
+		memD.acceptedProposalFrom = &memC
+
+		memA.RejectMutually(&memB)
+
+		assert.Equal(t, PreferenceList{members: []*Member{&memC, &memD}}, plA)
+		assert.Equal(t, PreferenceList{members: []*Member{&memC, &memD}}, plB)
+		assert.Equal(t, PreferenceList{members: []*Member{&memA, &memB, &memD}}, plC)
+		assert.Equal(t, PreferenceList{members: []*Member{&memA, &memB, &memC}}, plD)
+
+		/*
+		 * A mutually rejects B (its current proposer), so A and B have their
+		 * proposer reset
+		 */
+		assert.Nil(t, memA.CurrentProposer())
+		assert.Nil(t, memB.CurrentProposer())
 		assert.Equal(t, &memD, memC.CurrentProposer())
 		assert.Equal(t, &memC, memD.CurrentProposer())
 	})

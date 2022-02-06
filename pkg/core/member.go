@@ -51,6 +51,11 @@ func (m *Member) Accept(member *Member) {
 	m.acceptedProposalFrom = member
 }
 
+func (m *Member) AcceptMutually(member *Member) {
+	m.Accept(member)
+	member.Accept(m)
+}
+
 func (m *Member) Reject(member *Member) {
 
 	// Clear "current proposer" if that's who we're rejecting
@@ -61,6 +66,11 @@ func (m *Member) Reject(member *Member) {
 	// Remove both members from each other's preference lists
 	m.preferenceList.Remove(*member)
 	member.PreferenceList().Remove(*m)
+}
+
+func (m *Member) RejectMutually(member *Member) {
+	m.Reject(member)
+	member.Reject(m)
 }
 
 func (m Member) WouldPreferProposalFrom(newProposer Member) bool {
