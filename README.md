@@ -17,6 +17,7 @@ A utility library for solving matching problems.
 
 - [Overview](#overview)
 - [Installation](#installation)
+  * [Build from source](#build-from-source)
 - [Usage](#usage)
   * [As an executable](#as-an-executable)
   * [As a Go Library](#as-a-go-library)
@@ -34,16 +35,15 @@ The output will be mathematically "stable", meaning no two members will prefer e
 
 ## <a name="installation"></a>Installation
 
-Download the latest release executable:
+Download the the [latest release](https://github.com/abhchand/libmatch/releases/latest) for your platform.
+
+### <a name="build-from-source"></a>Build from source
 
 ```shell
-tbd
-```
+git clone git@github.com:abhchand/libmatch.git
+cd libmatch/
 
-Or, add `libmatch` to your Go project:
-
-```shell
-go get github.com/abhchand/libmatch
+make all
 ```
 
 ## <a name="usage">Usage
@@ -81,6 +81,14 @@ F,A
 See `libmatch --help` for more options and examples
 
 ### <a name="as-a-go-library">As a Go Library
+
+Add `libmatch` as a dependency:
+
+```shell
+go get github.com/abhchand/libmatch
+```
+
+Then `import` and use it:
 
 ```go
 package main
