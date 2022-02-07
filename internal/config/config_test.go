@@ -31,7 +31,7 @@ func TestNewConfig(t *testing.T) {
 		assert.Equal(t, []string{"/tmp/test.json"}, cfg.Filenames)
 	})
 
-	t.Run("`algorithm` is case insensitive", func(t *testing.T) {
+	t.Run("`algorithm` flag is case insensitive", func(t *testing.T) {
 		flagSet := flag.NewFlagSet("test", 0)
 		flagSet.String("algorithm", "sRp", "doc")
 
@@ -63,7 +63,7 @@ func TestExpandFilenames(t *testing.T) {
 		assert.Equal(t, []string{curDir + "/test.json"}, cfg.Filenames)
 	})
 
-	t.Run("handles multiple files", func(t *testing.T) {
+	t.Run("handles multiple `file` flags", func(t *testing.T) {
 		flagSet := flag.NewFlagSet("test", 0)
 		flagSet.Var(cli.NewStringSlice("./a.json", "./b.json"), "file", "doc")
 

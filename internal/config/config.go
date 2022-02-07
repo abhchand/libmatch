@@ -1,5 +1,10 @@
 package config
 
+/*
+ * Defines the `Config` structure that holds the internal `libmatch`
+ * configurations
+ */
+
 import (
 	"path/filepath"
 	"strings"
@@ -15,6 +20,9 @@ type Config struct {
 	CliContext   *cli.Context
 }
 
+/*
+ * Returns a new `Config` structure
+ */
 func NewConfig(ctx *cli.Context) (*Config, error) {
 	cfg := &Config{
 		Algorithm:    strings.ToUpper(ctx.String("algorithm")),
@@ -30,6 +38,9 @@ func NewConfig(ctx *cli.Context) (*Config, error) {
 	return cfg, nil
 }
 
+/*
+ * Expands all relative filenames into absolute paths
+ */
 func expandFilenames(cfg *Config) error {
 	files := cfg.CliContext.StringSlice("file")
 
