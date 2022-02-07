@@ -5,9 +5,7 @@ on:
     branches:
       - '*'
     tags-ignore:
-      - '*'
-    # paths:
-    #   - "**.go"
+      - 'v*'
 
 jobs:
   lint:
