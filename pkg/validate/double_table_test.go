@@ -10,7 +10,7 @@ import (
 
 func TestValidate__DoubleTable(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		entriesList := []*[]core.MatchEntry{
+		prefsSet := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"K", "L", "M"}},
 				{Name: "B", Preferences: []string{"L", "M", "K"}},
@@ -23,19 +23,19 @@ func TestValidate__DoubleTable(t *testing.T) {
 			},
 		}
 
-		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+		tables := core.NewPreferenceTablePair(prefsSet[0], prefsSet[1])
 
 		v := DoubleTableValidator{
-			EntriesList: entriesList,
-			Tables:      []*core.PreferenceTable{&tables[0], &tables[1]},
+			PrefsSet: prefsSet,
+			Tables:   []*core.PreferenceTable{&tables[0], &tables[1]},
 		}
 		err := v.Validate()
 
 		assert.Nil(t, err)
 	})
 
-	t.Run("bad number of entries", func(t *testing.T) {
-		entriesList := []*[]core.MatchEntry{
+	t.Run("bad number of prefs", func(t *testing.T) {
+		prefsSet := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"K", "L", "M"}},
 				{Name: "B", Preferences: []string{"L", "M", "K"}},
@@ -48,19 +48,19 @@ func TestValidate__DoubleTable(t *testing.T) {
 			},
 		}
 
-		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+		tables := core.NewPreferenceTablePair(prefsSet[0], prefsSet[1])
 
 		v := DoubleTableValidator{
-			EntriesList: []*[]core.MatchEntry{entriesList[0]},
-			Tables:      []*core.PreferenceTable{&tables[0], &tables[1]},
+			PrefsSet: []*[]core.MatchPreference{prefsSet[0]},
+			Tables:   []*core.PreferenceTable{&tables[0], &tables[1]},
 		}
 		err := v.Validate()
 
-		assert.Equal(t, "Internal error: expected exactly 2 Entries and 2 Tables", err.Error())
+		assert.Equal(t, "Internal error: expected exactly 2 Prefs and 2 Tables", err.Error())
 	})
 
 	t.Run("bad number of tables", func(t *testing.T) {
-		entriesList := []*[]core.MatchEntry{
+		prefsSet := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"K", "L", "M"}},
 				{Name: "B", Preferences: []string{"L", "M", "K"}},
@@ -73,19 +73,19 @@ func TestValidate__DoubleTable(t *testing.T) {
 			},
 		}
 
-		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+		tables := core.NewPreferenceTablePair(prefsSet[0], prefsSet[1])
 
 		v := DoubleTableValidator{
-			EntriesList: entriesList,
-			Tables:      []*core.PreferenceTable{&tables[0], &tables[1], &tables[1]},
+			PrefsSet: prefsSet,
+			Tables:   []*core.PreferenceTable{&tables[0], &tables[1], &tables[1]},
 		}
 		err := v.Validate()
 
-		assert.Equal(t, "Internal error: expected exactly 2 Entries and 2 Tables", err.Error())
+		assert.Equal(t, "Internal error: expected exactly 2 Prefs and 2 Tables", err.Error())
 	})
 
 	t.Run("duplicate member name within a table", func(t *testing.T) {
-		entriesList := []*[]core.MatchEntry{
+		prefsSet := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"K", "L", "M"}},
 				{Name: "B", Preferences: []string{"L", "M", "K"}},
@@ -99,11 +99,11 @@ func TestValidate__DoubleTable(t *testing.T) {
 			},
 		}
 
-		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+		tables := core.NewPreferenceTablePair(prefsSet[0], prefsSet[1])
 
 		v := DoubleTableValidator{
-			EntriesList: entriesList,
-			Tables:      []*core.PreferenceTable{&tables[0], &tables[1]},
+			PrefsSet: prefsSet,
+			Tables:   []*core.PreferenceTable{&tables[0], &tables[1]},
 		}
 		err := v.Validate()
 
@@ -112,7 +112,7 @@ func TestValidate__DoubleTable(t *testing.T) {
 	})
 
 	t.Run("duplicate member name across tables", func(t *testing.T) {
-		entriesList := []*[]core.MatchEntry{
+		prefsSet := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"K", "L", "M"}},
 				{Name: "B", Preferences: []string{"L", "M", "K"}},
@@ -125,11 +125,11 @@ func TestValidate__DoubleTable(t *testing.T) {
 			},
 		}
 
-		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+		tables := core.NewPreferenceTablePair(prefsSet[0], prefsSet[1])
 
 		v := DoubleTableValidator{
-			EntriesList: entriesList,
-			Tables:      []*core.PreferenceTable{&tables[0], &tables[1]},
+			PrefsSet: prefsSet,
+			Tables:   []*core.PreferenceTable{&tables[0], &tables[1]},
 		}
 		err := v.Validate()
 
@@ -138,7 +138,7 @@ func TestValidate__DoubleTable(t *testing.T) {
 	})
 
 	t.Run("empty table", func(t *testing.T) {
-		entriesList := []*[]core.MatchEntry{
+		prefsSet := []*[]core.MatchPreference{
 			{},
 			{
 				{Name: "K", Preferences: []string{"B", "C", "A"}},
@@ -147,11 +147,11 @@ func TestValidate__DoubleTable(t *testing.T) {
 			},
 		}
 
-		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+		tables := core.NewPreferenceTablePair(prefsSet[0], prefsSet[1])
 
 		v := DoubleTableValidator{
-			EntriesList: entriesList,
-			Tables:      []*core.PreferenceTable{&tables[0], &tables[1]},
+			PrefsSet: prefsSet,
+			Tables:   []*core.PreferenceTable{&tables[0], &tables[1]},
 		}
 		err := v.Validate()
 
@@ -159,7 +159,7 @@ func TestValidate__DoubleTable(t *testing.T) {
 	})
 
 	t.Run("tables are differente sizes", func(t *testing.T) {
-		entriesList := []*[]core.MatchEntry{
+		prefsSet := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"K", "L", "M"}},
 				{Name: "B", Preferences: []string{"L", "M", "K"}},
@@ -171,11 +171,11 @@ func TestValidate__DoubleTable(t *testing.T) {
 			},
 		}
 
-		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+		tables := core.NewPreferenceTablePair(prefsSet[0], prefsSet[1])
 
 		v := DoubleTableValidator{
-			EntriesList: entriesList,
-			Tables:      []*core.PreferenceTable{&tables[0], &tables[1]},
+			PrefsSet: prefsSet,
+			Tables:   []*core.PreferenceTable{&tables[0], &tables[1]},
 		}
 		err := v.Validate()
 
@@ -183,7 +183,7 @@ func TestValidate__DoubleTable(t *testing.T) {
 	})
 
 	t.Run("empty member", func(t *testing.T) {
-		entriesList := []*[]core.MatchEntry{
+		prefsSet := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"K", "L", "M"}},
 				{Name: "B", Preferences: []string{"L", "M", "K"}},
@@ -196,11 +196,11 @@ func TestValidate__DoubleTable(t *testing.T) {
 			},
 		}
 
-		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+		tables := core.NewPreferenceTablePair(prefsSet[0], prefsSet[1])
 
 		v := DoubleTableValidator{
-			EntriesList: entriesList,
-			Tables:      []*core.PreferenceTable{&tables[0], &tables[1]},
+			PrefsSet: prefsSet,
+			Tables:   []*core.PreferenceTable{&tables[0], &tables[1]},
 		}
 		err := v.Validate()
 
@@ -208,7 +208,7 @@ func TestValidate__DoubleTable(t *testing.T) {
 	})
 
 	t.Run("member names are case sensitive", func(t *testing.T) {
-		entriesList := []*[]core.MatchEntry{
+		prefsSet := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"K", "L", "M"}},
 				{Name: "B", Preferences: []string{"L", "M", "K"}},
@@ -221,11 +221,11 @@ func TestValidate__DoubleTable(t *testing.T) {
 			},
 		}
 
-		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+		tables := core.NewPreferenceTablePair(prefsSet[0], prefsSet[1])
 
 		v := DoubleTableValidator{
-			EntriesList: entriesList,
-			Tables:      []*core.PreferenceTable{&tables[0], &tables[1]},
+			PrefsSet: prefsSet,
+			Tables:   []*core.PreferenceTable{&tables[0], &tables[1]},
 		}
 		err := v.Validate()
 
@@ -233,7 +233,7 @@ func TestValidate__DoubleTable(t *testing.T) {
 	})
 
 	t.Run("asymmetrical empty list", func(t *testing.T) {
-		entriesList := []*[]core.MatchEntry{
+		prefsSet := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"K", "L", "M"}},
 				{Name: "B", Preferences: []string{}},
@@ -246,11 +246,11 @@ func TestValidate__DoubleTable(t *testing.T) {
 			},
 		}
 
-		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+		tables := core.NewPreferenceTablePair(prefsSet[0], prefsSet[1])
 
 		v := DoubleTableValidator{
-			EntriesList: entriesList,
-			Tables:      []*core.PreferenceTable{&tables[0], &tables[1]},
+			PrefsSet: prefsSet,
+			Tables:   []*core.PreferenceTable{&tables[0], &tables[1]},
 		}
 		err := v.Validate()
 
@@ -259,7 +259,7 @@ func TestValidate__DoubleTable(t *testing.T) {
 	})
 
 	t.Run("asymmetrical mismatched list", func(t *testing.T) {
-		entriesList := []*[]core.MatchEntry{
+		prefsSet := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"K", "L", "M"}},
 				{Name: "B", Preferences: []string{"L", "M", "K"}},
@@ -272,11 +272,11 @@ func TestValidate__DoubleTable(t *testing.T) {
 			},
 		}
 
-		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+		tables := core.NewPreferenceTablePair(prefsSet[0], prefsSet[1])
 
 		v := DoubleTableValidator{
-			EntriesList: entriesList,
-			Tables:      []*core.PreferenceTable{&tables[0], &tables[1]},
+			PrefsSet: prefsSet,
+			Tables:   []*core.PreferenceTable{&tables[0], &tables[1]},
 		}
 		err := v.Validate()
 
@@ -285,7 +285,7 @@ func TestValidate__DoubleTable(t *testing.T) {
 	})
 
 	t.Run("asymmetrical unknown member", func(t *testing.T) {
-		entriesList := []*[]core.MatchEntry{
+		prefsSet := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"K", "L", "M"}},
 				{Name: "B", Preferences: []string{"L", "M", "K"}},
@@ -298,11 +298,11 @@ func TestValidate__DoubleTable(t *testing.T) {
 			},
 		}
 
-		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+		tables := core.NewPreferenceTablePair(prefsSet[0], prefsSet[1])
 
 		v := DoubleTableValidator{
-			EntriesList: entriesList,
-			Tables:      []*core.PreferenceTable{&tables[0], &tables[1]},
+			PrefsSet: prefsSet,
+			Tables:   []*core.PreferenceTable{&tables[0], &tables[1]},
 		}
 		err := v.Validate()
 

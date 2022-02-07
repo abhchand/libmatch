@@ -105,7 +105,7 @@ import (
 )
 
 func main() {
-  prefTable := []libmatch.MatchEntry{
+  prefTable := []libmatch.MatchPreference{
     {Name: "A", Preferences: []string{"B", "D", "C"}},
     {Name: "B", Preferences: []string{"D", "A", "C"}},
     {Name: "C", Preferences: []string{"D", "A", "B"}},

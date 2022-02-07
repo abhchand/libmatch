@@ -22,7 +22,7 @@ func TestLoad(t *testing.T) {
 
 		result, err := Load(strings.NewReader(body))
 
-		wanted := &[]core.MatchEntry{
+		wanted := &[]core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"A", "C", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
@@ -52,7 +52,7 @@ func TestLoad(t *testing.T) {
 
 func TestSolveSMP(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		entriesA := []core.MatchEntry{
+		prefsA := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"L", "J", "H", "K", "I", "M"}},
 			{Name: "B", Preferences: []string{"L", "J", "K", "M", "I", "H"}},
 			{Name: "C", Preferences: []string{"L", "J", "M", "I", "K", "H"}},
@@ -61,7 +61,7 @@ func TestSolveSMP(t *testing.T) {
 			{Name: "F", Preferences: []string{"J", "K", "L", "M", "H", "I"}},
 		}
 
-		entriesB := []core.MatchEntry{
+		prefsB := []core.MatchPreference{
 			{Name: "H", Preferences: []string{"F", "E", "C", "A", "D", "B"}},
 			{Name: "I", Preferences: []string{"B", "D", "A", "E", "C", "F"}},
 			{Name: "J", Preferences: []string{"B", "A", "F", "E", "D", "C"}},
@@ -87,14 +87,14 @@ func TestSolveSMP(t *testing.T) {
 			},
 		}
 
-		result, err := SolveSMP(&entriesA, &entriesB)
+		result, err := SolveSMP(&prefsA, &prefsB)
 
 		assert.Nil(t, err)
 		assert.True(t, reflect.DeepEqual(wanted, result))
 	})
 
 	t.Run("table order is reversible", func(t *testing.T) {
-		entriesA := []core.MatchEntry{
+		prefsA := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"L", "J", "H", "K", "I", "M"}},
 			{Name: "B", Preferences: []string{"L", "J", "K", "M", "I", "H"}},
 			{Name: "C", Preferences: []string{"L", "J", "M", "I", "K", "H"}},
@@ -103,7 +103,7 @@ func TestSolveSMP(t *testing.T) {
 			{Name: "F", Preferences: []string{"J", "K", "L", "M", "H", "I"}},
 		}
 
-		entriesB := []core.MatchEntry{
+		prefsB := []core.MatchPreference{
 			{Name: "H", Preferences: []string{"F", "E", "C", "A", "D", "B"}},
 			{Name: "I", Preferences: []string{"B", "D", "A", "E", "C", "F"}},
 			{Name: "J", Preferences: []string{"B", "A", "F", "E", "D", "C"}},
@@ -129,14 +129,14 @@ func TestSolveSMP(t *testing.T) {
 			},
 		}
 
-		result, err := SolveSMP(&entriesB, &entriesA)
+		result, err := SolveSMP(&prefsB, &prefsA)
 
 		assert.Nil(t, err)
 		assert.True(t, reflect.DeepEqual(wanted, result))
 	})
 
-	t.Run("validates match entries", func(t *testing.T) {
-		entriesA := []core.MatchEntry{
+	t.Run("validates match prefs", func(t *testing.T) {
+		prefsA := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"L", "J", "H", "K", "I", "M"}},
 			{Name: "B", Preferences: []string{"L", "J", "K", "M", "I", "H"}},
 			{Name: "C", Preferences: []string{"L", "J", "M", "I", "K", "H"}},
@@ -146,7 +146,7 @@ func TestSolveSMP(t *testing.T) {
 			{Name: "A", Preferences: []string{"L", "J", "H", "K", "I", "M"}},
 		}
 
-		entriesB := []core.MatchEntry{
+		prefsB := []core.MatchPreference{
 			{Name: "H", Preferences: []string{"F", "E", "C", "A", "D", "B"}},
 			{Name: "I", Preferences: []string{"B", "D", "A", "E", "C", "F"}},
 			{Name: "J", Preferences: []string{"B", "A", "F", "E", "D", "C"}},
@@ -155,13 +155,13 @@ func TestSolveSMP(t *testing.T) {
 			{Name: "M", Preferences: []string{"B", "E", "D", "F", "C", "A"}},
 		}
 
-		_, err := SolveSMP(&entriesA, &entriesB)
+		_, err := SolveSMP(&prefsA, &prefsB)
 
 		assert.Equal(t, "Member names must be unique. Found duplicate entry 'A'", err.Error())
 	})
 
 	t.Run("validates preference table", func(t *testing.T) {
-		entriesA := []core.MatchEntry{
+		prefsA := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"L", "J", "H", "K", "I", "M"}},
 			{Name: "B", Preferences: []string{"L", "J", "K", "M", "I", "H"}},
 			{Name: "C", Preferences: []string{"L", "J", "M", "I", "K", "H"}},
@@ -169,7 +169,7 @@ func TestSolveSMP(t *testing.T) {
 			{Name: "E", Preferences: []string{"H", "I", "L", "K", "M", "J"}},
 		}
 
-		entriesB := []core.MatchEntry{
+		prefsB := []core.MatchPreference{
 			{Name: "H", Preferences: []string{"F", "E", "C", "A", "D", "B"}},
 			{Name: "I", Preferences: []string{"B", "D", "A", "E", "C", "F"}},
 			{Name: "J", Preferences: []string{"B", "A", "F", "E", "D", "C"}},
@@ -178,7 +178,7 @@ func TestSolveSMP(t *testing.T) {
 			{Name: "M", Preferences: []string{"B", "E", "D", "F", "C", "A"}},
 		}
 
-		_, err := SolveSMP(&entriesA, &entriesB)
+		_, err := SolveSMP(&prefsA, &prefsB)
 
 		assert.Equal(t, "Tables must be the same size", err.Error())
 	})
@@ -186,7 +186,7 @@ func TestSolveSMP(t *testing.T) {
 
 func TestSolveSRP(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		entries := []core.MatchEntry{
+		prefs := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"A", "C", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
@@ -202,14 +202,14 @@ func TestSolveSRP(t *testing.T) {
 			},
 		}
 
-		result, err := SolveSRP(&entries)
+		result, err := SolveSRP(&prefs)
 
 		assert.Nil(t, err)
 		assert.True(t, reflect.DeepEqual(wanted, result))
 	})
 
 	t.Run("no stable solution", func(t *testing.T) {
-		entries := []core.MatchEntry{
+		prefs := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "E", "C", "F", "D"}},
 			{Name: "B", Preferences: []string{"C", "F", "E", "A", "D"}},
 			{Name: "C", Preferences: []string{"E", "A", "F", "D", "B"}},
@@ -218,13 +218,13 @@ func TestSolveSRP(t *testing.T) {
 			{Name: "F", Preferences: []string{"C", "A", "E", "B", "D"}},
 		}
 
-		_, err := SolveSRP(&entries)
+		_, err := SolveSRP(&prefs)
 
 		assert.Equal(t, "No stable solution exists", err.Error())
 	})
 
 	t.Run("is not dependent on order", func(t *testing.T) {
-		entries := []core.MatchEntry{
+		prefs := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "D", Preferences: []string{"A", "B", "C"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
@@ -240,33 +240,33 @@ func TestSolveSRP(t *testing.T) {
 			},
 		}
 
-		result, err := SolveSRP(&entries)
+		result, err := SolveSRP(&prefs)
 
 		assert.Nil(t, err)
 		assert.True(t, reflect.DeepEqual(wanted, result))
 	})
 
-	t.Run("validates match entries", func(t *testing.T) {
-		entries := []core.MatchEntry{
+	t.Run("validates match prefs", func(t *testing.T) {
+		prefs := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"A", "C", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
 			{Name: "A", Preferences: []string{"C", "B", "D"}},
 		}
 
-		_, err := SolveSRP(&entries)
+		_, err := SolveSRP(&prefs)
 
 		assert.Equal(t, "Member names must be unique. Found duplicate entry 'A'", err.Error())
 	})
 
 	t.Run("validates preference table", func(t *testing.T) {
-		entries := []core.MatchEntry{
+		prefs := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"A", "C", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
 		}
 
-		_, err := SolveSRP(&entries)
+		_, err := SolveSRP(&prefs)
 
 		assert.Equal(t, "Table must have an even number of members", err.Error())
 	})

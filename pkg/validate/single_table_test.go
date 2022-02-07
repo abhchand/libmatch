@@ -10,32 +10,32 @@ import (
 
 func TestValidate__SingleTable(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		entries := []core.MatchEntry{
+		prefs := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"A", "C", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
 			{Name: "D", Preferences: []string{"A", "B", "C"}},
 		}
 
-		table := core.NewPreferenceTable(&entries)
+		table := core.NewPreferenceTable(&prefs)
 
-		v := SingleTableValidator{Entries: &entries, Table: &table}
+		v := SingleTableValidator{Prefs: &prefs, Table: &table}
 		err := v.Validate()
 
 		assert.Nil(t, err)
 	})
 
 	t.Run("duplicate member name", func(t *testing.T) {
-		entries := []core.MatchEntry{
+		prefs := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"A", "C", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
 			{Name: "A", Preferences: []string{"A", "B", "C"}},
 		}
 
-		table := core.NewPreferenceTable(&entries)
+		table := core.NewPreferenceTable(&prefs)
 
-		v := SingleTableValidator{Entries: &entries, Table: &table}
+		v := SingleTableValidator{Prefs: &prefs, Table: &table}
 		err := v.Validate()
 
 		if assert.NotNil(t, err) {
@@ -45,11 +45,11 @@ func TestValidate__SingleTable(t *testing.T) {
 	})
 
 	t.Run("empty table", func(t *testing.T) {
-		entries := []core.MatchEntry{}
+		prefs := []core.MatchPreference{}
 
-		table := core.NewPreferenceTable(&entries)
+		table := core.NewPreferenceTable(&prefs)
 
-		v := SingleTableValidator{Entries: &entries, Table: &table}
+		v := SingleTableValidator{Prefs: &prefs, Table: &table}
 		err := v.Validate()
 
 		if assert.NotNil(t, err) {
@@ -58,15 +58,15 @@ func TestValidate__SingleTable(t *testing.T) {
 	})
 
 	t.Run("odd number of members", func(t *testing.T) {
-		entries := []core.MatchEntry{
+		prefs := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"A", "C", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
 		}
 
-		table := core.NewPreferenceTable(&entries)
+		table := core.NewPreferenceTable(&prefs)
 
-		v := SingleTableValidator{Entries: &entries, Table: &table}
+		v := SingleTableValidator{Prefs: &prefs, Table: &table}
 		err := v.Validate()
 
 		if assert.NotNil(t, err) {
@@ -75,16 +75,16 @@ func TestValidate__SingleTable(t *testing.T) {
 	})
 
 	t.Run("empty member", func(t *testing.T) {
-		entries := []core.MatchEntry{
+		prefs := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"A", "C", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
 			{Name: "", Preferences: []string{"A", "B", "C"}},
 		}
 
-		table := core.NewPreferenceTable(&entries)
+		table := core.NewPreferenceTable(&prefs)
 
-		v := SingleTableValidator{Entries: &entries, Table: &table}
+		v := SingleTableValidator{Prefs: &prefs, Table: &table}
 		err := v.Validate()
 
 		if assert.NotNil(t, err) {
@@ -93,32 +93,32 @@ func TestValidate__SingleTable(t *testing.T) {
 	})
 
 	t.Run("member names are case sensitive", func(t *testing.T) {
-		entries := []core.MatchEntry{
+		prefs := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "a"}},
 			{Name: "B", Preferences: []string{"A", "C", "a"}},
 			{Name: "C", Preferences: []string{"A", "B", "a"}},
 			{Name: "a", Preferences: []string{"A", "B", "C"}},
 		}
 
-		table := core.NewPreferenceTable(&entries)
+		table := core.NewPreferenceTable(&prefs)
 
-		v := SingleTableValidator{Entries: &entries, Table: &table}
+		v := SingleTableValidator{Prefs: &prefs, Table: &table}
 		err := v.Validate()
 
 		assert.Nil(t, err)
 	})
 
 	t.Run("asymmetrical empty list", func(t *testing.T) {
-		entries := []core.MatchEntry{
+		prefs := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
 			{Name: "D", Preferences: []string{"A", "B", "C"}},
 		}
 
-		table := core.NewPreferenceTable(&entries)
+		table := core.NewPreferenceTable(&prefs)
 
-		v := SingleTableValidator{Entries: &entries, Table: &table}
+		v := SingleTableValidator{Prefs: &prefs, Table: &table}
 		err := v.Validate()
 
 		if assert.NotNil(t, err) {
@@ -128,16 +128,16 @@ func TestValidate__SingleTable(t *testing.T) {
 	})
 
 	t.Run("asymmetrical mismatched list", func(t *testing.T) {
-		entries := []core.MatchEntry{
+		prefs := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"A", "C"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
 			{Name: "D", Preferences: []string{"A", "B", "C"}},
 		}
 
-		table := core.NewPreferenceTable(&entries)
+		table := core.NewPreferenceTable(&prefs)
 
-		v := SingleTableValidator{Entries: &entries, Table: &table}
+		v := SingleTableValidator{Prefs: &prefs, Table: &table}
 		err := v.Validate()
 
 		if assert.NotNil(t, err) {
@@ -147,16 +147,16 @@ func TestValidate__SingleTable(t *testing.T) {
 	})
 
 	t.Run("asymmetrical unknown member", func(t *testing.T) {
-		entries := []core.MatchEntry{
+		prefs := []core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"A", "C", "X"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
 			{Name: "D", Preferences: []string{"A", "B", "C"}},
 		}
 
-		table := core.NewPreferenceTable(&entries)
+		table := core.NewPreferenceTable(&prefs)
 
-		v := SingleTableValidator{Entries: &entries, Table: &table}
+		v := SingleTableValidator{Prefs: &prefs, Table: &table}
 		err := v.Validate()
 
 		if assert.NotNil(t, err) {

@@ -10,10 +10,10 @@ import (
 	"github.com/abhchand/libmatch/pkg/validate"
 )
 
-type MatchEntry = core.MatchEntry
+type MatchPreference = core.MatchPreference
 type MatchResult = core.MatchResult
 
-func Load(r io.Reader) (*[]MatchEntry, error) {
+func Load(r io.Reader) (*[]MatchPreference, error) {
 	mp, err := load.LoadFromIO(r)
 	if err != nil {
 		return mp, err
@@ -22,14 +22,14 @@ func Load(r io.Reader) (*[]MatchEntry, error) {
 	return mp, err
 }
 
-func SolveSMP(prefsA, prefsB *[]MatchEntry) (MatchResult, error) {
+func SolveSMP(prefsA, prefsB *[]MatchPreference) (MatchResult, error) {
 	var res MatchResult
 	var err error
 
 	tables := core.NewPreferenceTablePair(prefsA, prefsB)
 	validator := validate.DoubleTableValidator{
-		EntriesList: []*[]core.MatchEntry{prefsA, prefsB},
-		Tables:      []*core.PreferenceTable{&tables[0], &tables[1]},
+		PrefsSet: []*[]core.MatchPreference{prefsA, prefsB},
+		Tables:   []*core.PreferenceTable{&tables[0], &tables[1]},
 	}
 
 	if err = validator.Validate(); err != nil {
@@ -46,12 +46,12 @@ func SolveSMP(prefsA, prefsB *[]MatchEntry) (MatchResult, error) {
 	return res, err
 }
 
-func SolveSRP(prefs *[]MatchEntry) (MatchResult, error) {
+func SolveSRP(prefs *[]MatchPreference) (MatchResult, error) {
 	var res MatchResult
 	var err error
 
 	table := core.NewPreferenceTable(prefs)
-	validator := validate.SingleTableValidator{Entries: prefs, Table: &table}
+	validator := validate.SingleTableValidator{Prefs: prefs, Table: &table}
 
 	if err = validator.Validate(); err != nil {
 		return res, err

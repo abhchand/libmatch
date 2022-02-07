@@ -10,7 +10,7 @@ import (
 )
 
 func TestPhase3CyclicalElimnation(t *testing.T) {
-	wanted := core.NewPreferenceTable(&[]core.MatchEntry{
+	wanted := core.NewPreferenceTable(&[]core.MatchPreference{
 		{Name: "A", Preferences: []string{"F"}},
 		{Name: "B", Preferences: []string{"E"}},
 		{Name: "C", Preferences: []string{"D"}},
@@ -25,7 +25,7 @@ func TestPhase3CyclicalElimnation(t *testing.T) {
 		title := fmt.Sprintf("With seed: %v", testCases[tc])
 
 		t.Run(title, func(t *testing.T) {
-			pt := core.NewPreferenceTable(&[]core.MatchEntry{
+			pt := core.NewPreferenceTable(&[]core.MatchPreference{
 				{Name: "A", Preferences: []string{"B", "F"}},
 				{Name: "B", Preferences: []string{"E", "F", "A"}},
 				{Name: "C", Preferences: []string{"D", "E"}},
@@ -41,7 +41,7 @@ func TestPhase3CyclicalElimnation(t *testing.T) {
 	}
 
 	t.Run("table is already complete", func(t *testing.T) {
-		pt := core.NewPreferenceTable(&[]core.MatchEntry{
+		pt := core.NewPreferenceTable(&[]core.MatchPreference{
 			{Name: "A", Preferences: []string{"F"}},
 			{Name: "B", Preferences: []string{"E"}},
 			{Name: "C", Preferences: []string{"D"}},

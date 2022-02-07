@@ -27,7 +27,7 @@ func TestLoadFromFile(t *testing.T) {
 
 	got, err := LoadFromFile(testFile)
 
-	wanted := &[]core.MatchEntry{
+	wanted := &[]core.MatchPreference{
 		{Name: "A", Preferences: []string{"B", "C", "D"}},
 		{Name: "B", Preferences: []string{"A", "C", "D"}},
 		{Name: "C", Preferences: []string{"A", "B", "D"}},
@@ -61,7 +61,7 @@ func TestLoadFromIO(t *testing.T) {
 
 	got, err := LoadFromIO(strings.NewReader(body))
 
-	wanted := &[]core.MatchEntry{
+	wanted := &[]core.MatchPreference{
 		{Name: "A", Preferences: []string{"B", "C", "D"}},
 		{Name: "B", Preferences: []string{"A", "C", "D"}},
 		{Name: "C", Preferences: []string{"A", "B", "D"}},

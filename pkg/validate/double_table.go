@@ -8,20 +8,20 @@ import (
 )
 
 type DoubleTableValidator struct {
-	EntriesList []*[]core.MatchEntry
-	Tables      []*core.PreferenceTable
-	Err         error
+	PrefsSet []*[]core.MatchPreference
+	Tables   []*core.PreferenceTable
+	Err      error
 }
 
 func (v DoubleTableValidator) Validate() error {
 	var err error
 
 	// This should already be verified upstream
-	if len(v.EntriesList) != 2 || len(v.Tables) != 2 {
-		return errors.New("Internal error: expected exactly 2 Entries and 2 Tables")
+	if len(v.PrefsSet) != 2 || len(v.Tables) != 2 {
+		return errors.New("Internal error: expected exactly 2 Prefs and 2 Tables")
 	}
 
-	err = v.validateEntriesUniqueness()
+	err = v.validatePrefsUniqueness()
 	if err != nil {
 		return err
 	}
@@ -49,14 +49,14 @@ func (v DoubleTableValidator) Validate() error {
 	return nil
 }
 
-func (v DoubleTableValidator) validateEntriesUniqueness() error {
+func (v DoubleTableValidator) validatePrefsUniqueness() error {
 	caches := make([]map[string]bool, 2)
 
-	for e := range v.EntriesList {
+	for e := range v.PrefsSet {
 		caches[e] = make(map[string]bool, 0)
 
-		for i := range *v.EntriesList[e] {
-			name := (*v.EntriesList[e])[i].Name
+		for i := range *v.PrefsSet[e] {
+			name := (*v.PrefsSet[e])[i].Name
 
 			if caches[e][name] {
 				msg := fmt.Sprintf("Member names must be unique. Found duplicate entry '%v'", name)

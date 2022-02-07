@@ -10,7 +10,7 @@ import (
 
 func TestRun(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		pt := core.NewPreferenceTable(&[]core.MatchEntry{
+		pt := core.NewPreferenceTable(&[]core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"A", "C", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
@@ -42,7 +42,7 @@ func TestRun(t *testing.T) {
 			     * with equal priority. In this case D's preference list will get
 			     * exhausted as no one prefers D to any other match
 		*/
-		pt := core.NewPreferenceTable(&[]core.MatchEntry{
+		pt := core.NewPreferenceTable(&[]core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"C", "A", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},

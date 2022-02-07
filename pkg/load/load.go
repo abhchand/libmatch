@@ -45,8 +45,8 @@ import (
 	"github.com/abhchand/libmatch/pkg/core"
 )
 
-func LoadFromFile(filename string) (*[]core.MatchEntry, error) {
-	var data *[]core.MatchEntry
+func LoadFromFile(filename string) (*[]core.MatchPreference, error) {
+	var data *[]core.MatchPreference
 
 	file, err := os.Open(filename)
 	if err != nil {
@@ -58,8 +58,8 @@ func LoadFromFile(filename string) (*[]core.MatchEntry, error) {
 	return data, err
 }
 
-func LoadFromIO(r io.Reader) (*[]core.MatchEntry, error) {
-	var data []core.MatchEntry
+func LoadFromIO(r io.Reader) (*[]core.MatchPreference, error) {
+	var data []core.MatchPreference
 
 	rawJson, err := io.ReadAll(r)
 	if err != nil {

@@ -10,7 +10,7 @@ import (
 
 func TestPhase1Proposal(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		pt := core.NewPreferenceTable(&[]core.MatchEntry{
+		pt := core.NewPreferenceTable(&[]core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "D", "F", "C", "E"}},
 			{Name: "B", Preferences: []string{"D", "E", "F", "A", "C"}},
 			{Name: "C", Preferences: []string{"D", "E", "F", "A", "B"}},
@@ -19,7 +19,7 @@ func TestPhase1Proposal(t *testing.T) {
 			{Name: "F", Preferences: []string{"A", "B", "D", "C", "E"}},
 		})
 
-		wanted := core.NewPreferenceTable(&[]core.MatchEntry{
+		wanted := core.NewPreferenceTable(&[]core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "D", "F", "C", "E"}},
 			{Name: "B", Preferences: []string{"E", "F", "A", "C"}},
 			{Name: "C", Preferences: []string{"D", "E", "F", "A", "B"}},
@@ -47,7 +47,7 @@ func TestPhase1Proposal(t *testing.T) {
 			     * with equal priority. In this case D's preference list will get
 			     * exhausted as no one prefers D to any other match
 		*/
-		pt := core.NewPreferenceTable(&[]core.MatchEntry{
+		pt := core.NewPreferenceTable(&[]core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"C", "A", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
@@ -61,7 +61,7 @@ func TestPhase1Proposal(t *testing.T) {
 }
 
 func TestIsStable(t *testing.T) {
-	pt := core.NewPreferenceTable(&[]core.MatchEntry{
+	pt := core.NewPreferenceTable(&[]core.MatchPreference{
 		{Name: "A", Preferences: []string{"B", "C", "D"}},
 		{Name: "B", Preferences: []string{"C", "A", "D"}},
 		{Name: "C", Preferences: []string{"A", "B", "D"}},
@@ -79,7 +79,7 @@ func TestIsStable(t *testing.T) {
 
 func TestSimulateProposal(t *testing.T) {
 	t.Run("proposed has no accepted proposal", func(t *testing.T) {
-		pt := core.NewPreferenceTable(&[]core.MatchEntry{
+		pt := core.NewPreferenceTable(&[]core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"C", "A", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
@@ -89,7 +89,7 @@ func TestSimulateProposal(t *testing.T) {
 		// C proposes to A, who has no other accepted proposal and will accept
 		simulateProposal(pt["C"], pt["A"])
 
-		wanted := core.NewPreferenceTable(&[]core.MatchEntry{
+		wanted := core.NewPreferenceTable(&[]core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"C", "A", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
@@ -102,7 +102,7 @@ func TestSimulateProposal(t *testing.T) {
 	})
 
 	t.Run("proposed prefers new proposal to existing one", func(t *testing.T) {
-		pt := core.NewPreferenceTable(&[]core.MatchEntry{
+		pt := core.NewPreferenceTable(&[]core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"C", "A", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
@@ -114,7 +114,7 @@ func TestSimulateProposal(t *testing.T) {
 		simulateProposal(pt["C"], pt["A"])
 		simulateProposal(pt["B"], pt["A"])
 
-		wanted := core.NewPreferenceTable(&[]core.MatchEntry{
+		wanted := core.NewPreferenceTable(&[]core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "D"}},
 			{Name: "B", Preferences: []string{"C", "A", "D"}},
 			{Name: "C", Preferences: []string{"B", "D"}},
@@ -127,7 +127,7 @@ func TestSimulateProposal(t *testing.T) {
 	})
 
 	t.Run("proposed doesn't prefer new proposal to existing one", func(t *testing.T) {
-		pt := core.NewPreferenceTable(&[]core.MatchEntry{
+		pt := core.NewPreferenceTable(&[]core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"C", "A", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
@@ -139,7 +139,7 @@ func TestSimulateProposal(t *testing.T) {
 		simulateProposal(pt["C"], pt["A"])
 		simulateProposal(pt["D"], pt["A"])
 
-		wanted := core.NewPreferenceTable(&[]core.MatchEntry{
+		wanted := core.NewPreferenceTable(&[]core.MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C"}},
 			{Name: "B", Preferences: []string{"C", "A", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},

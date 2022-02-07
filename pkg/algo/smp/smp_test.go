@@ -10,7 +10,7 @@ import (
 
 func TestRun(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		entriesList := []*[]core.MatchEntry{
+		prefsSet := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"L", "J", "H", "K", "I", "M"}},
 				{Name: "B", Preferences: []string{"L", "J", "K", "M", "I", "H"}},
@@ -29,7 +29,7 @@ func TestRun(t *testing.T) {
 			},
 		}
 
-		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+		tables := core.NewPreferenceTablePair(prefsSet[0], prefsSet[1])
 
 		algoCtx := core.AlgorithmContext{
 			TableA: &tables[0],
@@ -60,7 +60,7 @@ func TestRun(t *testing.T) {
 	})
 
 	t.Run("table order is reversible", func(t *testing.T) {
-		entriesList := []*[]core.MatchEntry{
+		prefsSet := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"L", "J", "H", "K", "I", "M"}},
 				{Name: "B", Preferences: []string{"L", "J", "K", "M", "I", "H"}},
@@ -79,7 +79,7 @@ func TestRun(t *testing.T) {
 			},
 		}
 
-		tables := core.NewPreferenceTablePair(entriesList[0], entriesList[1])
+		tables := core.NewPreferenceTablePair(prefsSet[0], prefsSet[1])
 
 		algoCtx := core.AlgorithmContext{
 			TableA: &tables[1],

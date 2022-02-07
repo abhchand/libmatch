@@ -10,7 +10,7 @@ import (
 
 func TestPhase1Proposal(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		actualEntries := []*[]core.MatchEntry{
+		actualPrefs := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"L", "J", "H", "K", "I", "M"}},
 				{Name: "B", Preferences: []string{"L", "J", "K", "M", "I", "H"}},
@@ -29,7 +29,7 @@ func TestPhase1Proposal(t *testing.T) {
 			},
 		}
 
-		wantedEntries := []*[]core.MatchEntry{
+		wantedPrefs := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"K", "I", "M"}},
 				{Name: "B", Preferences: []string{"J", "K", "M", "I", "H"}},
@@ -48,8 +48,8 @@ func TestPhase1Proposal(t *testing.T) {
 			},
 		}
 
-		actualTables := core.NewPreferenceTablePair(actualEntries[0], actualEntries[1])
-		wantedTables := core.NewPreferenceTablePair(wantedEntries[0], wantedEntries[1])
+		actualTables := core.NewPreferenceTablePair(actualPrefs[0], actualPrefs[1])
+		wantedTables := core.NewPreferenceTablePair(wantedPrefs[0], wantedPrefs[1])
 
 		wantedTables[0]["A"].AcceptMutually(wantedTables[1]["K"])
 		wantedTables[0]["B"].AcceptMutually(wantedTables[1]["J"])
@@ -64,7 +64,7 @@ func TestPhase1Proposal(t *testing.T) {
 	})
 
 	t.Run("table order is reversible", func(t *testing.T) {
-		actualEntries := []*[]core.MatchEntry{
+		actualPrefs := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"L", "J", "H", "K", "I", "M"}},
 				{Name: "B", Preferences: []string{"L", "J", "K", "M", "I", "H"}},
@@ -83,7 +83,7 @@ func TestPhase1Proposal(t *testing.T) {
 			},
 		}
 
-		wantedEntries := []*[]core.MatchEntry{
+		wantedPrefs := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"L", "J", "H", "K", "I", "M"}},
 				{Name: "B", Preferences: []string{"L", "J", "K", "H"}},
@@ -102,8 +102,8 @@ func TestPhase1Proposal(t *testing.T) {
 			},
 		}
 
-		actualTables := core.NewPreferenceTablePair(actualEntries[0], actualEntries[1])
-		wantedTables := core.NewPreferenceTablePair(wantedEntries[0], wantedEntries[1])
+		actualTables := core.NewPreferenceTablePair(actualPrefs[0], actualPrefs[1])
+		wantedTables := core.NewPreferenceTablePair(wantedPrefs[0], wantedPrefs[1])
 
 		wantedTables[0]["A"].AcceptMutually(wantedTables[1]["K"])
 		wantedTables[0]["B"].AcceptMutually(wantedTables[1]["J"])
@@ -120,7 +120,7 @@ func TestPhase1Proposal(t *testing.T) {
 
 func TestSimulateProposal(t *testing.T) {
 	t.Run("proposed has no accepted proposal", func(t *testing.T) {
-		actualEntries := []*[]core.MatchEntry{
+		actualPrefs := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"H", "I", "J"}},
 				{Name: "B", Preferences: []string{"H", "I", "J"}},
@@ -133,12 +133,12 @@ func TestSimulateProposal(t *testing.T) {
 			},
 		}
 
-		actualTables := core.NewPreferenceTablePair(actualEntries[0], actualEntries[1])
+		actualTables := core.NewPreferenceTablePair(actualPrefs[0], actualPrefs[1])
 
 		// C proposes to I, who has no other accepted proposal and will accept
 		simulateProposal(actualTables[0]["C"], actualTables[1]["I"])
 
-		wantedEntries := []*[]core.MatchEntry{
+		wantedPrefs := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"H", "I", "J"}},
 				{Name: "B", Preferences: []string{"H", "I", "J"}},
@@ -151,7 +151,7 @@ func TestSimulateProposal(t *testing.T) {
 			},
 		}
 
-		wantedTables := core.NewPreferenceTablePair(wantedEntries[0], wantedEntries[1])
+		wantedTables := core.NewPreferenceTablePair(wantedPrefs[0], wantedPrefs[1])
 
 		wantedTables[0]["C"].AcceptMutually(wantedTables[1]["I"])
 
@@ -159,7 +159,7 @@ func TestSimulateProposal(t *testing.T) {
 	})
 
 	t.Run("proposed prefers new proposal to existing one", func(t *testing.T) {
-		actualEntries := []*[]core.MatchEntry{
+		actualPrefs := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"H", "I", "J"}},
 				{Name: "B", Preferences: []string{"H", "I", "J"}},
@@ -172,14 +172,14 @@ func TestSimulateProposal(t *testing.T) {
 			},
 		}
 
-		actualTables := core.NewPreferenceTablePair(actualEntries[0], actualEntries[1])
+		actualTables := core.NewPreferenceTablePair(actualPrefs[0], actualPrefs[1])
 
 		// B proposes to H, then A proposes to H
 		// H will prefer the newer proosal (A) and mutually reject the former proposal (B)
 		simulateProposal(actualTables[0]["B"], actualTables[1]["H"])
 		simulateProposal(actualTables[0]["A"], actualTables[1]["H"])
 
-		wantedEntries := []*[]core.MatchEntry{
+		wantedPrefs := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"H", "I", "J"}},
 				{Name: "B", Preferences: []string{"I", "J"}},
@@ -192,7 +192,7 @@ func TestSimulateProposal(t *testing.T) {
 			},
 		}
 
-		wantedTables := core.NewPreferenceTablePair(wantedEntries[0], wantedEntries[1])
+		wantedTables := core.NewPreferenceTablePair(wantedPrefs[0], wantedPrefs[1])
 
 		wantedTables[1]["H"].AcceptMutually(wantedTables[0]["A"])
 
@@ -200,7 +200,7 @@ func TestSimulateProposal(t *testing.T) {
 	})
 
 	t.Run("proposed doesn't prefer new proposal to existing one", func(t *testing.T) {
-		actualEntries := []*[]core.MatchEntry{
+		actualPrefs := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"H", "I", "J"}},
 				{Name: "B", Preferences: []string{"H", "I", "J"}},
@@ -213,14 +213,14 @@ func TestSimulateProposal(t *testing.T) {
 			},
 		}
 
-		actualTables := core.NewPreferenceTablePair(actualEntries[0], actualEntries[1])
+		actualTables := core.NewPreferenceTablePair(actualPrefs[0], actualPrefs[1])
 
 		// A proposes to H, then B proposes to H
 		// H will prefer the formaer proosal (A) and mutually reject the newer proposal (B)
 		simulateProposal(actualTables[0]["A"], actualTables[1]["H"])
 		simulateProposal(actualTables[0]["B"], actualTables[1]["H"])
 
-		wantedEntries := []*[]core.MatchEntry{
+		wantedPrefs := []*[]core.MatchPreference{
 			{
 				{Name: "A", Preferences: []string{"H", "I", "J"}},
 				{Name: "B", Preferences: []string{"I", "J"}},
@@ -233,7 +233,7 @@ func TestSimulateProposal(t *testing.T) {
 			},
 		}
 
-		wantedTables := core.NewPreferenceTablePair(wantedEntries[0], wantedEntries[1])
+		wantedTables := core.NewPreferenceTablePair(wantedPrefs[0], wantedPrefs[1])
 
 		wantedTables[1]["H"].AcceptMutually(wantedTables[0]["A"])
 

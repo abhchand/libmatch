@@ -9,7 +9,7 @@ import (
 )
 
 func TestPhase2Rejection(t *testing.T) {
-	pt := core.NewPreferenceTable(&[]core.MatchEntry{
+	pt := core.NewPreferenceTable(&[]core.MatchPreference{
 		{Name: "A", Preferences: []string{"B", "D", "F", "C", "E"}},
 		{Name: "B", Preferences: []string{"E", "F", "A", "C"}},
 		{Name: "C", Preferences: []string{"D", "E", "F", "A", "B"}},
@@ -25,7 +25,7 @@ func TestPhase2Rejection(t *testing.T) {
 	pt["E"].Accept(pt["B"])
 	pt["F"].Accept(pt["D"])
 
-	wanted := core.NewPreferenceTable(&[]core.MatchEntry{
+	wanted := core.NewPreferenceTable(&[]core.MatchPreference{
 		{Name: "A", Preferences: []string{"B", "F"}},
 		{Name: "B", Preferences: []string{"E", "F", "A"}},
 		{Name: "C", Preferences: []string{"D", "E"}},

@@ -7,7 +7,7 @@ import (
 )
 
 func BenchmarkSolveSMP(b *testing.B) {
-	entriesA := []core.MatchEntry{
+	prefsA := []core.MatchPreference{
 		{Name: "A", Preferences: []string{"R", "L", "M", "S", "Q", "T", "P", "N", "O", "K"}},
 		{Name: "B", Preferences: []string{"S", "O", "N", "K", "T", "M", "Q", "P", "R", "L"}},
 		{Name: "C", Preferences: []string{"N", "O", "M", "S", "L", "K", "R", "P", "T", "Q"}},
@@ -20,7 +20,7 @@ func BenchmarkSolveSMP(b *testing.B) {
 		{Name: "J", Preferences: []string{"L", "N", "Q", "S", "T", "K", "P", "R", "O", "M"}},
 	}
 
-	entriesB := []core.MatchEntry{
+	prefsB := []core.MatchPreference{
 		{Name: "K", Preferences: []string{"C", "B", "F", "A", "J", "I", "G", "D", "H", "E"}},
 		{Name: "L", Preferences: []string{"F", "J", "D", "I", "H", "E", "A", "C", "G", "B"}},
 		{Name: "M", Preferences: []string{"D", "J", "H", "C", "F", "G", "B", "I", "E", "A"}},
@@ -34,12 +34,12 @@ func BenchmarkSolveSMP(b *testing.B) {
 	}
 
 	for i := 0; i < b.N; i++ {
-		SolveSMP(&entriesA, &entriesB)
+		SolveSMP(&prefsA, &prefsB)
 	}
 }
 
 func BenchmarkSolveSRP(b *testing.B) {
-	entries := []core.MatchEntry{
+	prefs := []core.MatchPreference{
 		{Name: "A", Preferences: []string{"H", "J", "E", "B", "D", "I", "C", "G", "F"}},
 		{Name: "B", Preferences: []string{"E", "I", "G", "D", "A", "J", "C", "F", "H"}},
 		{Name: "C", Preferences: []string{"J", "A", "B", "H", "F", "I", "G", "D", "E"}},
@@ -53,6 +53,6 @@ func BenchmarkSolveSRP(b *testing.B) {
 	}
 
 	for i := 0; i < b.N; i++ {
-		SolveSRP(&entries)
+		SolveSRP(&prefs)
 	}
 }

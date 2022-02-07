@@ -13,7 +13,7 @@ import (
 
 func ExampleSolveSMP() {
 
-	prefTableA := []libmatch.MatchEntry{
+	prefTableA := []libmatch.MatchPreference{
 		{Name: "A", Preferences: []string{"F", "J", "H", "G", "I"}},
 		{Name: "B", Preferences: []string{"F", "J", "H", "G", "I"}},
 		{Name: "C", Preferences: []string{"F", "G", "H", "J", "I"}},
@@ -21,7 +21,7 @@ func ExampleSolveSMP() {
 		{Name: "E", Preferences: []string{"H", "F", "G", "I", "J"}},
 	}
 
-	prefTableB := []libmatch.MatchEntry{
+	prefTableB := []libmatch.MatchPreference{
 		{Name: "F", Preferences: []string{"A", "E", "C", "B", "D"}},
 		{Name: "G", Preferences: []string{"D", "E", "C", "B", "A"}},
 		{Name: "H", Preferences: []string{"A", "B", "C", "D", "E"}},

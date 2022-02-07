@@ -12,7 +12,7 @@ import (
 )
 
 func ExampleSolveSRP() {
-	prefTable := []libmatch.MatchEntry{
+	prefTable := []libmatch.MatchPreference{
 		{Name: "A", Preferences: []string{"B", "D", "F", "C", "E"}},
 		{Name: "B", Preferences: []string{"D", "E", "F", "A", "C"}},
 		{Name: "C", Preferences: []string{"D", "E", "F", "A", "B"}},
@@ -43,7 +43,7 @@ func ExampleSolveSRP() {
 }
 
 func ExampleSolveSRP__no_stable_solution() {
-	prefTable := []libmatch.MatchEntry{
+	prefTable := []libmatch.MatchPreference{
 		{Name: "A", Preferences: []string{"B", "E", "C", "F", "D"}},
 		{Name: "B", Preferences: []string{"C", "F", "E", "A", "D"}},
 		{Name: "C", Preferences: []string{"E", "A", "F", "D", "B"}},

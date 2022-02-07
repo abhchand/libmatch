@@ -70,7 +70,7 @@ func solveAction(ctx *cli.Context) error {
 		return err
 	}
 
-	entriesList, err := loadFiles(*cfg)
+	prefsSet, err := loadFiles(*cfg)
 	if err != nil {
 		return err
 	}
@@ -81,9 +81,9 @@ func solveAction(ctx *cli.Context) error {
 	 */
 	switch cfg.Algorithm {
 	case "SMP":
-		result, err = libmatch.SolveSMP(entriesList[0], entriesList[1])
+		result, err = libmatch.SolveSMP(prefsSet[0], prefsSet[1])
 	case "SRP":
-		result, err = libmatch.SolveSRP(entriesList[0])
+		result, err = libmatch.SolveSRP(prefsSet[0])
 	}
 
 	if err != nil {
@@ -126,18 +126,18 @@ func validateConfig(cfg config.Config) error {
 	return nil
 }
 
-func loadFiles(cfg config.Config) ([]*[]core.MatchEntry, error) {
-	entriesList := make([]*[]core.MatchEntry, len(cfg.Filenames))
+func loadFiles(cfg config.Config) ([]*[]core.MatchPreference, error) {
+	prefsSet := make([]*[]core.MatchPreference, len(cfg.Filenames))
 
 	for i := range cfg.Filenames {
-		entries, err := load.LoadFromFile(cfg.Filenames[i])
+		prefs, err := load.LoadFromFile(cfg.Filenames[i])
 
 		if err != nil {
-			return entriesList, err
+			return prefsSet, err
 		}
 
-		entriesList[i] = entries
+		prefsSet[i] = prefs
 	}
 
-	return entriesList, nil
+	return prefsSet, nil
 }

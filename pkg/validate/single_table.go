@@ -8,9 +8,9 @@ import (
 )
 
 type SingleTableValidator struct {
-	Entries *[]core.MatchEntry
-	Table   *core.PreferenceTable
-	Err     error
+	Prefs *[]core.MatchPreference
+	Table *core.PreferenceTable
+	Err   error
 }
 
 func (v SingleTableValidator) Validate() error {
@@ -42,8 +42,8 @@ func (v SingleTableValidator) Validate() error {
 func (v SingleTableValidator) validateUniqueness() error {
 	cache := make(map[string]bool, 0)
 
-	for i := range *v.Entries {
-		name := (*v.Entries)[i].Name
+	for i := range *v.Prefs {
+		name := (*v.Prefs)[i].Name
 
 		if cache[name] {
 			msg := fmt.Sprintf("Member names must be unique. Found duplicate entry '%v'", name)

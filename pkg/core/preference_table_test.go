@@ -9,7 +9,7 @@ import (
 
 func TestNewPreferenceTable(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		entries := []MatchEntry{
+		prefs := []MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"A", "C", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
@@ -19,19 +19,19 @@ func TestNewPreferenceTable(t *testing.T) {
 		setupSingleTable()
 		wanted := pt
 
-		assert.True(t, reflect.DeepEqual(wanted, NewPreferenceTable(&entries)))
+		assert.True(t, reflect.DeepEqual(wanted, NewPreferenceTable(&prefs)))
 	})
 
 	t.Run("empty table", func(t *testing.T) {
-		entries := []MatchEntry{}
+		prefs := []MatchPreference{}
 
 		wanted := PreferenceTable{}
 
-		assert.Equal(t, wanted, NewPreferenceTable(&entries))
+		assert.Equal(t, wanted, NewPreferenceTable(&prefs))
 	})
 
 	t.Run("undefined preference", func(t *testing.T) {
-		entries := []MatchEntry{
+		prefs := []MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "X"}},
 			{Name: "B", Preferences: []string{"A", "C", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
@@ -43,11 +43,11 @@ func TestNewPreferenceTable(t *testing.T) {
 		plA = PreferenceList{members: []*Member{&memB, &memC, nil}}
 		memA.SetPreferenceList(&plA)
 
-		assert.True(t, reflect.DeepEqual(pt, NewPreferenceTable(&entries)))
+		assert.True(t, reflect.DeepEqual(pt, NewPreferenceTable(&prefs)))
 	})
 
 	t.Run("case sensitive", func(t *testing.T) {
-		entries := []MatchEntry{
+		prefs := []MatchPreference{
 			{Name: "A", Preferences: []string{"B", "C", "D"}},
 			{Name: "B", Preferences: []string{"A", "C", "D"}},
 			{Name: "C", Preferences: []string{"A", "B", "D"}},
@@ -69,18 +69,18 @@ func TestNewPreferenceTable(t *testing.T) {
 			"a": &_memA,
 		}
 
-		assert.Equal(t, wanted, NewPreferenceTable(&entries))
+		assert.Equal(t, wanted, NewPreferenceTable(&prefs))
 	})
 }
 
 func TestNewPreferenceTablePair(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		entriesA := []MatchEntry{
+		prefsA := []MatchPreference{
 			{Name: "A", Preferences: []string{"K", "L", "M"}},
 			{Name: "B", Preferences: []string{"L", "M", "K"}},
 			{Name: "C", Preferences: []string{"M", "L", "K"}},
 		}
-		entriesB := []MatchEntry{
+		prefsB := []MatchPreference{
 			{Name: "K", Preferences: []string{"B", "C", "A"}},
 			{Name: "L", Preferences: []string{"A", "C", "B"}},
 			{Name: "M", Preferences: []string{"A", "B", "C"}},
@@ -88,19 +88,19 @@ func TestNewPreferenceTablePair(t *testing.T) {
 
 		setupDoubleTable()
 
-		tables := NewPreferenceTablePair(&entriesA, &entriesB)
+		tables := NewPreferenceTablePair(&prefsA, &prefsB)
 
 		assert.True(t, reflect.DeepEqual(ptA, tables[0]))
 		assert.True(t, reflect.DeepEqual(ptB, tables[1]))
 	})
 
-	t.Run("order of entries does not matter", func(t *testing.T) {
-		entriesA := []MatchEntry{
+	t.Run("order of prefs does not matter", func(t *testing.T) {
+		prefsA := []MatchPreference{
 			{Name: "A", Preferences: []string{"K", "L", "M"}},
 			{Name: "B", Preferences: []string{"L", "M", "K"}},
 			{Name: "C", Preferences: []string{"M", "L", "K"}},
 		}
-		entriesB := []MatchEntry{
+		prefsB := []MatchPreference{
 			{Name: "K", Preferences: []string{"B", "C", "A"}},
 			{Name: "L", Preferences: []string{"A", "C", "B"}},
 			{Name: "M", Preferences: []string{"A", "B", "C"}},
@@ -108,29 +108,29 @@ func TestNewPreferenceTablePair(t *testing.T) {
 
 		setupDoubleTable()
 
-		tables := NewPreferenceTablePair(&entriesB, &entriesA)
+		tables := NewPreferenceTablePair(&prefsB, &prefsA)
 
 		assert.True(t, reflect.DeepEqual(ptB, tables[0]))
 		assert.True(t, reflect.DeepEqual(ptA, tables[1]))
 	})
 
 	t.Run("empty table", func(t *testing.T) {
-		entriesA := []MatchEntry{}
-		entriesB := []MatchEntry{}
+		prefsA := []MatchPreference{}
+		prefsB := []MatchPreference{}
 
-		tables := NewPreferenceTablePair(&entriesA, &entriesB)
+		tables := NewPreferenceTablePair(&prefsA, &prefsB)
 
 		assert.True(t, reflect.DeepEqual(PreferenceTable{}, tables[0]))
 		assert.True(t, reflect.DeepEqual(PreferenceTable{}, tables[1]))
 	})
 
 	t.Run("undefined preference", func(t *testing.T) {
-		entriesA := []MatchEntry{
+		prefsA := []MatchPreference{
 			{Name: "A", Preferences: []string{"K", "L", "X"}},
 			{Name: "B", Preferences: []string{"L", "M", "K"}},
 			{Name: "C", Preferences: []string{"M", "L", "K"}},
 		}
-		entriesB := []MatchEntry{
+		prefsB := []MatchPreference{
 			{Name: "K", Preferences: []string{"B", "C", "A"}},
 			{Name: "L", Preferences: []string{"A", "Z", "B"}},
 			{Name: "M", Preferences: []string{"A", "B", "C"}},
@@ -144,20 +144,20 @@ func TestNewPreferenceTablePair(t *testing.T) {
 		plL = PreferenceList{members: []*Member{&memA, nil, &memB}}
 		memL.SetPreferenceList(&plL)
 
-		tables := NewPreferenceTablePair(&entriesA, &entriesB)
+		tables := NewPreferenceTablePair(&prefsA, &prefsB)
 
 		assert.True(t, reflect.DeepEqual(ptA, tables[0]))
 		assert.True(t, reflect.DeepEqual(ptB, tables[1]))
 	})
 
 	t.Run("case sensitive", func(t *testing.T) {
-		entriesA := []MatchEntry{
+		prefsA := []MatchPreference{
 			{Name: "A", Preferences: []string{"K", "L", "M"}},
 			{Name: "B", Preferences: []string{"L", "M", "K"}},
 			{Name: "C", Preferences: []string{"M", "L", "K"}},
 			{Name: "a", Preferences: []string{"L", "K", "M"}},
 		}
-		entriesB := []MatchEntry{
+		prefsB := []MatchPreference{
 			{Name: "K", Preferences: []string{"B", "C", "A"}},
 			{Name: "L", Preferences: []string{"A", "C", "B"}},
 			{Name: "M", Preferences: []string{"A", "B", "C"}},
@@ -188,7 +188,7 @@ func TestNewPreferenceTablePair(t *testing.T) {
 			"k": &_memK,
 		}
 
-		tables := NewPreferenceTablePair(&entriesA, &entriesB)
+		tables := NewPreferenceTablePair(&prefsA, &prefsB)
 
 		assert.True(t, reflect.DeepEqual(ptA, tables[0]))
 		assert.True(t, reflect.DeepEqual(ptB, tables[1]))
@@ -228,14 +228,14 @@ func TestString__PreferenceTable(t *testing.T) {
 		testCase := cases[i]
 
 		t.Run(testCase[0], func(t *testing.T) {
-			entries := []MatchEntry{
+			prefs := []MatchPreference{
 				{Name: "A", Preferences: []string{"B", "C", "D"}},
 				{Name: "B", Preferences: []string{"A", "C", "D"}},
 				{Name: "C", Preferences: []string{"A", "B", "D"}},
 				{Name: "D", Preferences: []string{"A", "B", "C"}},
 			}
 
-			pt = NewPreferenceTable(&entries)
+			pt = NewPreferenceTable(&prefs)
 
 			if len(testCase[1]) > 0 {
 				proposed := testCase[1]
@@ -248,9 +248,9 @@ func TestString__PreferenceTable(t *testing.T) {
 	}
 
 	t.Run("empty table", func(t *testing.T) {
-		entries := []MatchEntry{}
+		prefs := []MatchPreference{}
 
-		pt = NewPreferenceTable(&entries)
+		pt = NewPreferenceTable(&prefs)
 
 		wanted := ""
 
