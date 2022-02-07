@@ -110,7 +110,31 @@ func TestSolveAction(t *testing.T) {
 	})
 
 	t.Run("error solving matching", func(t *testing.T) {
-		t.Skip("Skipping test - no way to force `SolveSRP` to return error yet")
+		body := `
+	  [
+	    {"name":"A", "preferences": ["B", "E", "C", "F", "D"] },
+	    {"name":"B", "preferences": ["C", "F", "E", "A", "D"] },
+	    {"name":"C", "preferences": ["E", "A", "F", "D", "B"] },
+	    {"name":"D", "preferences": ["B", "A", "C", "F", "E"] },
+	    {"name":"E", "preferences": ["A", "C", "D", "B", "F"] },
+	    {"name":"F", "preferences": ["C", "A", "E", "B", "D"] }
+	  ]
+		`
+
+		writeToFile(testFile, body)
+
+		globalSet := flag.NewFlagSet("test", 0)
+		globalSet.String("algorithm", "SRP", "doc")
+		globalSet.String("format", "csv", "doc")
+		globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
+
+		app := cli.NewApp()
+		ctx := cli.NewContext(app, globalSet, nil)
+		err := solveAction(ctx)
+
+		if assert.NotNil(t, err) {
+			assert.Equal(t, "No stable solution exists", err.Error())
+		}
 	})
 }
 
