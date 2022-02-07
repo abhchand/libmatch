@@ -65,154 +65,156 @@ func TestSolveAction(t *testing.T) {
 
 		assert.Nil(t, err)
 	})
-}
 
-func TestSolveAction_ErrorCreatingConfig(t *testing.T) {
-	// Force a config error by specifying an invalid file
-	_ = os.Remove(testFile)
+	t.Run("error creating Config", func(t *testing.T) {
+		// Force a config error by specifying an invalid file
+		_ = os.Remove(testFile)
 
-	globalSet := flag.NewFlagSet("test", 0)
-	globalSet.String("algorithm", "SRP", "doc")
-	globalSet.String("format", "csv", "doc")
-	globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
+		globalSet := flag.NewFlagSet("test", 0)
+		globalSet.String("algorithm", "SRP", "doc")
+		globalSet.String("format", "csv", "doc")
+		globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
 
-	app := cli.NewApp()
-	ctx := cli.NewContext(app, globalSet, nil)
-	err := solveAction(ctx)
+		app := cli.NewApp()
+		ctx := cli.NewContext(app, globalSet, nil)
+		err := solveAction(ctx)
 
-	if assert.NotNil(t, err) {
-		assert.Equal(t,
-			fmt.Sprintf("open %v: no such file or directory", testFile), err.Error())
-	}
-}
+		if assert.NotNil(t, err) {
+			assert.Equal(t,
+				fmt.Sprintf("open %v: no such file or directory", testFile), err.Error())
+		}
+	})
 
-func TestSolveAction_ErrorValidatingConfig(t *testing.T) {
-	body := `
-  [
-    { "name":"A", "preferences": ["B"] },
-    { "name":"B", "preferences": ["A"] }
-  ]
-	`
-	writeToFile(testFile, body)
+	t.Run("error validating Config", func(t *testing.T) {
+		body := `
+	  [
+	    { "name":"A", "preferences": ["B"] },
+	    { "name":"B", "preferences": ["A"] }
+	  ]
+		`
+		writeToFile(testFile, body)
 
-	globalSet := flag.NewFlagSet("test", 0)
-	// Force a validation error by specifying a bad `algorithm` value
-	globalSet.String("algorithm", "INVALID_VALUE", "doc")
-	globalSet.String("format", "csv", "doc")
-	globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
+		globalSet := flag.NewFlagSet("test", 0)
+		// Force a validation error by specifying a bad `algorithm` value
+		globalSet.String("algorithm", "INVALID_VALUE", "doc")
+		globalSet.String("format", "csv", "doc")
+		globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
 
-	app := cli.NewApp()
-	ctx := cli.NewContext(app, globalSet, nil)
-	err := solveAction(ctx)
+		app := cli.NewApp()
+		ctx := cli.NewContext(app, globalSet, nil)
+		err := solveAction(ctx)
 
-	if assert.NotNil(t, err) {
-		assert.Equal(t, "Unknown `--algorithm` value: INVALID_VALUE", err.Error())
-	}
-}
+		if assert.NotNil(t, err) {
+			assert.Equal(t, "Unknown `--algorithm` value: INVALID_VALUE", err.Error())
+		}
+	})
 
-func TestSolveAction_ErrorSolvingMatching(t *testing.T) {
-	t.Skip("Skipping test - no way to force `SolveSRP` to return error yet")
+	t.Run("error solving matching", func(t *testing.T) {
+		t.Skip("Skipping test - no way to force `SolveSRP` to return error yet")
+	})
 }
 
 func TestValidateConfig(t *testing.T) {
-	body := `
-  [
-    { "name":"A", "preferences": ["B"] },
-    { "name":"B", "preferences": ["A"] }
-  ]
-	`
-	writeToFile(testFile, body)
+	t.Run("success", func(t *testing.T) {
+		body := `
+	  [
+	    { "name":"A", "preferences": ["B"] },
+	    { "name":"B", "preferences": ["A"] }
+	  ]
+		`
+		writeToFile(testFile, body)
 
-	globalSet := flag.NewFlagSet("test", 0)
-	globalSet.String("algorithm", "SRP", "doc")
-	globalSet.String("format", "csv", "doc")
-	globalSet.Bool("debug", false, "doc")
-	globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
+		globalSet := flag.NewFlagSet("test", 0)
+		globalSet.String("algorithm", "SRP", "doc")
+		globalSet.String("format", "csv", "doc")
+		globalSet.Bool("debug", false, "doc")
+		globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
 
-	app := cli.NewApp()
-	ctx := cli.NewContext(app, globalSet, nil)
-	cfg, err := config.NewConfig(ctx)
-	err = validateConfig(*cfg)
+		app := cli.NewApp()
+		ctx := cli.NewContext(app, globalSet, nil)
+		cfg, err := config.NewConfig(ctx)
+		err = validateConfig(*cfg)
 
-	assert.Nil(t, err)
-}
+		assert.Nil(t, err)
+	})
 
-func TestValidateConfig_InvalidAlgorithm(t *testing.T) {
-	body := `
-  [
-    { "name":"A", "preferences": ["B"] },
-    { "name":"B", "preferences": ["A"] }
-  ]
-	`
-	writeToFile(testFile, body)
+	t.Run("invalid algorithm", func(t *testing.T) {
+		body := `
+	  [
+	    { "name":"A", "preferences": ["B"] },
+	    { "name":"B", "preferences": ["A"] }
+	  ]
+		`
+		writeToFile(testFile, body)
 
-	globalSet := flag.NewFlagSet("test", 0)
-	globalSet.String("algorithm", "INVALID_VALUE", "doc")
-	globalSet.String("format", "csv", "doc")
-	globalSet.Bool("debug", false, "doc")
-	globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
+		globalSet := flag.NewFlagSet("test", 0)
+		globalSet.String("algorithm", "INVALID_VALUE", "doc")
+		globalSet.String("format", "csv", "doc")
+		globalSet.Bool("debug", false, "doc")
+		globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
 
-	app := cli.NewApp()
-	ctx := cli.NewContext(app, globalSet, nil)
-	cfg, err := config.NewConfig(ctx)
-	err = validateConfig(*cfg)
+		app := cli.NewApp()
+		ctx := cli.NewContext(app, globalSet, nil)
+		cfg, err := config.NewConfig(ctx)
+		err = validateConfig(*cfg)
 
-	if assert.NotNil(t, err) {
-		assert.Equal(t, "Unknown `--algorithm` value: INVALID_VALUE", err.Error())
-	}
-}
+		if assert.NotNil(t, err) {
+			assert.Equal(t, "Unknown `--algorithm` value: INVALID_VALUE", err.Error())
+		}
+	})
 
-func TestValidateConfig_InvalidNumberOfTables(t *testing.T) {
-	testFile2 := "/tmp/libmatch_test_2.json"
+	t.Run("invalid number of tables", func(t *testing.T) {
+		testFile2 := "/tmp/libmatch_test_2.json"
 
-	body := `
-  [
-    { "name":"A", "preferences": ["B"] },
-    { "name":"B", "preferences": ["A"] }
-  ]
-	`
-	writeToFile(testFile, body)
-	writeToFile(testFile2, body)
+		body := `
+	  [
+	    { "name":"A", "preferences": ["B"] },
+	    { "name":"B", "preferences": ["A"] }
+	  ]
+		`
+		writeToFile(testFile, body)
+		writeToFile(testFile2, body)
 
-	globalSet := flag.NewFlagSet("test", 0)
-	globalSet.String("algorithm", "SRP", "doc")
-	globalSet.String("format", "csv", "doc")
-	globalSet.Bool("debug", false, "doc")
-	globalSet.Var(cli.NewStringSlice(testFile, testFile2), "file", "doc")
+		globalSet := flag.NewFlagSet("test", 0)
+		globalSet.String("algorithm", "SRP", "doc")
+		globalSet.String("format", "csv", "doc")
+		globalSet.Bool("debug", false, "doc")
+		globalSet.Var(cli.NewStringSlice(testFile, testFile2), "file", "doc")
 
-	app := cli.NewApp()
-	ctx := cli.NewContext(app, globalSet, nil)
-	cfg, err := config.NewConfig(ctx)
-	err = validateConfig(*cfg)
+		app := cli.NewApp()
+		ctx := cli.NewContext(app, globalSet, nil)
+		cfg, err := config.NewConfig(ctx)
+		err = validateConfig(*cfg)
 
-	if assert.NotNil(t, err) {
-		assert.Equal(t, "Expected --file to be specified exactly 1 time(s)", err.Error())
-	}
-}
+		if assert.NotNil(t, err) {
+			assert.Equal(t, "Expected --file to be specified exactly 1 time(s)", err.Error())
+		}
+	})
 
-func TestValidateConfig_InvalidFormat(t *testing.T) {
-	body := `
-  [
-    { "name":"A", "preferences": ["B"] },
-    { "name":"B", "preferences": ["A"] }
-  ]
-	`
-	writeToFile(testFile, body)
+	t.Run("invalid format", func(t *testing.T) {
+		body := `
+	  [
+	    { "name":"A", "preferences": ["B"] },
+	    { "name":"B", "preferences": ["A"] }
+	  ]
+		`
+		writeToFile(testFile, body)
 
-	globalSet := flag.NewFlagSet("test", 0)
-	globalSet.String("algorithm", "srp", "doc")
-	globalSet.String("format", "INVALID_VALUE", "doc")
-	globalSet.Bool("debug", false, "doc")
-	globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
+		globalSet := flag.NewFlagSet("test", 0)
+		globalSet.String("algorithm", "srp", "doc")
+		globalSet.String("format", "INVALID_VALUE", "doc")
+		globalSet.Bool("debug", false, "doc")
+		globalSet.Var(cli.NewStringSlice(testFile), "file", "doc")
 
-	app := cli.NewApp()
-	ctx := cli.NewContext(app, globalSet, nil)
-	cfg, err := config.NewConfig(ctx)
-	err = validateConfig(*cfg)
+		app := cli.NewApp()
+		ctx := cli.NewContext(app, globalSet, nil)
+		cfg, err := config.NewConfig(ctx)
+		err = validateConfig(*cfg)
 
-	if assert.NotNil(t, err) {
-		assert.Equal(t, "Unknown `--format` value: INVALID_VALUE", err.Error())
-	}
+		if assert.NotNil(t, err) {
+			assert.Equal(t, "Unknown `--format` value: INVALID_VALUE", err.Error())
+		}
+	})
 }
 
 func writeToFile(filename, body string) {
