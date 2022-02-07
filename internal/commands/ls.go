@@ -1,5 +1,11 @@
 package commands
 
+/*
+ * Main handler for the `ls` subcommand.
+ *
+ * This subcommand lists all available matching algorithms.
+ */
+
 import (
 	"fmt"
 	"strings"

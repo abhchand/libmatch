@@ -1,5 +1,12 @@
 package commands
 
+/*
+ * Main handler for the `solve` subcommand.
+ *
+ * This subcommand executes one of the matching algorithms given input
+ * `--file` arguments
+ */
+
 import (
 	"errors"
 	"fmt"
@@ -60,23 +67,26 @@ func SolveCommand() *cli.Command {
 func solveAction(ctx *cli.Context) error {
 	var result core.MatchResult
 
+	// Create a new libmatch `Config`
 	cfg, err := config.NewConfig(ctx)
 	if err != nil {
 		return err
 	}
 
+	// Validate the config, which validates the CLI input flags
 	if err = validateConfig(*cfg); err != nil {
 		return err
 	}
 
+	// Read one or more input files and load data into `core.MatchPreference` structures
 	prefsSet, err := loadFiles(*cfg)
 	if err != nil {
 		return err
 	}
 
 	/*
-	 * `algorithm` value was already validated above, so it is guranteed
-	 * to be one of the `case`s below.
+	 * Call the appropriate `libmatch` API method for the specified
+	 * Matching Algorithm
 	 */
 	switch cfg.Algorithm {
 	case "SMP":
@@ -89,15 +99,19 @@ func solveAction(ctx *cli.Context) error {
 		return err
 	}
 
+	// Print the results in the desired output format
 	result.Print(cfg.OutputFormat)
 
 	return nil
 }
 
+/*
+ * Validate the `Config`, which contains the CLI input flags
+ */
 func validateConfig(cfg config.Config) error {
 	mac := MATCHING_ALGORITHMS_CFG[cfg.Algorithm]
 
-	// Verify `algorithm` value is valid
+	// Verify `--algorithm` value is valid
 	valid := false
 	if mac.numInputFilesRequired == 0 {
 		return errors.New(fmt.Sprintf("Unknown `--algorithm` value: %v", cfg.Algorithm))
@@ -109,7 +123,7 @@ func validateConfig(cfg config.Config) error {
 			fmt.Sprintf("Expected --file to be specified exactly %v time(s)", mac.numInputFilesRequired))
 	}
 
-	// Verify `format` value is valid
+	// Verify `--format` value is valid
 	valid = false
 	for i := range OUTPUT_FORMATS {
 		if cfg.OutputFormat == OUTPUT_FORMATS[i] {
@@ -125,6 +139,10 @@ func validateConfig(cfg config.Config) error {
 	return nil
 }
 
+/*
+ * Read one or more input `--file` values and load the data into
+ * `core.MatchPreference` structures
+ */
 func loadFiles(cfg config.Config) ([]*[]core.MatchPreference, error) {
 	prefsSet := make([]*[]core.MatchPreference, len(cfg.Filenames))
 

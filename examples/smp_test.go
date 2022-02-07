@@ -36,7 +36,7 @@ func ExampleSolveSMP() {
 		os.Exit(1)
 	}
 
-	// Iterate through the results
+	// Iterate through the result mapping
 	for x, y := range result.Mapping {
 		fmt.Printf("%v => %v\n", x, y)
 	}
