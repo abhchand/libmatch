@@ -5,20 +5,24 @@ import (
 )
 
 func Run(algoCtx core.AlgorithmContext) (core.MatchResult, error) {
-	res := core.MatchResult{}
-
 	ptA := algoCtx.TableA
 	ptB := algoCtx.TableB
 
 	phase1Proposal(ptA, ptB)
 
+	return buildResult(ptA, ptB), nil
+}
+
+func buildResult(ptA, ptB *core.PreferenceTable) core.MatchResult {
+	res := core.MatchResult{}
+
 	res.Mapping = make(map[string]string)
-	for name, member := range *ptA {
-		res.Mapping[name] = member.CurrentProposer().Name()
-	}
-	for name, member := range *ptB {
-		res.Mapping[name] = member.CurrentProposer().Name()
+
+	for _, pt := range []*core.PreferenceTable{ptA, ptB} {
+		for name, member := range *pt {
+			res.Mapping[name] = member.CurrentProposer().Name()
+		}
 	}
 
-	return res, nil
+	return res
 }
