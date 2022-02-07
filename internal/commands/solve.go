@@ -11,16 +11,15 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-type matchingAlgorithm struct {
-	fileCount int
-}
-
-var MATCHING_ALGORITHMS_CFG = map[string]matchingAlgorithm{
+// Static configuration of the matching algorithms
+var MATCHING_ALGORITHMS_CFG = map[string]struct {
+	numInputFilesRequired int
+}{
 	"SMP": {
-		fileCount: 2,
+		numInputFilesRequired: 2,
 	},
 	"SRP": {
-		fileCount: 1,
+		numInputFilesRequired: 1,
 	},
 }
 var OUTPUT_FORMATS = [2]string{"csv", "json"}
@@ -100,14 +99,14 @@ func validateConfig(cfg config.Config) error {
 
 	// Verify `algorithm` value is valid
 	valid := false
-	if mac.fileCount == 0 {
+	if mac.numInputFilesRequired == 0 {
 		return errors.New(fmt.Sprintf("Unknown `--algorithm` value: %v", cfg.Algorithm))
 	}
 
 	// Verify number of `--file` inputs
-	if len(cfg.Filenames) != mac.fileCount {
+	if len(cfg.Filenames) != mac.numInputFilesRequired {
 		return errors.New(
-			fmt.Sprintf("Expected --file to be specified exactly %v time(s)", mac.fileCount))
+			fmt.Sprintf("Expected --file to be specified exactly %v time(s)", mac.numInputFilesRequired))
 	}
 
 	// Verify `format` value is valid
