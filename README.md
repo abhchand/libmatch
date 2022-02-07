@@ -16,11 +16,12 @@ A utility library for solving matching problems.
 ---
 
 - [Overview](#overview)
-- [Installation](#installation)
-  * [Build from source](#build-from-source)
-- [Usage](#usage)
-  * [As an executable](#as-an-executable)
-  * [As a Go Library](#as-a-go-library)
+- [As an executable](#as-an-executable)
+  * [Installation](#installation)
+  * [Usage](#usage)
+- [As a Go Library](#as-a-go-library)
+  * [Installation](#installation)
+  * [Usage](#usage)
 - [Miscellaneous](#miscellaneous)
 
 ## <a name="overview">Overview
@@ -33,11 +34,13 @@ Given one or more sets of *member preferences*, `libmatch` finds an optimal matc
 
 The output will be mathematically "stable", meaning no two members will prefer each other over their existing matches.
 
-## <a name="installation"></a>Installation
+## <a name="as-an-executable">As an executable
+
+### <a name="installation"></a>Installation
 
 Download the the [latest release](https://github.com/abhchand/libmatch/releases/latest) for your platform.
 
-### <a name="build-from-source"></a>Build from source
+Or alternatively, build it from source:
 
 ```shell
 git clone git@github.com:abhchand/libmatch.git
@@ -46,10 +49,7 @@ cd libmatch/
 make all
 ```
 
-## <a name="usage">Usage
-
-### <a name="as-an-executable">As an executable
-
+### <a name="usage">Usage
 
 Define member preferences as a JSON input file:
 
@@ -80,13 +80,17 @@ F,A
 
 See `libmatch --help` for more options and examples
 
-### <a name="as-a-go-library">As a Go Library
+## <a name="as-a-go-library">As a Go Library
+
+### <a name="installation"></a>Installation
 
 Add `libmatch` as a dependency:
 
 ```shell
 go get github.com/abhchand/libmatch
 ```
+
+### <a name="usage"></a>Usage
 
 Then `import` and use it:
 
