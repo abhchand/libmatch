@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#
+# Run all tests
+#
+
 set -e
 
 RED='\033[00;31m'

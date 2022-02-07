@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#
+# Lint all files
+#
+
 set -e
 
 RED='\033[00;31m'
