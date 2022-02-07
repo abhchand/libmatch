@@ -31,9 +31,12 @@ func NewConfig(ctx *cli.Context) (*Config, error) {
 		CliContext:   ctx,
 	}
 
-	if err := expandFilenames(cfg); err != nil {
+	// Expand path of each `file` flag
+	expandedFiles, err := expandFilenames(cfg.CliContext.StringSlice("file"))
+	if err != nil {
 		return cfg, err
 	}
+	cfg.Filenames = expandedFiles
 
 	return cfg, nil
 }
@@ -41,20 +44,16 @@ func NewConfig(ctx *cli.Context) (*Config, error) {
 /*
  * Expands all relative filenames into absolute paths
  */
-func expandFilenames(cfg *Config) error {
-	files := cfg.CliContext.StringSlice("file")
-
+func expandFilenames(files []string) ([]string, error) {
 	for f := range files {
 		absFilename, err := filepath.Abs(files[f])
 
 		if err != nil {
-			return err
+			return files, err
 		}
 
 		files[f] = absFilename
 	}
 
-	cfg.Filenames = files
-
-	return nil
+	return files, nil
 }
