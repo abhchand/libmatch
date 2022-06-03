@@ -112,14 +112,17 @@ func main() {
     {Name: "D", Preferences: []string{"C", "A", "B"}},
   }
 
-  // libmatch returns a `libmatch.MatchResult` type.
-  // The mapping can be accessed via the `.Mapping` property
+  // Call the solver for the type of matching algorithm you'd like to solve.
+  // The top of the README contains a list of all supported shorthands.
+  // In this case `SolveSRP` solves the Stable Roommate Problem
   result, err := libmatch.SolveSRP(&prefTable)
   if err != nil {
     fmt.Println(err)
     os.Exit(1)
   }
 
+  // libmatch returns a `libmatch.MatchResult` type above.
+  // The mapping can be accessed via the `.Mapping` property
   for x, y := range result.Mapping {
     fmt.Printf("%v => %v\n", x, y)
   }
