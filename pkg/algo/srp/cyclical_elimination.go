@@ -8,10 +8,21 @@ type cyclePair struct {
 	x, y *core.Member
 }
 
+// phase3CyclicalElimnation implements the 3rd phase of the Irving (1985)
+// algorithm to solve the "Stable Roommate Problem".
+//
+// In this last phase we attempt to find any preference cycles and reject them.
+//
+// See srp package documentation for more detail
 func phase3CyclicalElimnation(pt *core.PreferenceTable) {
 	phase3CyclicalElimnationWithSeed(pt, "")
 }
 
+// phase3CyclicalElimnationWithSeed implements the 3rd phase of the Irving
+// (1985) algorithm to solve the "Stable Roommate Problem".
+//
+// It accepts a seed value with which to being processing members
+// deterministically. This is useful for testing.
 func phase3CyclicalElimnationWithSeed(pt *core.PreferenceTable, seed string) {
 	var startingMember *core.Member
 	var loopIdx int
@@ -40,6 +51,8 @@ func phase3CyclicalElimnationWithSeed(pt *core.PreferenceTable, seed string) {
 	}
 }
 
+// detectCycle detects preference cycles in a preference table, given a starting
+// member.
 func detectCycle(pt *core.PreferenceTable, startingMember *core.Member) []cyclePair {
 	pairs := []cyclePair{
 		{x: startingMember},
@@ -71,6 +84,7 @@ func detectCycle(pt *core.PreferenceTable, startingMember *core.Member) []cycleP
 	return pairs
 }
 
+// eliminateCycle removes an identified preference cycle in a preference table
 func eliminateCycle(pt *core.PreferenceTable, pairs []cyclePair) {
 	for p := range pairs {
 		(pairs[p].x).Reject(pairs[p].y)

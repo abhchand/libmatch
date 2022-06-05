@@ -5,6 +5,9 @@ import (
 	"github.com/abhchand/libmatch/pkg/core"
 )
 
+// Run solves the "Stable Roommates Problem" (SRP) for a set of given inputs.
+//
+// See srp package documentation for an end-to-end example
 func Run(algoCtx core.AlgorithmContext) (core.MatchResult, error) {
 	var res core.MatchResult
 	pt := algoCtx.TableA

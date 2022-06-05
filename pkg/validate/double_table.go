@@ -7,12 +7,15 @@ import (
 	"github.com/abhchand/libmatch/pkg/core"
 )
 
+// DoubleTableValidator contains all information required to validate a pair
+// of preference tables.
 type DoubleTableValidator struct {
 	PrefsSet []*[]core.MatchPreference
 	Tables   []*core.PreferenceTable
 	Err      error
 }
 
+// Validate validates the pair of preference tables specified in the struct.
 func (v DoubleTableValidator) Validate() error {
 	var err error
 
@@ -49,6 +52,7 @@ func (v DoubleTableValidator) Validate() error {
 	return nil
 }
 
+// validatePrefsUniqueness validates that all member names are unique
 func (v DoubleTableValidator) validatePrefsUniqueness() error {
 	caches := make([]map[string]bool, 2)
 
@@ -70,6 +74,8 @@ func (v DoubleTableValidator) validatePrefsUniqueness() error {
 	return nil
 }
 
+// validateTableUniqueness validates that both tables have distinct sets of
+// members
 func (v DoubleTableValidator) validateTableUniqueness() error {
 	for t := range v.Tables {
 		table := v.Tables[t]
@@ -86,6 +92,7 @@ func (v DoubleTableValidator) validateTableUniqueness() error {
 	return nil
 }
 
+// validateSize validates that both tables are non-empty and of equal size
 func (v DoubleTableValidator) validateSize() error {
 	sizes := make([]int, 2)
 
@@ -104,6 +111,7 @@ func (v DoubleTableValidator) validateSize() error {
 	return nil
 }
 
+// validateMembers validates that members are non-blank.
 func (v DoubleTableValidator) validateMembers() error {
 	for t := range v.Tables {
 		if (*v.Tables[t])[""] != nil {
@@ -114,12 +122,8 @@ func (v DoubleTableValidator) validateMembers() error {
 	return nil
 }
 
-/*
- * Check whether the tables are symmetrical
- *
- * That is, verify each member's preferences contains all members of the other
- * table
- */
+// validateSymmetry validates whether the tables are symmetrical. Each member's
+// preferences should contain all members of the other table.
 func (v DoubleTableValidator) validateSymmetry() error {
 
 	// Build a list of member names of both tables

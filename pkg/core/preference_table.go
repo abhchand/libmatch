@@ -6,8 +6,20 @@ import (
 	"sort"
 )
 
+// PreferenceTable models a preference table for a set of members. In theory
+// it maps a member name to its preferene list. In reality, the Member data
+// model already contains a member's name and preference list. So this data
+// model is a glorified lookup table that maps a member's string name to its
+// Member struct object.
+//
+// This could have been modeled without a dedicated struct, but using a struct
+// also provides the convenience of defining additional methods that apply to
+// the table itself.
 type PreferenceTable map[string]*Member
 
+// NewPreferenceTable creates a new preference table given a list of match
+// preferences (likely loaded from JSON data). Each member will have a
+// preference list of all other members in the same set.
 func NewPreferenceTable(prefs *[]MatchPreference) PreferenceTable {
 	p := *prefs
 
@@ -39,6 +51,8 @@ func NewPreferenceTable(prefs *[]MatchPreference) PreferenceTable {
 	return table
 }
 
+// NewPreferenceTablePair creates a pair of preference tables where each
+// member has a preference list of members in the *other* set.
 func NewPreferenceTablePair(prefsA, prefsB *[]MatchPreference) []PreferenceTable {
 	prefsSet := []*[]MatchPreference{prefsA, prefsB}
 
@@ -84,6 +98,7 @@ func NewPreferenceTablePair(prefsA, prefsB *[]MatchPreference) []PreferenceTable
 	return tables
 }
 
+// String returns a human readable representation of this preference table
 func (pt PreferenceTable) String() string {
 	var str string
 
@@ -113,6 +128,8 @@ func (pt PreferenceTable) String() string {
 	return str
 }
 
+// UnmatchedMembers returns a list of all members in this table who are still
+// unmatched.
 func (pt PreferenceTable) UnmatchedMembers() []*Member {
 	var unmatched []*Member
 
@@ -125,6 +142,8 @@ func (pt PreferenceTable) UnmatchedMembers() []*Member {
 	return unmatched
 }
 
+// IsStable indicates whether this table is considered mathematically stable.
+// That is, no member should have an empty preference list.
 func (pt PreferenceTable) IsStable() bool {
 	for m := range pt {
 		if len(pt[m].PreferenceList().members) == 0 {
@@ -135,6 +154,8 @@ func (pt PreferenceTable) IsStable() bool {
 	return true
 }
 
+// IsComplete indicates whether this table is considered complete. That is,
+// every member should have exactly 1 member remaining in its preference list.
 func (pt PreferenceTable) IsComplete() bool {
 	for m := range pt {
 		if len(pt[m].PreferenceList().members) != 1 {

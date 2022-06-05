@@ -15,7 +15,7 @@ A utility library for solving matching problems.
 
 ---
 
-- [Overview](#overview)
+- [What Does This Do?](#what-does-this-do)
 - [As an executable](#as-an-executable)
   * [Installation](#installation)
   * [Usage](#usage)
@@ -24,7 +24,7 @@ A utility library for solving matching problems.
   * [Usage](#usage)
 - [Miscellaneous](#miscellaneous)
 
-## <a name="overview">Overview
+## <a name="what-does-this-do">What Does This Do?
 
 Given one or more sets of *member preferences*, `libmatch` finds an optimal matching between members.
 
@@ -32,7 +32,7 @@ Given one or more sets of *member preferences*, `libmatch` finds an optimal matc
   <img src="https://github.com/abhchand/libmatch/raw/main/meta/matching.png" width="400px" />
 </div>
 
-The output will be mathematically "stable", meaning no two members will prefer each other over their existing matches.
+`libmatch` provides solutions to solve different variations of this classic matching problem, which has a wide range of practical applications.
 
 ## <a name="as-an-executable">As an executable
 
@@ -51,7 +51,7 @@ make all
 
 ### <a name="usage">Usage
 
-Define member preferences as a JSON input file:
+Define member preferences as JSON data:
 
 ```shell
 $ cat <<EOF > input.json

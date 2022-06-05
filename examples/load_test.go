@@ -1,10 +1,5 @@
 package examples
 
-/*
- * Utilizes the `libmatch.Load()` helper to load the input preferences from
- * an `io.Reader` source (in this case, a JSON file)
- */
-
 import (
 	"bufio"
 	"fmt"
@@ -13,6 +8,8 @@ import (
 	"github.com/abhchand/libmatch"
 )
 
+// ExampleLoad loads preferences from a JSON file and uses it as input to the
+// Stable Roommates Problem (SRP).
 func ExampleLoad() {
 
 	// Read file contents as `io.Reader`

@@ -1,39 +1,5 @@
-/*
- * Loads and transforms preference data.
- *
- * The input can be a data structure of JSON file in the following format:
- *
- * Input format:
- *
- *     [
- *         [
- *             { "name": "A", "preferences": ["B", "C", "D"] },
- *             { "name": "B", "preferences": ["A", "C", "D"] },
- *             { "name": "C", "preferences": ["A", "B", "D"] },
- *             { "name": "D", "preferences": ["A", "B", "C"] }
- *         ],
- *         [
- *             { "name": "E", "preferences": ["F", "G", "H"] }
- *         ]
- *     ]
- *
- * The output will be a list of `PreferenceTable` structs, mapping a name
- * to a list of preferences:
- *
- *     [
- *         PreferenceTable{
- *             "A": PreferenceList{"B", "C", "D"},
- *             "B": PreferenceList{"A", "C", "D"},
- *             "C": PreferenceList{"A", "B", "D"},
- *             "D": PreferenceList{"A", "B", "C"}
- *         },
- *         PreferenceTable{
- *             "E": PreferenceList{"F", "G", "H"},
- *         }
- *     ]
- *
- */
-
+// Package load is responsible for loading preference data from streams and
+// files
 package load
 
 import (
@@ -45,6 +11,30 @@ import (
 	"github.com/abhchand/libmatch/pkg/core"
 )
 
+// LoadFromFile loads preference data from a file containing JSON data.
+//
+// The structure of the JSON file should be of format:
+//
+//    [
+//      { "name":"A", "preferences": ["B", "D", "F", "C", "E"] },
+//      { "name":"B", "preferences": ["D", "E", "F", "A", "C"] },
+//      { "name":"C", "preferences": ["D", "E", "F", "A", "B"] },
+//      { "name":"D", "preferences": ["F", "C", "A", "E", "B"] },
+//      { "name":"E", "preferences": ["F", "C", "D", "B", "A"] },
+//      { "name":"F", "preferences": ["A", "B", "D", "C", "E"] },
+//    ]
+//
+// The return value is an array of `MatchPreference` structs containing the
+// loaded JSON data
+//
+//    *[]core.MatchPreference{
+//      {Name: "A", Preferences: []string{"B", "D", "F", "C", "E"}},
+//      {Name: "B", Preferences: []string{"D", "E", "F", "A", "C"}},
+//      {Name: "C", Preferences: []string{"D", "E", "F", "A", "B"}},
+//      {Name: "D", Preferences: []string{"F", "C", "A", "E", "B"}},
+//      {Name: "E", Preferences: []string{"F", "C", "D", "B", "A"}},
+//      {Name: "F", Preferences: []string{"A", "B", "D", "C", "E"}},
+//    }
 func LoadFromFile(filename string) (*[]core.MatchPreference, error) {
 	var data *[]core.MatchPreference
 
@@ -58,6 +48,30 @@ func LoadFromFile(filename string) (*[]core.MatchPreference, error) {
 	return data, err
 }
 
+// LoadFromIO reads match preference data from an `io.Reader`.
+//
+// The expected data is a JSON formatted preference table of the format:
+//
+//    [
+//      { "name":"A", "preferences": ["B", "D", "F", "C", "E"] },
+//      { "name":"B", "preferences": ["D", "E", "F", "A", "C"] },
+//      { "name":"C", "preferences": ["D", "E", "F", "A", "B"] },
+//      { "name":"D", "preferences": ["F", "C", "A", "E", "B"] },
+//      { "name":"E", "preferences": ["F", "C", "D", "B", "A"] },
+//      { "name":"F", "preferences": ["A", "B", "D", "C", "E"] },
+//    ]
+//
+// The return value is an array of `MatchPreference` structs containing the
+// loaded JSON data
+//
+//    *[]libmatch.MatchPreference{
+//      {Name: "A", Preferences: []string{"B", "D", "F", "C", "E"}},
+//      {Name: "B", Preferences: []string{"D", "E", "F", "A", "C"}},
+//      {Name: "C", Preferences: []string{"D", "E", "F", "A", "B"}},
+//      {Name: "D", Preferences: []string{"F", "C", "A", "E", "B"}},
+//      {Name: "E", Preferences: []string{"F", "C", "D", "B", "A"}},
+//      {Name: "F", Preferences: []string{"A", "B", "D", "C", "E"}},
+//    }
 func LoadFromIO(r io.Reader) (*[]core.MatchPreference, error) {
 	var data []core.MatchPreference
 

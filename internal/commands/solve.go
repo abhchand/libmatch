@@ -1,12 +1,5 @@
 package commands
 
-/*
- * Main handler for the `solve` subcommand.
- *
- * This subcommand executes one of the matching algorithms given input
- * `--file` arguments
- */
-
 import (
 	"errors"
 	"fmt"
@@ -31,11 +24,12 @@ var MATCHING_ALGORITHMS_CFG = map[string]struct {
 }
 var OUTPUT_FORMATS = [2]string{"csv", "json"}
 
-/*
- * The `cli.Command` return value is wrapped in a function so we return a new
- * instance of it every time. This avoids caching flags between tests
- */
+// SolveCommand generates the cli.Command definition for the `solve` subcommand.
 func SolveCommand() *cli.Command {
+	/*
+	 * The `cli.Command` return value is wrapped in a function so we return a new
+	 * instance of it every time. This avoids caching flags between tests
+	 */
 	return &cli.Command{
 		Name:   "solve",
 		Usage:  "Run a matching algorithm",
@@ -64,6 +58,8 @@ func SolveCommand() *cli.Command {
 	}
 }
 
+// solveAction is the handler for the `solve` subcommand, which runs a the
+// specified matching algorithm
 func solveAction(ctx *cli.Context) error {
 	var result core.MatchResult
 
@@ -105,9 +101,7 @@ func solveAction(ctx *cli.Context) error {
 	return nil
 }
 
-/*
- * Validate the `Config`, which contains the CLI input flags
- */
+// validateConfig validates the configuration containing the CLI input flags
 func validateConfig(cfg config.Config) error {
 	mac := MATCHING_ALGORITHMS_CFG[cfg.Algorithm]
 
@@ -139,10 +133,8 @@ func validateConfig(cfg config.Config) error {
 	return nil
 }
 
-/*
- * Read one or more input `--file` values and load the data into
- * `core.MatchPreference` structures
- */
+// loadFiles reads one or more files specified with the `--flag` configuration
+// input and loads the data into `core.MatchPreference` structures
 func loadFiles(cfg config.Config) ([]*[]core.MatchPreference, error) {
 	prefsSet := make([]*[]core.MatchPreference, len(cfg.Filenames))
 

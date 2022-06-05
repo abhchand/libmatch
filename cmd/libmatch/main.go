@@ -1,3 +1,4 @@
+// Package main is the entrypoint for the libmatch command line executable
 package main
 
 import (

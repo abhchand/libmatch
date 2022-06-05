@@ -1,9 +1,5 @@
 package examples
 
-/*
- * Example of solving the *Stable Roommates Problem* for some sample input
- */
-
 import (
 	"fmt"
 	"os"
@@ -11,6 +7,7 @@ import (
 	"github.com/abhchand/libmatch"
 )
 
+// ExampleSolveSRP solves the "Stable Roommates Problem" for some sample input
 func ExampleSolveSRP() {
 	prefTable := []libmatch.MatchPreference{
 		{Name: "A", Preferences: []string{"B", "D", "F", "C", "E"}},
@@ -42,6 +39,8 @@ func ExampleSolveSRP() {
 	// F => A
 }
 
+// ExampleSolveSRP__no_stable_solution solves the "Stable Roommates Problem" for
+// some sample input that does not have a guranteed stable solution
 func ExampleSolveSRP__no_stable_solution() {
 	prefTable := []libmatch.MatchPreference{
 		{Name: "A", Preferences: []string{"B", "E", "C", "F", "D"}},

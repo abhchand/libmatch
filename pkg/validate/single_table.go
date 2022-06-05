@@ -7,12 +7,15 @@ import (
 	"github.com/abhchand/libmatch/pkg/core"
 )
 
+// SingleTableValidator contains all information required to validate a single
+// preference table.
 type SingleTableValidator struct {
 	Prefs *[]core.MatchPreference
 	Table *core.PreferenceTable
 	Err   error
 }
 
+// Validate validates the preference table specified in the struct.
 func (v SingleTableValidator) Validate() error {
 	var err error
 
@@ -39,6 +42,7 @@ func (v SingleTableValidator) Validate() error {
 	return nil
 }
 
+// validatePrefsUniqueness validates that all member names are unique
 func (v SingleTableValidator) validateUniqueness() error {
 	cache := make(map[string]bool, 0)
 
@@ -56,6 +60,7 @@ func (v SingleTableValidator) validateUniqueness() error {
 	return nil
 }
 
+// validateSize validates that the table is non-empty and of even size
 func (v SingleTableValidator) validateSize() error {
 	numMembers := len(*v.Table)
 
@@ -70,6 +75,7 @@ func (v SingleTableValidator) validateSize() error {
 	return nil
 }
 
+// validateMembers validates that members are non-blank.
 func (v SingleTableValidator) validateMembers() error {
 	if (*v.Table)[""] != nil {
 		return errors.New("All member names must non-blank")
@@ -78,11 +84,8 @@ func (v SingleTableValidator) validateMembers() error {
 	return nil
 }
 
-/*
- * Check whether table is symmetrical
- *
- * That is, verify each member's preferences contains all the other members.
- */
+// validateSymmetry validates whether the table is symmetrical. Each member's
+// preferences should contain all other members of the table.
 func (v SingleTableValidator) validateSymmetry() error {
 
 	// Build a list of member names

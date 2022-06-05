@@ -6,10 +6,15 @@ import (
 	"fmt"
 )
 
+// MatchResult stores the result of executing a mapping algorithm
 type MatchResult struct {
 	Mapping map[string]string `json:"mapping"`
 }
 
+// Print prints formatted match results in a sepcified format. The `format` can
+// be specified as one of the following:
+// 		* csv
+//    * json
 func (mr MatchResult) Print(format string) error {
 	switch format {
 	case "csv":

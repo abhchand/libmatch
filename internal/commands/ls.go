@@ -1,11 +1,5 @@
 package commands
 
-/*
- * Main handler for the `ls` subcommand.
- *
- * This subcommand lists all available matching algorithms.
- */
-
 import (
 	"fmt"
 	"strings"
@@ -36,11 +30,12 @@ https://en.wikipedia.org/wiki/Stable_roommates_problem.
 `,
 }
 
-/*
- * The `cli.Command` return value is wrapped in a function so we return a new
- * instance of it every time. This avoids caching flags between tests
- */
+// LsCommand generates the cli.Command definition for the `ls` subcommand.
 func LsCommand() *cli.Command {
+	/*
+	 * The `cli.Command` return value is wrapped in a function so we return a new
+	 * instance of it every time. This avoids caching flags between tests
+	 */
 	return &cli.Command{
 		Name:   "ls",
 		Usage:  "List all matching algorithms",
@@ -48,6 +43,8 @@ func LsCommand() *cli.Command {
 	}
 }
 
+// lsAction is the handler for the `ls` subcommand, which lists all available
+// matching algorithms.
 func lsAction(ctx *cli.Context) error {
 	fmt.Println("\nlibmatch supports the following matching algorithms:")
 	fmt.Println("")

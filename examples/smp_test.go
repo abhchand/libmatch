@@ -1,9 +1,5 @@
 package examples
 
-/*
- * Example of solving the *Stable Matching Problem* for some sample input
- */
-
 import (
 	"fmt"
 	"os"
@@ -11,6 +7,7 @@ import (
 	"github.com/abhchand/libmatch"
 )
 
+// ExampleSolveSMP solves the "Stable Matching Problem" for some sample input
 func ExampleSolveSMP() {
 
 	prefTableA := []libmatch.MatchPreference{

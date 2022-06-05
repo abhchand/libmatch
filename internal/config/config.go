@@ -1,9 +1,6 @@
+// Package config provides accessors to create and model internal libmatch
+// configuration
 package config
-
-/*
- * Defines the `Config` structure that holds the internal `libmatch`
- * configurations
- */
 
 import (
 	"path/filepath"
@@ -12,6 +9,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+// Config defines the structure of the internal libmatch configuration
 type Config struct {
 	Algorithm    string
 	Debug        bool
@@ -20,9 +18,7 @@ type Config struct {
 	CliContext   *cli.Context
 }
 
-/*
- * Returns a new `Config` structure
- */
+// NewConfig returns a new Config structure
 func NewConfig(ctx *cli.Context) (*Config, error) {
 	cfg := &Config{
 		Algorithm:    strings.ToUpper(ctx.String("algorithm")),
@@ -41,9 +37,7 @@ func NewConfig(ctx *cli.Context) (*Config, error) {
 	return cfg, nil
 }
 
-/*
- * Expands all relative filenames into absolute paths
- */
+// expandFilenames expands all relative filenames into absolute paths
 func expandFilenames(files []string) ([]string, error) {
 	for f := range files {
 		absFilename, err := filepath.Abs(files[f])
