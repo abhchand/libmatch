@@ -36,7 +36,7 @@
 
 ## <a name="what-does-this-do">What Does This Do?
 
-Given one or more sets of *member preferences*, `libmatch` finds an optimal matching between members.
+`libmatch` finds an optimal matching between members, given one or more sets of *member preferences*.
 
 <div align="center">
   <img src="https://github.com/abhchand/libmatch/raw/main/meta/matching.png" width="400px" />
