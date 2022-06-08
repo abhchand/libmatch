@@ -32,8 +32,6 @@
   * [Installation](#installation)
   * [Usage](#usage)
 - [As a Go Library](#as-a-go-library)
-  * [Installation](#installation)
-  * [Usage](#usage)
 - [Miscellaneous](#miscellaneous)
 
 ## <a name="what-does-this-do">What Does This Do?
@@ -94,15 +92,13 @@ See `libmatch --help` for more options and examples
 
 ## <a name="as-a-go-library">As a Go Library
 
-### <a name="installation"></a>Installation
+[View the docs](https://abhchand.me/libmatch/pkg/github.com/abhchand/libmatch/).
 
 Add `libmatch` as a dependency:
 
 ```shell
 go get github.com/abhchand/libmatch
 ```
-
-### <a name="usage"></a>Usage
 
 Then `import` and use it:
 
