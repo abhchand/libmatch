@@ -1,6 +1,8 @@
 package libmatch
 
 import (
+	"fmt"
+	"os"
 	"reflect"
 	"strings"
 	"testing"
@@ -48,6 +50,50 @@ func TestLoad(t *testing.T) {
 
 		assert.Equal(t, "invalid character '[' after object key", err.Error())
 	})
+}
+
+func ExampleLoad() {
+
+	// Load JSON contents as an `io.Reader`
+	// This could be data read from a file or another source
+	body := `
+	[
+	  { "name":"A", "preferences": ["B", "D", "F", "C", "E"] },
+	  { "name":"B", "preferences": ["D", "E", "F", "A", "C"] },
+	  { "name":"C", "preferences": ["D", "E", "F", "A", "B"] },
+	  { "name":"D", "preferences": ["F", "C", "A", "E", "B"] },
+	  { "name":"E", "preferences": ["F", "C", "D", "B", "A"] },
+	  { "name":"F", "preferences": ["A", "B", "D", "C", "E"] }
+	]
+	`
+	reader := strings.NewReader(body)
+
+	// Load input preferences
+	prefTable, err := Load(reader)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	// Call `libmatch`
+	result, err := SolveSRP(prefTable)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	// Iterate through the results
+	for x, y := range result.Mapping {
+		fmt.Printf("%v => %v\n", x, y)
+	}
+
+	// Unordered output:
+	// A => F
+	// B => E
+	// C => D
+	// D => C
+	// E => B
+	// F => A
 }
 
 func TestSolveSMP(t *testing.T) {
@@ -184,6 +230,49 @@ func TestSolveSMP(t *testing.T) {
 	})
 }
 
+func ExampleSolveSMP() {
+
+	prefTableA := []MatchPreference{
+		{Name: "A", Preferences: []string{"F", "J", "H", "G", "I"}},
+		{Name: "B", Preferences: []string{"F", "J", "H", "G", "I"}},
+		{Name: "C", Preferences: []string{"F", "G", "H", "J", "I"}},
+		{Name: "D", Preferences: []string{"H", "J", "F", "I", "G"}},
+		{Name: "E", Preferences: []string{"H", "F", "G", "I", "J"}},
+	}
+
+	prefTableB := []MatchPreference{
+		{Name: "F", Preferences: []string{"A", "E", "C", "B", "D"}},
+		{Name: "G", Preferences: []string{"D", "E", "C", "B", "A"}},
+		{Name: "H", Preferences: []string{"A", "B", "C", "D", "E"}},
+		{Name: "I", Preferences: []string{"B", "E", "C", "D", "A"}},
+		{Name: "J", Preferences: []string{"E", "A", "D", "B", "C"}},
+	}
+
+	// Call `libmatch`
+	result, err := SolveSMP(&prefTableA, &prefTableB)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	// Iterate through the result mapping
+	for x, y := range result.Mapping {
+		fmt.Printf("%v => %v\n", x, y)
+	}
+
+	// Unordered output:
+	// A => F
+	// B => H
+	// C => I
+	// D => J
+	// E => G
+	// F => A
+	// G => E
+	// H => B
+	// I => C
+	// J => D
+}
+
 func TestSolveSRP(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		prefs := []core.MatchPreference{
@@ -270,4 +359,56 @@ func TestSolveSRP(t *testing.T) {
 
 		assert.Equal(t, "Table must have an even number of members", err.Error())
 	})
+}
+
+// ExampleSolveSRP solves the "Stable Roommates Problem" for some sample input
+func ExampleSolveSRP() {
+	prefTable := []MatchPreference{
+		{Name: "A", Preferences: []string{"B", "D", "F", "C", "E"}},
+		{Name: "B", Preferences: []string{"D", "E", "F", "A", "C"}},
+		{Name: "C", Preferences: []string{"D", "E", "F", "A", "B"}},
+		{Name: "D", Preferences: []string{"F", "C", "A", "E", "B"}},
+		{Name: "E", Preferences: []string{"F", "C", "D", "B", "A"}},
+		{Name: "F", Preferences: []string{"A", "B", "D", "C", "E"}},
+	}
+
+	// Call `libmatch`
+	result, err := SolveSRP(&prefTable)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	// Iterate through the result mapping
+	for x, y := range result.Mapping {
+		fmt.Printf("%v => %v\n", x, y)
+	}
+
+	// Unordered output:
+	// A => F
+	// B => E
+	// C => D
+	// D => C
+	// E => B
+	// F => A
+}
+
+func ExampleSolveSRP__no_stable_solution() {
+	prefTable := []MatchPreference{
+		{Name: "A", Preferences: []string{"B", "E", "C", "F", "D"}},
+		{Name: "B", Preferences: []string{"C", "F", "E", "A", "D"}},
+		{Name: "C", Preferences: []string{"E", "A", "F", "D", "B"}},
+		{Name: "D", Preferences: []string{"B", "A", "C", "F", "E"}},
+		{Name: "E", Preferences: []string{"A", "C", "D", "B", "F"}},
+		{Name: "F", Preferences: []string{"C", "A", "E", "B", "D"}},
+	}
+
+	// Call `libmatch`
+	_, err := SolveSRP(&prefTable)
+
+	// The above input has no stable matching solution, and we expect it to return an error
+	fmt.Println(err)
+
+	// Output:
+	// No stable solution exists
 }

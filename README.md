@@ -129,8 +129,6 @@ func main() {
 }
 ```
 
-See [the `examples/` directory](examples/) for a full list of working examples
-
 ## <a name="miscellaneous">Miscellaneous
 
 * [Create an issue](https://github.com/abhchand/libmatch/issues/new) to report a bug or request a feature
