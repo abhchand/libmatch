@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>src/github.com/abhchand/libmatch/pkg/core/member_test.go - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="../../../../../../lib/godoc/style.css">
+
+
+<script>window.initFuncs = [];</script>
+<script src="../../../../../../lib/godoc/jquery.js" defer></script>
+
+
+
+<script>var goVersion = "go1.12.12";</script>
+<script src="../../../../../../lib/godoc/godocs.js" defer></script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="http://localhost:6060/">The Go Programming Language</a></div>
+<div class="top-heading" id="heading-narrow"><a href="http://localhost:6060/">Go</a></div>
+<a href="member_test.go.html#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="http://localhost:6060/search">
+<div id="menu">
+<a href="http://localhost:6060/doc/">Documents</a>
+<a href="http://localhost:6060/pkg/">Packages</a>
+<a href="http://localhost:6060/project/">The Project</a>
+<a href="http://localhost:6060/help/">Help</a>
+
+<a href="http://localhost:6060/blog/">Blog</a>
+
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Source file
+    <a href="http://localhost:6060/src">src</a>/<a href="http://localhost:6060/src/github.com">github.com</a>/<a href="http://localhost:6060/src/github.com/abhchand">abhchand</a>/<a href="http://localhost:6060/src/github.com/abhchand/libmatch">libmatch</a>/<a href="../../pkg.html">pkg</a>/<a href="../core.html">core</a>/<span class="text-muted">member_test.go</span>
+  </h1>
+
+
+
+
+
+  <h2>
+    Documentation: <a href="../../../../../../pkg/github.com/abhchand/libmatch/pkg/core.html">github.com/abhchand/libmatch/pkg/core</a>
+  </h2>
+
+
+
+<div id="nav"></div>
+
+
+<script type='text/javascript'>document.ANALYSIS_DATA = null;</script>
+<pre><span id="L1" class="ln">     1&nbsp;&nbsp;</span>package core
+<span id="L2" class="ln">     2&nbsp;&nbsp;</span>
+<span id="L3" class="ln">     3&nbsp;&nbsp;</span>import (
+<span id="L4" class="ln">     4&nbsp;&nbsp;</span>	&#34;reflect&#34;
+<span id="L5" class="ln">     5&nbsp;&nbsp;</span>	&#34;testing&#34;
+<span id="L6" class="ln">     6&nbsp;&nbsp;</span>
+<span id="L7" class="ln">     7&nbsp;&nbsp;</span>	&#34;github.com/stretchr/testify/assert&#34;
+<span id="L8" class="ln">     8&nbsp;&nbsp;</span>)
+<span id="L9" class="ln">     9&nbsp;&nbsp;</span>
+<span id="L10" class="ln">    10&nbsp;&nbsp;</span>func TestNewMember(t *testing.T) {
+<span id="L11" class="ln">    11&nbsp;&nbsp;</span>	m := NewMember(&#34;A&#34;)
+<span id="L12" class="ln">    12&nbsp;&nbsp;</span>
+<span id="L13" class="ln">    13&nbsp;&nbsp;</span>	var zero Member
+<span id="L14" class="ln">    14&nbsp;&nbsp;</span>	wanted := reflect.TypeOf(zero).Kind()
+<span id="L15" class="ln">    15&nbsp;&nbsp;</span>
+<span id="L16" class="ln">    16&nbsp;&nbsp;</span>	assert.Equal(t, wanted, reflect.TypeOf(m).Kind())
+<span id="L17" class="ln">    17&nbsp;&nbsp;</span>	assert.Equal(t, &#34;A&#34;, m.name)
+<span id="L18" class="ln">    18&nbsp;&nbsp;</span>	assert.Nil(t, m.preferenceList)
+<span id="L19" class="ln">    19&nbsp;&nbsp;</span>	assert.Nil(t, m.acceptedProposalFrom)
+<span id="L20" class="ln">    20&nbsp;&nbsp;</span>}
+<span id="L21" class="ln">    21&nbsp;&nbsp;</span>
+<span id="L22" class="ln">    22&nbsp;&nbsp;</span>func TestString__Member(t *testing.T) {
+<span id="L23" class="ln">    23&nbsp;&nbsp;</span>	m := Member{name: &#34;A&#34;}
+<span id="L24" class="ln">    24&nbsp;&nbsp;</span>
+<span id="L25" class="ln">    25&nbsp;&nbsp;</span>	assert.Equal(t, &#34;&#39;A&#39;&#34;, m.String())
+<span id="L26" class="ln">    26&nbsp;&nbsp;</span>}
+<span id="L27" class="ln">    27&nbsp;&nbsp;</span>
+<span id="L28" class="ln">    28&nbsp;&nbsp;</span>func TestName(t *testing.T) {
+<span id="L29" class="ln">    29&nbsp;&nbsp;</span>	memA = Member{name: &#34;A&#34;}
+<span id="L30" class="ln">    30&nbsp;&nbsp;</span>
+<span id="L31" class="ln">    31&nbsp;&nbsp;</span>	assert.Equal(t, &#34;A&#34;, memA.Name())
+<span id="L32" class="ln">    32&nbsp;&nbsp;</span>}
+<span id="L33" class="ln">    33&nbsp;&nbsp;</span>
+<span id="L34" class="ln">    34&nbsp;&nbsp;</span>func TestCurrentProposer(t *testing.T) {
+<span id="L35" class="ln">    35&nbsp;&nbsp;</span>
+<span id="L36" class="ln">    36&nbsp;&nbsp;</span>	t.Run(&#34;returns current proposer&#34;, func(t *testing.T) {
+<span id="L37" class="ln">    37&nbsp;&nbsp;</span>		memA = Member{name: &#34;A&#34;}
+<span id="L38" class="ln">    38&nbsp;&nbsp;</span>		memB = Member{name: &#34;B&#34;}
+<span id="L39" class="ln">    39&nbsp;&nbsp;</span>
+<span id="L40" class="ln">    40&nbsp;&nbsp;</span>		memA.acceptedProposalFrom = &amp;memB
+<span id="L41" class="ln">    41&nbsp;&nbsp;</span>
+<span id="L42" class="ln">    42&nbsp;&nbsp;</span>		assert.Equal(t, &#34;B&#34;, memA.CurrentProposer().Name())
+<span id="L43" class="ln">    43&nbsp;&nbsp;</span>	})
+<span id="L44" class="ln">    44&nbsp;&nbsp;</span>
+<span id="L45" class="ln">    45&nbsp;&nbsp;</span>	t.Run(&#34;passed by reference&#34;, func(t *testing.T) {
+<span id="L46" class="ln">    46&nbsp;&nbsp;</span>		memA = Member{name: &#34;A&#34;}
+<span id="L47" class="ln">    47&nbsp;&nbsp;</span>		memB = Member{name: &#34;B&#34;}
+<span id="L48" class="ln">    48&nbsp;&nbsp;</span>
+<span id="L49" class="ln">    49&nbsp;&nbsp;</span>		memA.acceptedProposalFrom = &amp;memB
+<span id="L50" class="ln">    50&nbsp;&nbsp;</span>
+<span id="L51" class="ln">    51&nbsp;&nbsp;</span>		assert.Equal(t, &#34;B&#34;, memA.CurrentProposer().Name())
+<span id="L52" class="ln">    52&nbsp;&nbsp;</span>		memB.name = &#34;SomethingElse&#34;
+<span id="L53" class="ln">    53&nbsp;&nbsp;</span>		assert.Equal(t, &#34;SomethingElse&#34;, memA.CurrentProposer().Name())
+<span id="L54" class="ln">    54&nbsp;&nbsp;</span>	})
+<span id="L55" class="ln">    55&nbsp;&nbsp;</span>}
+<span id="L56" class="ln">    56&nbsp;&nbsp;</span>
+<span id="L57" class="ln">    57&nbsp;&nbsp;</span>func TestCurrentAcceptor(t *testing.T) {
+<span id="L58" class="ln">    58&nbsp;&nbsp;</span>	t.Run(&#34;success&#34;, func(t *testing.T) {
+<span id="L59" class="ln">    59&nbsp;&nbsp;</span>		setupSingleTable()
+<span id="L60" class="ln">    60&nbsp;&nbsp;</span>
+<span id="L61" class="ln">    61&nbsp;&nbsp;</span>		<span class="comment">// Ensure all users have an accepted proposal for this test. This avoids</span>
+<span id="L62" class="ln">    62&nbsp;&nbsp;</span>		<span class="comment">// any nil reference errors for this specific test</span>
+<span id="L63" class="ln">    63&nbsp;&nbsp;</span>		memA.acceptedProposalFrom = &amp;memB
+<span id="L64" class="ln">    64&nbsp;&nbsp;</span>		memB.acceptedProposalFrom = &amp;memA
+<span id="L65" class="ln">    65&nbsp;&nbsp;</span>		memC.acceptedProposalFrom = &amp;memD
+<span id="L66" class="ln">    66&nbsp;&nbsp;</span>		memD.acceptedProposalFrom = &amp;memC
+<span id="L67" class="ln">    67&nbsp;&nbsp;</span>
+<span id="L68" class="ln">    68&nbsp;&nbsp;</span>		testCases := map[Member]string{
+<span id="L69" class="ln">    69&nbsp;&nbsp;</span>			memA: &#34;B&#34;,
+<span id="L70" class="ln">    70&nbsp;&nbsp;</span>			memB: &#34;A&#34;,
+<span id="L71" class="ln">    71&nbsp;&nbsp;</span>			memC: &#34;D&#34;,
+<span id="L72" class="ln">    72&nbsp;&nbsp;</span>			memD: &#34;C&#34;,
+<span id="L73" class="ln">    73&nbsp;&nbsp;</span>		}
+<span id="L74" class="ln">    74&nbsp;&nbsp;</span>
+<span id="L75" class="ln">    75&nbsp;&nbsp;</span>		for member, acceptorName := range testCases {
+<span id="L76" class="ln">    76&nbsp;&nbsp;</span>			assert.Equal(t, acceptorName, member.CurrentAcceptor().Name())
+<span id="L77" class="ln">    77&nbsp;&nbsp;</span>		}
+<span id="L78" class="ln">    78&nbsp;&nbsp;</span>	})
+<span id="L79" class="ln">    79&nbsp;&nbsp;</span>
+<span id="L80" class="ln">    80&nbsp;&nbsp;</span>	t.Run(&#34;handles members with no accepted proposal&#34;, func(t *testing.T) {
+<span id="L81" class="ln">    81&nbsp;&nbsp;</span>		setupSingleTable()
+<span id="L82" class="ln">    82&nbsp;&nbsp;</span>
+<span id="L83" class="ln">    83&nbsp;&nbsp;</span>		<span class="comment">// Set only some members to have an accepted proposal</span>
+<span id="L84" class="ln">    84&nbsp;&nbsp;</span>		memA.acceptedProposalFrom = nil
+<span id="L85" class="ln">    85&nbsp;&nbsp;</span>		memB.acceptedProposalFrom = &amp;memA
+<span id="L86" class="ln">    86&nbsp;&nbsp;</span>		memC.acceptedProposalFrom = nil
+<span id="L87" class="ln">    87&nbsp;&nbsp;</span>		memD.acceptedProposalFrom = &amp;memC
+<span id="L88" class="ln">    88&nbsp;&nbsp;</span>
+<span id="L89" class="ln">    89&nbsp;&nbsp;</span>		testCases := map[Member]string{
+<span id="L90" class="ln">    90&nbsp;&nbsp;</span>			memA: &#34;B&#34;,
+<span id="L91" class="ln">    91&nbsp;&nbsp;</span>			memB: &#34;&#34;,
+<span id="L92" class="ln">    92&nbsp;&nbsp;</span>			memC: &#34;D&#34;,
+<span id="L93" class="ln">    93&nbsp;&nbsp;</span>			memD: &#34;&#34;,
+<span id="L94" class="ln">    94&nbsp;&nbsp;</span>		}
+<span id="L95" class="ln">    95&nbsp;&nbsp;</span>
+<span id="L96" class="ln">    96&nbsp;&nbsp;</span>		for member, acceptorName := range testCases {
+<span id="L97" class="ln">    97&nbsp;&nbsp;</span>			if acceptorName == &#34;&#34; {
+<span id="L98" class="ln">    98&nbsp;&nbsp;</span>				assert.Nil(t, member.CurrentAcceptor())
+<span id="L99" class="ln">    99&nbsp;&nbsp;</span>			} else {
+<span id="L100" class="ln">   100&nbsp;&nbsp;</span>				assert.Equal(t, acceptorName, member.CurrentAcceptor().Name())
+<span id="L101" class="ln">   101&nbsp;&nbsp;</span>			}
+<span id="L102" class="ln">   102&nbsp;&nbsp;</span>		}
+<span id="L103" class="ln">   103&nbsp;&nbsp;</span>	})
+<span id="L104" class="ln">   104&nbsp;&nbsp;</span>}
+<span id="L105" class="ln">   105&nbsp;&nbsp;</span>
+<span id="L106" class="ln">   106&nbsp;&nbsp;</span>func TestHasAcceptedProposal(t *testing.T) {
+<span id="L107" class="ln">   107&nbsp;&nbsp;</span>	memA = Member{name: &#34;A&#34;}
+<span id="L108" class="ln">   108&nbsp;&nbsp;</span>	memB = Member{name: &#34;B&#34;}
+<span id="L109" class="ln">   109&nbsp;&nbsp;</span>
+<span id="L110" class="ln">   110&nbsp;&nbsp;</span>	memA.acceptedProposalFrom = &amp;memB
+<span id="L111" class="ln">   111&nbsp;&nbsp;</span>
+<span id="L112" class="ln">   112&nbsp;&nbsp;</span>	assert.True(t, memA.HasAcceptedProposal())
+<span id="L113" class="ln">   113&nbsp;&nbsp;</span>	assert.False(t, memB.HasAcceptedProposal())
+<span id="L114" class="ln">   114&nbsp;&nbsp;</span>}
+<span id="L115" class="ln">   115&nbsp;&nbsp;</span>
+<span id="L116" class="ln">   116&nbsp;&nbsp;</span>func TestAccept(t *testing.T) {
+<span id="L117" class="ln">   117&nbsp;&nbsp;</span>	setupSingleTable()
+<span id="L118" class="ln">   118&nbsp;&nbsp;</span>
+<span id="L119" class="ln">   119&nbsp;&nbsp;</span>	assert.Nil(t, memA.acceptedProposalFrom)
+<span id="L120" class="ln">   120&nbsp;&nbsp;</span>
+<span id="L121" class="ln">   121&nbsp;&nbsp;</span>	memA.Accept(&amp;memB)
+<span id="L122" class="ln">   122&nbsp;&nbsp;</span>	assert.Equal(t, memB, *memA.acceptedProposalFrom)
+<span id="L123" class="ln">   123&nbsp;&nbsp;</span>
+<span id="L124" class="ln">   124&nbsp;&nbsp;</span>	memA.Accept(&amp;memC)
+<span id="L125" class="ln">   125&nbsp;&nbsp;</span>	assert.Equal(t, memC, *memA.acceptedProposalFrom)
+<span id="L126" class="ln">   126&nbsp;&nbsp;</span>}
+<span id="L127" class="ln">   127&nbsp;&nbsp;</span>
+<span id="L128" class="ln">   128&nbsp;&nbsp;</span>func TestAcceptMutually(t *testing.T) {
+<span id="L129" class="ln">   129&nbsp;&nbsp;</span>	setupSingleTable()
+<span id="L130" class="ln">   130&nbsp;&nbsp;</span>
+<span id="L131" class="ln">   131&nbsp;&nbsp;</span>	assert.Nil(t, memA.acceptedProposalFrom)
+<span id="L132" class="ln">   132&nbsp;&nbsp;</span>	assert.Nil(t, memB.acceptedProposalFrom)
+<span id="L133" class="ln">   133&nbsp;&nbsp;</span>	assert.Nil(t, memC.acceptedProposalFrom)
+<span id="L134" class="ln">   134&nbsp;&nbsp;</span>
+<span id="L135" class="ln">   135&nbsp;&nbsp;</span>	memA.AcceptMutually(&amp;memB)
+<span id="L136" class="ln">   136&nbsp;&nbsp;</span>	assert.Equal(t, memB, *memA.acceptedProposalFrom)
+<span id="L137" class="ln">   137&nbsp;&nbsp;</span>	assert.Equal(t, memA, *memB.acceptedProposalFrom)
+<span id="L138" class="ln">   138&nbsp;&nbsp;</span>	assert.Nil(t, memC.acceptedProposalFrom)
+<span id="L139" class="ln">   139&nbsp;&nbsp;</span>
+<span id="L140" class="ln">   140&nbsp;&nbsp;</span>	memA.AcceptMutually(&amp;memC)
+<span id="L141" class="ln">   141&nbsp;&nbsp;</span>	assert.Equal(t, memA, *memB.acceptedProposalFrom)
+<span id="L142" class="ln">   142&nbsp;&nbsp;</span>	assert.Equal(t, memC, *memA.acceptedProposalFrom)
+<span id="L143" class="ln">   143&nbsp;&nbsp;</span>	assert.Equal(t, memA, *memC.acceptedProposalFrom)
+<span id="L144" class="ln">   144&nbsp;&nbsp;</span>}
+<span id="L145" class="ln">   145&nbsp;&nbsp;</span>
+<span id="L146" class="ln">   146&nbsp;&nbsp;</span>func TestReject(t *testing.T) {
+<span id="L147" class="ln">   147&nbsp;&nbsp;</span>	t.Run(&#34;success&#34;, func(t *testing.T) {
+<span id="L148" class="ln">   148&nbsp;&nbsp;</span>		setupSingleTable()
+<span id="L149" class="ln">   149&nbsp;&nbsp;</span>
+<span id="L150" class="ln">   150&nbsp;&nbsp;</span>		memA.acceptedProposalFrom = &amp;memB
+<span id="L151" class="ln">   151&nbsp;&nbsp;</span>		memB.acceptedProposalFrom = &amp;memA
+<span id="L152" class="ln">   152&nbsp;&nbsp;</span>		memC.acceptedProposalFrom = &amp;memD
+<span id="L153" class="ln">   153&nbsp;&nbsp;</span>		memD.acceptedProposalFrom = &amp;memC
+<span id="L154" class="ln">   154&nbsp;&nbsp;</span>
+<span id="L155" class="ln">   155&nbsp;&nbsp;</span>		memA.Reject(&amp;memC)
+<span id="L156" class="ln">   156&nbsp;&nbsp;</span>
+<span id="L157" class="ln">   157&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memB, &amp;memD}}, plA)
+<span id="L158" class="ln">   158&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memA, &amp;memC, &amp;memD}}, plB)
+<span id="L159" class="ln">   159&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memB, &amp;memD}}, plC)
+<span id="L160" class="ln">   160&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memA, &amp;memB, &amp;memC}}, plD)
+<span id="L161" class="ln">   161&nbsp;&nbsp;</span>
+<span id="L162" class="ln">   162&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memB, memA.CurrentProposer())
+<span id="L163" class="ln">   163&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memA, memB.CurrentProposer())
+<span id="L164" class="ln">   164&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memD, memC.CurrentProposer())
+<span id="L165" class="ln">   165&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memC, memD.CurrentProposer())
+<span id="L166" class="ln">   166&nbsp;&nbsp;</span>	})
+<span id="L167" class="ln">   167&nbsp;&nbsp;</span>
+<span id="L168" class="ln">   168&nbsp;&nbsp;</span>	t.Run(&#34;Rejecting current proposer&#34;, func(t *testing.T) {
+<span id="L169" class="ln">   169&nbsp;&nbsp;</span>		setupSingleTable()
+<span id="L170" class="ln">   170&nbsp;&nbsp;</span>
+<span id="L171" class="ln">   171&nbsp;&nbsp;</span>		memA.acceptedProposalFrom = &amp;memB
+<span id="L172" class="ln">   172&nbsp;&nbsp;</span>		memB.acceptedProposalFrom = &amp;memA
+<span id="L173" class="ln">   173&nbsp;&nbsp;</span>		memC.acceptedProposalFrom = &amp;memD
+<span id="L174" class="ln">   174&nbsp;&nbsp;</span>		memD.acceptedProposalFrom = &amp;memC
+<span id="L175" class="ln">   175&nbsp;&nbsp;</span>
+<span id="L176" class="ln">   176&nbsp;&nbsp;</span>		memA.Reject(&amp;memB)
+<span id="L177" class="ln">   177&nbsp;&nbsp;</span>
+<span id="L178" class="ln">   178&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memC, &amp;memD}}, plA)
+<span id="L179" class="ln">   179&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memC, &amp;memD}}, plB)
+<span id="L180" class="ln">   180&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memA, &amp;memB, &amp;memD}}, plC)
+<span id="L181" class="ln">   181&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memA, &amp;memB, &amp;memC}}, plD)
+<span id="L182" class="ln">   182&nbsp;&nbsp;</span>
+<span id="L183" class="ln">   183&nbsp;&nbsp;</span>		<span class="comment">/*
+<span id="L184" class="ln">   184&nbsp;&nbsp;</span>		 * A rejects B (its current proposer), so A also has that value reset
+<span id="L185" class="ln">   185&nbsp;&nbsp;</span>		 * B does not lose its current proposer, regardless of who is it
+<span id="L186" class="ln">   186&nbsp;&nbsp;</span>		 */</span>
+<span id="L187" class="ln">   187&nbsp;&nbsp;</span>		assert.Nil(t, memA.CurrentProposer())
+<span id="L188" class="ln">   188&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memA, memB.CurrentProposer())
+<span id="L189" class="ln">   189&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memD, memC.CurrentProposer())
+<span id="L190" class="ln">   190&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memC, memD.CurrentProposer())
+<span id="L191" class="ln">   191&nbsp;&nbsp;</span>	})
+<span id="L192" class="ln">   192&nbsp;&nbsp;</span>}
+<span id="L193" class="ln">   193&nbsp;&nbsp;</span>
+<span id="L194" class="ln">   194&nbsp;&nbsp;</span>func TestRejectMutually(t *testing.T) {
+<span id="L195" class="ln">   195&nbsp;&nbsp;</span>	t.Run(&#34;success&#34;, func(t *testing.T) {
+<span id="L196" class="ln">   196&nbsp;&nbsp;</span>		setupSingleTable()
+<span id="L197" class="ln">   197&nbsp;&nbsp;</span>
+<span id="L198" class="ln">   198&nbsp;&nbsp;</span>		memA.acceptedProposalFrom = &amp;memB
+<span id="L199" class="ln">   199&nbsp;&nbsp;</span>		memB.acceptedProposalFrom = &amp;memA
+<span id="L200" class="ln">   200&nbsp;&nbsp;</span>		memC.acceptedProposalFrom = &amp;memD
+<span id="L201" class="ln">   201&nbsp;&nbsp;</span>		memD.acceptedProposalFrom = &amp;memC
+<span id="L202" class="ln">   202&nbsp;&nbsp;</span>
+<span id="L203" class="ln">   203&nbsp;&nbsp;</span>		memA.RejectMutually(&amp;memC)
+<span id="L204" class="ln">   204&nbsp;&nbsp;</span>
+<span id="L205" class="ln">   205&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memB, &amp;memD}}, plA)
+<span id="L206" class="ln">   206&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memA, &amp;memC, &amp;memD}}, plB)
+<span id="L207" class="ln">   207&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memB, &amp;memD}}, plC)
+<span id="L208" class="ln">   208&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memA, &amp;memB, &amp;memC}}, plD)
+<span id="L209" class="ln">   209&nbsp;&nbsp;</span>
+<span id="L210" class="ln">   210&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memB, memA.CurrentProposer())
+<span id="L211" class="ln">   211&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memA, memB.CurrentProposer())
+<span id="L212" class="ln">   212&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memD, memC.CurrentProposer())
+<span id="L213" class="ln">   213&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memC, memD.CurrentProposer())
+<span id="L214" class="ln">   214&nbsp;&nbsp;</span>	})
+<span id="L215" class="ln">   215&nbsp;&nbsp;</span>
+<span id="L216" class="ln">   216&nbsp;&nbsp;</span>	t.Run(&#34;Rejecting current proposer&#34;, func(t *testing.T) {
+<span id="L217" class="ln">   217&nbsp;&nbsp;</span>		setupSingleTable()
+<span id="L218" class="ln">   218&nbsp;&nbsp;</span>
+<span id="L219" class="ln">   219&nbsp;&nbsp;</span>		memA.acceptedProposalFrom = &amp;memB
+<span id="L220" class="ln">   220&nbsp;&nbsp;</span>		memB.acceptedProposalFrom = &amp;memA
+<span id="L221" class="ln">   221&nbsp;&nbsp;</span>		memC.acceptedProposalFrom = &amp;memD
+<span id="L222" class="ln">   222&nbsp;&nbsp;</span>		memD.acceptedProposalFrom = &amp;memC
+<span id="L223" class="ln">   223&nbsp;&nbsp;</span>
+<span id="L224" class="ln">   224&nbsp;&nbsp;</span>		memA.RejectMutually(&amp;memB)
+<span id="L225" class="ln">   225&nbsp;&nbsp;</span>
+<span id="L226" class="ln">   226&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memC, &amp;memD}}, plA)
+<span id="L227" class="ln">   227&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memC, &amp;memD}}, plB)
+<span id="L228" class="ln">   228&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memA, &amp;memB, &amp;memD}}, plC)
+<span id="L229" class="ln">   229&nbsp;&nbsp;</span>		assert.Equal(t, PreferenceList{members: []*Member{&amp;memA, &amp;memB, &amp;memC}}, plD)
+<span id="L230" class="ln">   230&nbsp;&nbsp;</span>
+<span id="L231" class="ln">   231&nbsp;&nbsp;</span>		<span class="comment">/*
+<span id="L232" class="ln">   232&nbsp;&nbsp;</span>		 * A mutually rejects B (its current proposer), so A and B have their
+<span id="L233" class="ln">   233&nbsp;&nbsp;</span>		 * proposer reset
+<span id="L234" class="ln">   234&nbsp;&nbsp;</span>		 */</span>
+<span id="L235" class="ln">   235&nbsp;&nbsp;</span>		assert.Nil(t, memA.CurrentProposer())
+<span id="L236" class="ln">   236&nbsp;&nbsp;</span>		assert.Nil(t, memB.CurrentProposer())
+<span id="L237" class="ln">   237&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memD, memC.CurrentProposer())
+<span id="L238" class="ln">   238&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memC, memD.CurrentProposer())
+<span id="L239" class="ln">   239&nbsp;&nbsp;</span>	})
+<span id="L240" class="ln">   240&nbsp;&nbsp;</span>}
+<span id="L241" class="ln">   241&nbsp;&nbsp;</span>
+<span id="L242" class="ln">   242&nbsp;&nbsp;</span>func TestWouldPreferProposalFrom(t *testing.T) {
+<span id="L243" class="ln">   243&nbsp;&nbsp;</span>	t.Run(&#34;success&#34;, func(t *testing.T) {
+<span id="L244" class="ln">   244&nbsp;&nbsp;</span>		setupSingleTable()
+<span id="L245" class="ln">   245&nbsp;&nbsp;</span>
+<span id="L246" class="ln">   246&nbsp;&nbsp;</span>		memA.acceptedProposalFrom = &amp;memC
+<span id="L247" class="ln">   247&nbsp;&nbsp;</span>
+<span id="L248" class="ln">   248&nbsp;&nbsp;</span>		assert.True(t, memA.WouldPreferProposalFrom(memB))
+<span id="L249" class="ln">   249&nbsp;&nbsp;</span>		assert.False(t, memA.WouldPreferProposalFrom(memD))
+<span id="L250" class="ln">   250&nbsp;&nbsp;</span>	})
+<span id="L251" class="ln">   251&nbsp;&nbsp;</span>
+<span id="L252" class="ln">   252&nbsp;&nbsp;</span>	t.Run(&#34;has not accepted proposal&#34;, func(t *testing.T) {
+<span id="L253" class="ln">   253&nbsp;&nbsp;</span>		setupSingleTable()
+<span id="L254" class="ln">   254&nbsp;&nbsp;</span>
+<span id="L255" class="ln">   255&nbsp;&nbsp;</span>		assert.True(t, memA.WouldPreferProposalFrom(memB))
+<span id="L256" class="ln">   256&nbsp;&nbsp;</span>		assert.True(t, memA.WouldPreferProposalFrom(memD))
+<span id="L257" class="ln">   257&nbsp;&nbsp;</span>	})
+<span id="L258" class="ln">   258&nbsp;&nbsp;</span>}
+<span id="L259" class="ln">   259&nbsp;&nbsp;</span>
+<span id="L260" class="ln">   260&nbsp;&nbsp;</span>func TestFirstPreference(t *testing.T) {
+<span id="L261" class="ln">   261&nbsp;&nbsp;</span>	t.Run(&#34;success&#34;, func(t *testing.T) {
+<span id="L262" class="ln">   262&nbsp;&nbsp;</span>		memA = Member{name: &#34;A&#34;}
+<span id="L263" class="ln">   263&nbsp;&nbsp;</span>		memB = Member{name: &#34;B&#34;}
+<span id="L264" class="ln">   264&nbsp;&nbsp;</span>		memC = Member{name: &#34;C&#34;}
+<span id="L265" class="ln">   265&nbsp;&nbsp;</span>
+<span id="L266" class="ln">   266&nbsp;&nbsp;</span>		plA = PreferenceList{members: []*Member{&amp;memB, &amp;memC}}
+<span id="L267" class="ln">   267&nbsp;&nbsp;</span>		memA.SetPreferenceList(&amp;plA)
+<span id="L268" class="ln">   268&nbsp;&nbsp;</span>
+<span id="L269" class="ln">   269&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memB, memA.FirstPreference())
+<span id="L270" class="ln">   270&nbsp;&nbsp;</span>	})
+<span id="L271" class="ln">   271&nbsp;&nbsp;</span>
+<span id="L272" class="ln">   272&nbsp;&nbsp;</span>	t.Run(&#34;preference list is empty&#34;, func(t *testing.T) {
+<span id="L273" class="ln">   273&nbsp;&nbsp;</span>		memA = Member{name: &#34;A&#34;}
+<span id="L274" class="ln">   274&nbsp;&nbsp;</span>
+<span id="L275" class="ln">   275&nbsp;&nbsp;</span>		plA = PreferenceList{members: []*Member{}}
+<span id="L276" class="ln">   276&nbsp;&nbsp;</span>		memA.SetPreferenceList(&amp;plA)
+<span id="L277" class="ln">   277&nbsp;&nbsp;</span>
+<span id="L278" class="ln">   278&nbsp;&nbsp;</span>		assert.Nil(t, memA.SecondPreference())
+<span id="L279" class="ln">   279&nbsp;&nbsp;</span>	})
+<span id="L280" class="ln">   280&nbsp;&nbsp;</span>}
+<span id="L281" class="ln">   281&nbsp;&nbsp;</span>
+<span id="L282" class="ln">   282&nbsp;&nbsp;</span>func TestSecondPreference(t *testing.T) {
+<span id="L283" class="ln">   283&nbsp;&nbsp;</span>	t.Run(&#34;success&#34;, func(t *testing.T) {
+<span id="L284" class="ln">   284&nbsp;&nbsp;</span>		memA = Member{name: &#34;A&#34;}
+<span id="L285" class="ln">   285&nbsp;&nbsp;</span>		memB = Member{name: &#34;B&#34;}
+<span id="L286" class="ln">   286&nbsp;&nbsp;</span>		memC = Member{name: &#34;C&#34;}
+<span id="L287" class="ln">   287&nbsp;&nbsp;</span>
+<span id="L288" class="ln">   288&nbsp;&nbsp;</span>		plA = PreferenceList{members: []*Member{&amp;memB, &amp;memC}}
+<span id="L289" class="ln">   289&nbsp;&nbsp;</span>		memA.SetPreferenceList(&amp;plA)
+<span id="L290" class="ln">   290&nbsp;&nbsp;</span>
+<span id="L291" class="ln">   291&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memC, memA.SecondPreference())
+<span id="L292" class="ln">   292&nbsp;&nbsp;</span>	})
+<span id="L293" class="ln">   293&nbsp;&nbsp;</span>
+<span id="L294" class="ln">   294&nbsp;&nbsp;</span>	t.Run(&#34;preference list has one element&#34;, func(t *testing.T) {
+<span id="L295" class="ln">   295&nbsp;&nbsp;</span>		memA = Member{name: &#34;A&#34;}
+<span id="L296" class="ln">   296&nbsp;&nbsp;</span>		memB = Member{name: &#34;B&#34;}
+<span id="L297" class="ln">   297&nbsp;&nbsp;</span>
+<span id="L298" class="ln">   298&nbsp;&nbsp;</span>		plA = PreferenceList{members: []*Member{&amp;memB}}
+<span id="L299" class="ln">   299&nbsp;&nbsp;</span>		memA.SetPreferenceList(&amp;plA)
+<span id="L300" class="ln">   300&nbsp;&nbsp;</span>
+<span id="L301" class="ln">   301&nbsp;&nbsp;</span>		assert.Nil(t, memA.SecondPreference())
+<span id="L302" class="ln">   302&nbsp;&nbsp;</span>	})
+<span id="L303" class="ln">   303&nbsp;&nbsp;</span>}
+<span id="L304" class="ln">   304&nbsp;&nbsp;</span>
+<span id="L305" class="ln">   305&nbsp;&nbsp;</span>func TestLastPreference(t *testing.T) {
+<span id="L306" class="ln">   306&nbsp;&nbsp;</span>	t.Run(&#34;success&#34;, func(t *testing.T) {
+<span id="L307" class="ln">   307&nbsp;&nbsp;</span>		memA = Member{name: &#34;A&#34;}
+<span id="L308" class="ln">   308&nbsp;&nbsp;</span>		memB = Member{name: &#34;B&#34;}
+<span id="L309" class="ln">   309&nbsp;&nbsp;</span>		memC = Member{name: &#34;C&#34;}
+<span id="L310" class="ln">   310&nbsp;&nbsp;</span>
+<span id="L311" class="ln">   311&nbsp;&nbsp;</span>		plA = PreferenceList{members: []*Member{&amp;memB, &amp;memC}}
+<span id="L312" class="ln">   312&nbsp;&nbsp;</span>		memA.SetPreferenceList(&amp;plA)
+<span id="L313" class="ln">   313&nbsp;&nbsp;</span>
+<span id="L314" class="ln">   314&nbsp;&nbsp;</span>		assert.Equal(t, &amp;memC, memA.LastPreference())
+<span id="L315" class="ln">   315&nbsp;&nbsp;</span>	})
+<span id="L316" class="ln">   316&nbsp;&nbsp;</span>
+<span id="L317" class="ln">   317&nbsp;&nbsp;</span>	t.Run(&#34;preference list is empty&#34;, func(t *testing.T) {
+<span id="L318" class="ln">   318&nbsp;&nbsp;</span>		memA = Member{name: &#34;A&#34;}
+<span id="L319" class="ln">   319&nbsp;&nbsp;</span>
+<span id="L320" class="ln">   320&nbsp;&nbsp;</span>		plA = PreferenceList{members: []*Member{}}
+<span id="L321" class="ln">   321&nbsp;&nbsp;</span>		memA.SetPreferenceList(&amp;plA)
+<span id="L322" class="ln">   322&nbsp;&nbsp;</span>
+<span id="L323" class="ln">   323&nbsp;&nbsp;</span>		assert.Nil(t, memA.LastPreference())
+<span id="L324" class="ln">   324&nbsp;&nbsp;</span>	})
+<span id="L325" class="ln">   325&nbsp;&nbsp;</span>}
+<span id="L326" class="ln">   326&nbsp;&nbsp;</span>
+</pre><p><a href="http://localhost:6060/src/github.com/abhchand/libmatch/pkg/core/member_test.go?m=text">View as plain text</a></p>
+
+<div id="footer">
+Build version go1.12.12.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://localhost:6060/LICENSE">BSD license</a>.<br>
+<a href="http://localhost:6060/doc/tos.html">Terms of Service</a> |
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+</body>
+</html>
+
