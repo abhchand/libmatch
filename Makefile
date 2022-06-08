@@ -4,10 +4,11 @@
 .EXPORT_ALL_VARIABLES: ; # send all vars to shell
 
 BINARY_NAME=libmatch
+DOCS_DIR=./docs
 
 export GO111MODULE=on
 
-all: lint test build
+all: lint test build docgen
 
 benchmark:
 	echo '# $@'
@@ -18,6 +19,12 @@ build:
 	echo '# $@'
 	rm -f $(BINARY_NAME)
 	scripts/build.sh $(BINARY_NAME)
+	echo ''
+
+docgen:
+	echo '# $@'
+	rm -f $(DOCS_DIR)
+	scripts/docgen.sh $(DOCS_DIR)
 	echo ''
 
 lint:
