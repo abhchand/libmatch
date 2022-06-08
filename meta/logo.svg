@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="148px" height="148px" viewBox="0 0 148 148" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>libmatch-logo</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="libmatch-logo" stroke="#444444">
+            <path d="M49.5,0.5 L49.5,49.5 L0.5,49.5 L0.5,5 C0.5,3.75735931 1.00367966,2.63235931 1.81801948,1.81801948 C2.63235931,1.00367966 3.75735931,0.5 5,0.5 L5,0.5 L49.5,0.5 Z" id="Rectangle" fill="#FFFFFF"></path>
+            <rect id="Rectangle" fill="#7AD3FD" x="0.5" y="49.5" width="49" height="49"></rect>
+            <path d="M49.5,98.5 L49.5,147.5 L5,147.5 C3.75735931,147.5 2.63235931,146.99632 1.81801948,146.181981 C1.00367966,145.367641 0.5,144.242641 0.5,143 L0.5,143 L0.5,98.5 L49.5,98.5 Z" id="Rectangle" fill="#FDDD00"></path>
+            <rect id="Rectangle" fill="#7AD3FD" x="49.5" y="98.5" width="49" height="49"></rect>
+            <rect id="Rectangle" fill="#FFFFFF" x="49.5" y="0.5" width="49" height="49"></rect>
+            <rect id="Rectangle" fill="#FFFFFF" x="49.5" y="49.5" width="49" height="49"></rect>
+            <path d="M147.5,98.5 L147.5,143 C147.5,144.242641 146.99632,145.367641 146.181981,146.181981 C145.367641,146.99632 144.242641,147.5 143,147.5 L143,147.5 L98.5,147.5 L98.5,98.5 L147.5,98.5 Z" id="Rectangle" fill="#FFFFFF"></path>
+            <path d="M143,0.5 C144.242641,0.5 145.367641,1.00367966 146.181981,1.81801948 C146.99632,2.63235931 147.5,3.75735931 147.5,5 L147.5,5 L147.5,49.5 L98.5,49.5 L98.5,0.5 Z" id="Rectangle" fill="#FFFFFF"></path>
+            <rect id="Rectangle" fill="#FDDD00" x="98.5" y="49.5" width="49" height="49"></rect>
+        </g>
+    </g>
+</svg>

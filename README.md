@@ -1,8 +1,20 @@
-# libmatch
+<div align="center">
+  <h1>libmatch</h1>
+
+  <a href="https://github.com/abhchand/libmatch">
+    <img
+      width="100"
+      alt="libmatch"
+      src="https://raw.githubusercontent.com/abhchand/libmatch/master/meta/logo.png"
+    />
+  </a>
+
+  <p>libmatch is a utility library for solving matching problems.</p>
+</div>
+
+---
 
 ![build status](https://github.com/abhchand/libmatch/actions/workflows/test.yml/badge.svg?branch=main)
-
-A utility library for solving matching problems.
 
 `libmatch` supports solving the following classes of problems:
 
