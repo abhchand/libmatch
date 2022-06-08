@@ -1,5 +1,15 @@
 package libmatch
 
+/*
+Benchmark tests for performance.
+
+You can run these manually with
+
+	make benchmark
+
+These also run as part of the CI Build.
+*/
+
 import (
 	"testing"
 
