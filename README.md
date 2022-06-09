@@ -9,42 +9,94 @@
     />
   </a>
 
-  <p>libmatch is a utility library for solving matching problems.</p>
+  <p>libmatch is a library for solving matching problems.</p>
 </div>
 
 ---
 
-![build status](https://github.com/abhchand/libmatch/actions/workflows/test.yml/badge.svg?branch=main)
+[![Build Status][ci-badge]][ci]
 
-`libmatch` supports solving the following classes of problems:
+`libmatch` can be used as a **Go package** or as a **standalone executable** (CLI).
+
+It supports solving the following problems:
 
 | Matching Problem | Shorthand | Description |
 |---|---|---|
 | [Stable Marriage Problem](https://en.wikipedia.org/wiki/Stable_marriage_problem) | `SMP` | Matching between two groups of members |
 | [Stable Roommates Problem](https://en.wikipedia.org/wiki/Stable_roommates_problem) | `SRP` | Matching within a group of members |
 
-`libmatch` can be used as a **standalone executable** or included **as a library** in your Go program.
-
 ---
 
 - [What Does This Do?](#what-does-this-do)
-- [As an executable](#as-an-executable)
+- [Go Package](#go-package)
+- [CLI](#cli)
   * [Installation](#installation)
   * [Usage](#usage)
-- [As a Go Library](#as-a-go-library)
 - [Miscellaneous](#miscellaneous)
+
 
 ## <a name="what-does-this-do">What Does This Do?
 
-`libmatch` finds an optimal matching between members, given one or more sets of *member preferences*.
+Matching algorithms find an optimal matching between members, given one or more sets of *member preferences*.
 
 <div align="center">
   <img src="https://github.com/abhchand/libmatch/raw/main/meta/matching.png" width="400px" />
 </div>
 
-`libmatch` provides solutions to solve different variations of this classic matching problem, which has a wide range of practical applications.
+`libmatch` provides solutions to solve this and variations of this classic matching problem, which have a wide range of real-world applications.
 
-## <a name="as-an-executable">As an executable
+## <a name="go-package">Go Package
+
+[View the Go docs](https://abhchand.me/libmatch/pkg/github.com/abhchand/libmatch/).
+
+Add `libmatch`:
+
+```shell
+go get github.com/abhchand/libmatch
+```
+
+Use it:
+
+```go
+package main
+
+import (
+  "fmt"
+  "os"
+
+  "github.com/abhchand/libmatch"
+)
+
+func main() {
+  prefTable := []libmatch.MatchPreference{
+    {Name: "A", Preferences: []string{"B", "D", "C"}},
+    {Name: "B", Preferences: []string{"D", "A", "C"}},
+    {Name: "C", Preferences: []string{"D", "A", "B"}},
+    {Name: "D", Preferences: []string{"C", "A", "B"}},
+  }
+
+  // Call the solver for the type of matching algorithm you'd like to solve.
+  // In this case `SolveSRP` solves the "Stable Roommate Problem".
+  result, err := libmatch.SolveSRP(&prefTable)
+  if err != nil {
+    fmt.Println(err)
+    os.Exit(1)
+  }
+
+  // => MatchResult{
+  //   Mapping: map[string]string{
+  //     "A": "F",
+  //     "B": "E",
+  //     "C": "D",
+  //     "D": "C",
+  //     "E": "B",
+  //     "F": "A",
+  //   }
+  // }
+}
+```
+
+## <a name="cli">CLI
 
 ### <a name="installation"></a>Installation
 
@@ -88,57 +140,15 @@ E,B
 F,A
 ```
 
-See `libmatch --help` for more options and examples
-
-## <a name="as-a-go-library">As a Go Library
-
-[View the docs](https://abhchand.me/libmatch/pkg/github.com/abhchand/libmatch/).
-
-Add `libmatch` as a dependency:
-
-```shell
-go get github.com/abhchand/libmatch
-```
-
-Then `import` and use it:
-
-```go
-package main
-
-import (
-  "fmt"
-  "os"
-
-  "github.com/abhchand/libmatch"
-)
-
-func main() {
-  prefTable := []libmatch.MatchPreference{
-    {Name: "A", Preferences: []string{"B", "D", "C"}},
-    {Name: "B", Preferences: []string{"D", "A", "C"}},
-    {Name: "C", Preferences: []string{"D", "A", "B"}},
-    {Name: "D", Preferences: []string{"C", "A", "B"}},
-  }
-
-  // Call the solver for the type of matching algorithm you'd like to solve.
-  // The top of the README contains a list of all supported shorthands.
-  // In this case `SolveSRP` solves the Stable Roommate Problem
-  result, err := libmatch.SolveSRP(&prefTable)
-  if err != nil {
-    fmt.Println(err)
-    os.Exit(1)
-  }
-
-  // libmatch returns a `libmatch.MatchResult` type above.
-  // The mapping can be accessed via the `.Mapping` property
-  for x, y := range result.Mapping {
-    fmt.Printf("%v => %v\n", x, y)
-  }
-}
-```
+See `libmatch --help` for more options and examples.
 
 ## <a name="miscellaneous">Miscellaneous
 
 * [Create an issue](https://github.com/abhchand/libmatch/issues/new) to report a bug or request a feature
 * Contributions are welcome! Please [open an Issue](https://github.com/abhchand/libmatch/issues/new) to discuss your changes first
 * The Changelog can be found in the [releases](https://github.com/abhchand/libmatch/releases)
+
+[ci-badge]:
+  https://github.com/abhchand/libmatch/actions/workflows/test.yml/badge.svg?branch=main
+[ci]:
+  https://github.com/abhchand/libmatch/actions
