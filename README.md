@@ -29,9 +29,11 @@ It supports solving the following problems:
 
 - [What Does This Do?](#what-does-this-do)
 - [Go Package](#go-package)
+  * [Installation](#pkg-installation)
+  * [Example](#pkg-example)
 - [CLI](#cli)
-  * [Installation](#installation)
-  * [Usage](#usage)
+  * [Installation](#cliinstallation)
+  * [Example](#cli-example)
 - [Miscellaneous](#miscellaneous)
 
 
@@ -49,56 +51,57 @@ Matching algorithms find an optimal matching between members, given one or more 
 
 [View Go Package Documentation](https://pkg.go.dev/github.com/abhchand/libmatch#section-documentation).
 
-Add `libmatch`:
+### <a name="pkg-installation"></a>Installation
 
 ```shell
 go get github.com/abhchand/libmatch
 ```
 
+### <a name="pkg-example">Example
+
+_Below is an example of the Stable Roommates Problem_
+
+Import it:
+
+```go
+import (
+  "github.com/abhchand/libmatch"
+)
+```
+
 Use it:
 
 ```go
-package main
-
-import (
-  "fmt"
-  "os"
-
-  "github.com/abhchand/libmatch"
-)
-
-func main() {
-  prefTable := []libmatch.MatchPreference{
-    {Name: "A", Preferences: []string{"B", "D", "C"}},
-    {Name: "B", Preferences: []string{"D", "A", "C"}},
-    {Name: "C", Preferences: []string{"D", "A", "B"}},
-    {Name: "D", Preferences: []string{"C", "A", "B"}},
-  }
-
-  // Call the solver for the type of matching algorithm you'd like to solve.
-  // In this case `SolveSRP` solves the "Stable Roommate Problem".
-  result, err := libmatch.SolveSRP(&prefTable)
-  if err != nil {
-    fmt.Println(err)
-    os.Exit(1)
-  }
-
-  // => MatchResult{
-  //   Mapping: map[string]string{
-  //     "A": "F",
-  //     "B": "E",
-  //     "C": "D",
-  //     "D": "C",
-  //     "E": "B",
-  //     "F": "A",
-  //   }
-  // }
+prefTable := []libmatch.MatchPreference{
+  {Name: "A", Preferences: []string{"B", "D", "C"}},
+  {Name: "B", Preferences: []string{"D", "A", "C"}},
+  {Name: "C", Preferences: []string{"D", "A", "B"}},
+  {Name: "D", Preferences: []string{"C", "A", "B"}},
 }
+
+// Call the solver for the type of matching algorithm you'd like to solve.
+// In this case `SolveSRP` solves the "Stable Roommate Problem".
+result, err := libmatch.SolveSRP(&prefTable)
+if err != nil {
+  fmt.Println(err)
+  os.Exit(1)
+}
+
+// => MatchResult{
+//   Mapping: map[string]string{
+//     "A": "F",
+//     "B": "E",
+//     "C": "D",
+//     "D": "C",
+//     "E": "B",
+//     "F": "A",
+//   }
+// }
 ```
 
 ## <a name="cli">CLI
 
-### <a name="installation"></a>Installation
+### <a name="cli-installation"></a>Installation
 
 Download the the [latest release](https://github.com/abhchand/libmatch/releases/latest) for your platform.
 
@@ -111,7 +114,9 @@ cd libmatch/
 make all
 ```
 
-### <a name="usage">Usage
+### <a name="cli-example">Example
+
+_Below is an example of the Stable Roommates Problem_
 
 Define member preferences as JSON data:
 
