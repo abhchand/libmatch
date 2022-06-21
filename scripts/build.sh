@@ -39,15 +39,15 @@ LIBMATCH_VERSION=$(cat $CUR_DIR/../pkg/version/version.go | grep -m 1 "var versi
 
 # Determine OS and Architecture
 #
-# If running on CI (Github Actions), $GOOS and $GOARCH will be set by
+# If running on CI (Github Actions), $INPUT_GOOS and $INPUT_GOARCH will be set by
 # the `wangyoucao577/go-release-action` Github Action
 #
 # If they are not set, we attempt to set these values ourselves
-if [[ -z "${GOOS}" || -z "${GOARCH}" ]]; then
+if [[ -z "${INPUT_GOOS}" || -z "${INPUT_GOARCH}" ]]; then
   set_os_and_arch
 else
-  LIBMATCH_OS=$(uname -s)
-  LIBMATCH_ARCH=$(uname -m)
+  LIBMATCH_OS=$INPUT_GOOS
+  LIBMATCH_ARCH=$INPUT_GOARCH
 fi
 
 # Define colors for pretty output
