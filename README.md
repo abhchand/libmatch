@@ -30,10 +30,14 @@ It supports solving the following problems:
 - [What Does This Do?](#what-does-this-do)
 - [Go Package](#go-package)
   * [Installation](#pkg-installation)
-  * [Example](#pkg-example)
+  * [Examples](#pkg-examples)
+    * [Stable Marriage Example](#pkg-stable-marriage-example)
+    * [Stable Roommates Example](#pkg-stable-roommates-example)
 - [CLI](#cli)
   * [Installation](#cliinstallation)
-  * [Example](#cli-example)
+  * [Examples](#cli-examples)
+    * [Stable Marriage Example](#cli-stable-marriage-example)
+    * [Stable Roommates Example](#cli-stable-roommates-example)
 - [Miscellaneous](#miscellaneous)
 
 
@@ -59,30 +63,63 @@ Algorithmic solutions to these problems have a wide range of real-world applicat
 go get github.com/abhchand/libmatch
 ```
 
-### <a name="pkg-example">Example
+### <a name="pkg-examples">Examples
 
-_Below is an example of the Stable Roommates Problem_
-
-Import it:
+#### <a name="pkg-stable-marriage-example">Stable Marriage Example
 
 ```go
 import (
   "github.com/abhchand/libmatch"
 )
-```
 
-Use it:
-
-```go
-prefTable := []libmatch.MatchPreference{
-  {Name: "A", Preferences: []string{"B", "D", "C"}},
-  {Name: "B", Preferences: []string{"D", "A", "C"}},
-  {Name: "C", Preferences: []string{"D", "A", "B"}},
-  {Name: "D", Preferences: []string{"C", "A", "B"}},
+prefTableA := []libmatch.MatchPreference{
+  {Name: "A", Preferences: []string{"E", "F", "G", "H"}},
+  {Name: "B", Preferences: []string{"F", "G", "H", "E"}},
+  {Name: "C", Preferences: []string{"G", "F", "H", "E"}},
+  {Name: "D", Preferences: []string{"H", "E", "G", "F"}},
 }
 
-// Call the solver for the type of matching algorithm you'd like to solve.
-// In this case `SolveSRP` solves the "Stable Roommate Problem".
+prefTableB := []libmatch.MatchPreference{
+  {Name: "E", Preferences: []string{"A", "B", "C", "D"}},
+  {Name: "F", Preferences: []string{"C", "B", "D", "A"}},
+  {Name: "G", Preferences: []string{"D", "A", "C", "B"}},
+  {Name: "H", Preferences: []string{"B", "C", "D", "A"}},
+}
+
+result, err := libmatch.SolveSMP(&prefTableA, &prefTableB)
+if err != nil {
+  fmt.Println(err)
+  os.Exit(1)
+}
+
+// => MatchResult{
+//   Mapping: map[string]string{
+//     "H": "D",
+//     "B": "F",
+//     "C": "G",
+//     "D": "H",
+//     "A": "E",
+//     "E": "A",
+//     "F": "B",
+//     "G": "C",
+//   }
+// }
+```
+
+#### <a name="pkg-stable-roommates-example">Stable Roommates Example
+
+```go
+import (
+  "github.com/abhchand/libmatch"
+)
+
+prefTable := []libmatch.MatchPreference{
+  {Name: "A", Preferences: []string{"B", "C", "D"}},
+  {Name: "B", Preferences: []string{"A", "C", "D"}},
+  {Name: "C", Preferences: []string{"A", "B", "D"}},
+  {Name: "D", Preferences: []string{"A", "B", "C"}}
+}
+
 result, err := libmatch.SolveSRP(&prefTable)
 if err != nil {
   fmt.Println(err)
@@ -91,12 +128,10 @@ if err != nil {
 
 // => MatchResult{
 //   Mapping: map[string]string{
-//     "A": "F",
-//     "B": "E",
-//     "C": "D",
 //     "D": "C",
-//     "E": "B",
-//     "F": "A",
+//     "A": "B",
+//     "B": "A",
+//     "C": "D",
 //   }
 // }
 ```
@@ -116,38 +151,58 @@ cd libmatch/
 make all
 ```
 
-### <a name="cli-example">Example
 
-_Below is an example of the Stable Roommates Problem_
+### <a name="cli-examples">Examples
 
-Define member preferences as JSON data:
-
+#### <a name="cli-stable-marriage-example">Stable Marriage Example
 ```shell
-$ cat <<EOF > input.json
+$ cat <<EOF > prefs-a.json
 [
-  { "name":"A", "preferences": ["B", "D", "F", "C", "E"] },
-  { "name":"B", "preferences": ["D", "E", "F", "A", "C"] },
-  { "name":"C", "preferences": ["D", "E", "F", "A", "B"] },
-  { "name":"D", "preferences": ["F", "C", "A", "E", "B"] },
-  { "name":"E", "preferences": ["F", "C", "D", "B", "A"] },
-  { "name":"F", "preferences": ["A", "B", "D", "C", "E"] }
+  { "name": "A", "preferences": ["E", "F", "G", "H"] },
+  { "name": "B", "preferences": ["F", "G", "H", "E"] },
+  { "name": "C", "preferences": ["G", "F", "H", "E"] },
+  { "name": "D", "preferences": ["H", "E", "G", "F"] }
 ]
 EOF
+
+$ cat <<EOF > prefs-b.json
+[
+  { "name": "E", "preferences": ["A", "B", "C", "D"] },
+  { "name": "F", "preferences": ["C", "B", "D", "A"] },
+  { "name": "G", "preferences": ["D", "A", "C", "B"] },
+  { "name": "H", "preferences": ["B", "C", "D", "A"] }
+]
+EOF
+
+$ ./libmatch solve --algorithm SMP --file prefs-a.json --file prefs-b.json
+H,D
+B,F
+C,G
+D,H
+A,E
+E,A
+F,B
+G,C
 ```
 
-Run `libmatch`:
+#### <a name="cli-stable-roommates-example">Stable Roommates Example
 
 ```shell
-$ libmatch solve --algorithm SRP --file input.json
-A,F
-B,E
-C,D
-D,C
-E,B
-F,A
-```
+$ cat <<EOF > prefs.json
+[
+  { "name": "A", "preferences": ["B", "C", "D"] },
+  { "name": "B", "preferences": ["A", "C", "D"] },
+  { "name": "C", "preferences": ["A", "B", "D"] },
+  { "name": "D", "preferences": ["A", "B", "C"] }
+]
+EOF
 
-See `libmatch --help` for more options and examples.
+$ libmatch solve --algorithm SRP --file prefs.json
+D,C
+A,B
+B,A
+C,D
+```
 
 ## <a name="miscellaneous">Miscellaneous
 
