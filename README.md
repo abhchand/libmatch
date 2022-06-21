@@ -45,7 +45,9 @@ Matching algorithms find an optimal matching between members, given one or more 
   <img src="https://github.com/abhchand/libmatch/raw/main/meta/matching.png" width="400px" />
 </div>
 
-`libmatch` provides solutions to solve this and variations of this classic matching problem, which have a wide range of real-world applications.
+Algorithmic solutions to these problems have a wide range of real-world applications, from economics to computational mathematics.
+
+`libmatch` provides solutions to solve this and variations of this classic matching problem at scale.
 
 ## <a name="go-package">Go Package
 
