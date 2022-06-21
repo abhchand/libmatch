@@ -174,7 +174,7 @@ $ cat <<EOF > prefs-b.json
 ]
 EOF
 
-$ ./libmatch solve --algorithm SMP --file prefs-a.json --file prefs-b.json
+$ libmatch solve --algorithm SMP --file prefs-a.json --file prefs-b.json
 H,D
 B,F
 C,G
