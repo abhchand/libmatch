@@ -20,10 +20,10 @@
 
 It supports solving the following problems:
 
-| Matching Problem | Shorthand | Description | Example |
-|---|---|---|---|
-| [Stable Marriage Problem](https://en.wikipedia.org/wiki/Stable_marriage_problem) | `SMP` | Matching between two groups of members | [example→](https://pkg.go.dev/github.com/abhchand/libmatch#example-SolveSMP) |
-| [Stable Roommates Problem](https://en.wikipedia.org/wiki/Stable_roommates_problem) | `SRP` | Matching within a group of members | [example→](https://pkg.go.dev/github.com/abhchand/libmatch#example-SolveSRP) |
+| Matching Problem | Shorthand | Description |
+|---|---|---|
+| [Stable Marriage Problem](https://en.wikipedia.org/wiki/Stable_marriage_problem) | `SMP` | Matching between two groups of members |
+| [Stable Roommates Problem](https://en.wikipedia.org/wiki/Stable_roommates_problem) | `SRP` | Matching within a group of members |
 
 ---
 
