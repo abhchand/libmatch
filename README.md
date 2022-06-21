@@ -55,7 +55,7 @@ Algorithmic solutions to these problems have a wide range of real-world applicat
 
 ## <a name="go-package">Go Package
 
-[View Go Package Documentation](https://pkg.go.dev/github.com/abhchand/libmatch#section-documentation).
+[View Go Package Documentation →](https://pkg.go.dev/github.com/abhchand/libmatch#section-documentation).
 
 ### <a name="pkg-installation"></a>Installation
 
